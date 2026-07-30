@@ -1,6 +1,8 @@
 ---
 import Nav from '@/components/Nav.astro';
 import Footer from '@/components/Footer.astro';
+import Preloader from '@/components/Preloader.astro';
+import Grain from '@/components/Grain.astro';
 import '@/styles/global.css';
 
 interface Props {
@@ -32,6 +34,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <link rel="canonical" href={canonicalURL} />
   <link rel="icon" type="image/svg+xml" href={`${base}/assets/NG_logo.svg`} />
 
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content={`${title} | Novae Glamp`} />
@@ -46,6 +53,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <meta name="twitter:image" content={ogImage} />
 </head>
 <body>
+  <Preloader />
   <Nav />
 
   <main>
@@ -53,6 +61,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   </main>
 
   <Footer />
+  <Grain />
 
   <script>
     import Lenis from 'lenis';
@@ -61,7 +70,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // Lenis smooth scroll
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -75,12 +83,32 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     });
     gsap.ticker.lagSmoothing(0);
 
-    // Reveal animations — GSAP owns both initial + animated state
+    lenis.stop();
+
+    function startLenis() {
+      lenis.start();
+      ScrollTrigger.refresh();
+    }
+
+    if (document.documentElement.classList.contains('preloader-done')) {
+      startLenis();
+    } else {
+      window.addEventListener('preloader:complete', startLenis, { once: true });
+    }
+
     const reveals = document.querySelectorAll('[data-reveal]');
+    const isFirstLoad = !document.documentElement.classList.contains('preloader-done');
 
     reveals.forEach((el) => {
       const type = el.getAttribute('data-reveal') || 'default';
-      const delay = parseFloat(el.getAttribute('data-reveal-delay') || '0');
+      let delay = parseFloat(el.getAttribute('data-reveal-delay') || '0');
+
+      if (isFirstLoad) {
+        const rect = (el as HTMLElement).getBoundingClientRect();
+        if (rect.top < window.innerHeight) {
+          delay += 0.5;
+        }
+      }
 
       const initial: gsap.TweenVars = { opacity: 0 };
       if (type === 'up') initial.y = 60;

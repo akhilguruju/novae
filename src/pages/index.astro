@@ -605,13 +605,22 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     splitTextNodes(heroTitle);
 
     const chars = heroTitle.querySelectorAll('.hero-char');
-    gsap.to(chars, {
-      opacity: 1,
-      duration: 0.6,
-      stagger: 0.03,
-      ease: 'power3.out',
-      delay: 0.3,
-    });
+
+    function animateHeroChars(delay: number) {
+      gsap.to(chars, {
+        opacity: 1,
+        duration: 0.6,
+        stagger: 0.03,
+        ease: 'power3.out',
+        delay,
+      });
+    }
+
+    if (document.documentElement.classList.contains('preloader-done')) {
+      animateHeroChars(0.3);
+    } else {
+      window.addEventListener('preloader:complete', () => animateHeroChars(0.15), { once: true });
+    }
   }
 
   // Night sky parallax
