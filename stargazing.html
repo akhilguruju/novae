@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Best Stargazing Experience Near Hyderabad — Dark Sky Glamping | Novae Glamp</title>
+  <meta name="description" content="Best stargazing experience near Hyderabad at Novae Glamp — Hyderabad's only dark-sky glamping retreat. Guided constellation tours, telescope sessions, meteor shower watch events and astrophotography in Telangana." />
+  <meta name="keywords" content="stargazing near Hyderabad, dark sky resort Telangana, telescope experience near Hyderabad, constellation tour near Hyderabad, meteor shower watch Telangana, astrophotography near Hyderabad, Bortle 4 sky Telangana" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Novae Glamp" />
+  <link rel="canonical" href="https://novaeglamp.com/stargazing.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Novae Glamp" />
+  <meta property="og:title" content="Best Stargazing Experience Near Hyderabad — Dark Sky Glamping | Novae Glamp" />
+  <meta property="og:description" content="Hyderabad's only dark-sky glamping retreat. Guided constellation tours, telescope sessions, meteor shower events and astrophotography near Hyderabad, Telangana." />
+  <meta property="og:url" content="https://novaeglamp.com/stargazing.html" />
+  <meta property="og:image" content="https://novaeglamp.com/assets/home/nightsky.jpeg" />
+  <meta property="og:image:alt" content="Stargazing through telescope under dark sky at Novae Glamp near Hyderabad" />
+  <meta property="og:locale" content="en_IN" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Best Stargazing Near Hyderabad — Dark Sky Glamping | Novae Glamp" />
+  <meta name="twitter:description" content="Hyderabad's only dark-sky glamping retreat. Telescope sessions, constellation tours, meteor showers and astrophotography." />
+  <meta name="twitter:image" content="https://novaeglamp.com/assets/home/nightsky.jpeg" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/NG_logo.svg" />
+  <link rel="apple-touch-icon" href="/assets/NG_logo.svg" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TouristAttraction",
+    "name": "Novae Glamp Stargazing Experience",
+    "description": "Hyderabad's only dark-sky glamping retreat with Bortle 4 skies. Guided constellation tours, telescope sessions, meteor shower events and astrophotography near Hyderabad.",
+    "url": "https://novaeglamp.com/stargazing.html",
+    "image": "https://novaeglamp.com/assets/home/nightsky.jpeg",
+    "touristType": ["Astronomy Enthusiasts", "Families", "Couples", "School Groups"],
+    "isAccessibleForFree": false,
+    "provider": {
+      "@type": "LodgingBusiness",
+      "name": "Novae Glamp",
+      "url": "https://novaeglamp.com/",
+      "telephone": "+918886866631",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Maryala Village Road",
+        "addressLocality": "Bhuvanagiri",
+        "addressRegion": "Telangana",
+        "postalCode": "508117",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 17.5706219,
+        "longitude": 78.8242302
+      },
+      "hasMap": "https://maps.app.goo.gl/JyPHd87zTscMeEfH9"
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://novaeglamp.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Stargazing Experience", "item": "https://novaeglamp.com/stargazing.html"}
+      ]
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/stargazing.css" />
+</head>
+<body>
+
+  <!-- Custom cursor (stargazing page only) -->
+  <div class="cursor"      id="cursor"      aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+
+  <!-- Full-page animated star canvas -->
+  <canvas id="star-canvas" aria-hidden="true"></canvas>
+
+  <!-- ═══ NAVIGATION ═══ -->
+  <header>
+    <nav class="nav" id="nav" aria-label="Main navigation">
+      <a href="index.html" class="nav__logo">
+       <img src="assets/NG_logo.svg" alt="Novae Glamp — Luxury Glamping Near Hyderabad" width="120" height="48" />
+      </a>
+
+      <button class="nav__hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav__links">
+        <li><a href="index.html"       class="nav__link is-active">Home</a></li>
+        <li><a href="about.html"       class="nav__link">About</a></li>
+
+        <!-- Stays dropdown -->
+        <li class="nav__dropdown">
+          <a href="stays.html" class="nav__link">Stays</a>
+          <div class="nav__dropdown-menu">
+            <a href="stays.html#luxury"   class="nav__link">Luxury Tepee — ₹14,999</a>
+            <a href="stays.html#american" class="nav__link">American Tents — ₹11,999</a>
+            <a href="stays.html#suite"    class="nav__link">Suite Rooms — ₹11,999</a>
+            <a href="stays.html#hut"      class="nav__link">Hut Tents — ₹3,499/person</a>
+            <a href="stays.html#dorm"     class="nav__link">Dormitory — ₹2,999/person</a>
+            <a href="stays.html#camping"  class="nav__link">Camping Tents — ₹2,299/person</a>
+          </div>
+        </li>
+
+        <!-- Experiences dropdown -->
+        <li class="nav__dropdown">
+          <a href="experiences.html" class="nav__link">Experiences</a>
+          <div class="nav__dropdown-menu">
+            <a href="experiences.html#families"  class="nav__link">Families &amp; Friends</a>
+            <a href="experiences.html#couples"   class="nav__link">Couples</a>
+            <a href="experiences.html#corporate" class="nav__link">Corporates &amp; Groups</a>
+            <a href="experiences.html#schools"   class="nav__link">Schools &amp; Students</a>
+            <a href="experiences.html#events"    class="nav__link">Events</a>
+            <a href="experiences.html#astronomy" class="nav__link">Astronomy Enthusiasts</a>
+          </div>
+        </li>
+
+        <li><a href="stargazing.html"  class="nav__link">Stargazing</a></li>
+        <li><a href="activities.html"  class="nav__link">Activities</a></li>
+        <li><a href="contact.html"     class="nav__link">Contact</a></li>
+        <li>
+          <a href="https://wa.me/918886866631?text=Hi%20Novae%20Glamp%2C%20I%20would%20like%20to%20enquire%20about%20a%20stay."
+             class="nav__link nav__cta" target="_blank" rel="noopener">
+            Book Now
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+
+  <!-- ═══ HERO ═══ -->
+  <section class="sg-hero" aria-label="Stargazing hero">
+
+    <!-- Background layers -->
+    <div class="sg-hero__nebula"    aria-hidden="true"></div>
+    <div class="sg-hero__milky-way" aria-hidden="true"></div>
+
+    <!-- Shooting stars container (JS populates this) -->
+    <div id="shooting-stars" aria-hidden="true"></div>
+
+    <!-- Telescope crosshair ring -->
+    <div class="sg-hero__ring" aria-hidden="true">
+      <span class="sg-hero__ring-mark sg-hero__ring-mark--top"></span>
+      <span class="sg-hero__ring-mark sg-hero__ring-mark--bottom"></span>
+      <span class="sg-hero__ring-mark sg-hero__ring-mark--left"></span>
+      <span class="sg-hero__ring-mark sg-hero__ring-mark--right"></span>
+    </div>
+
+    <!-- Hero content -->
+    <div class="sg-hero__content">
+      <span class="sg-hero__eyebrow">
+        Novae Glamp · <span>Bhuvanagiri, Telangana</span> · 30 km from Hyderabad
+      </span>
+
+      <h1 class="sg-hero__title">
+        The Sky
+        <em class="sg-hero__title-line2">Is the Experience</em>
+        <span class="sg-hero__subtitle">Hyderabad's Only Dark-Sky Glamping Retreat</span>
+      </h1>
+
+      <p class="sg-hero__desc">
+        Most people live their entire lives without seeing the Milky Way with their own eyes.
+        At Novae Glamp, on a clear night, you can count thousands of stars — no telescope needed.
+        This is what we built everything around.
+      </p>
+
+      <div class="btn-group flex-center sg-hero__ctas">
+        <a href="#experience" class="btn btn--glow">Explore the Experience</a>
+        <a href="https://wa.me/918886866631?text=Hi%20Novae%20Glamp%2C%20I%20want%20to%20book%20a%20stargazing%20night."
+           class="btn btn--outline" target="_blank" rel="noopener">Book Stargazing Night</a>
+      </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="scroll-indicator sg-hero__scroll" aria-hidden="true">
+      <div class="scroll-indicator__line"></div>
+      <span class="scroll-indicator__label">Scroll to explore</span>
+    </div>
+
+  </section>
+
+
+  <!-- ═══ DATA RIBBON ═══ -->
+  <div class="data-ribbon" role="region" aria-label="Key facts">
+    <div class="data-ribbon__inner">
+      <div class="data-ribbon__item">
+        <span class="data-ribbon__val">~6,500</span>
+        <span class="data-ribbon__label">Stars Visible (Clear Night)</span>
+      </div>
+      <div class="data-ribbon__sep" aria-hidden="true"></div>
+      <div class="data-ribbon__item">
+        <span class="data-ribbon__val">Bortle 4</span>
+        <span class="data-ribbon__label">Sky Darkness Rating</span>
+      </div>
+      <div class="data-ribbon__sep" aria-hidden="true"></div>
+      <div class="data-ribbon__item">
+        <span class="data-ribbon__val">360°</span>
+        <span class="data-ribbon__label">Open Horizon Access</span>
+      </div>
+      <div class="data-ribbon__sep" aria-hidden="true"></div>
+      <div class="data-ribbon__item">
+        <span class="data-ribbon__val">9:00 PM</span>
+        <span class="data-ribbon__label">Session Start Time</span>
+      </div>
+      <div class="data-ribbon__sep" aria-hidden="true"></div>
+      <div class="data-ribbon__item">
+        <span class="data-ribbon__val">30 km</span>
+        <span class="data-ribbon__label">From Hyderabad City</span>
+      </div>
+      <div class="data-ribbon__sep" aria-hidden="true"></div>
+      <div class="data-ribbon__item">
+        <span class="data-ribbon__val">Expert</span>
+        <span class="data-ribbon__label">Guided Sessions</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ WHY STARGAZE ═══ -->
+  <section class="section bg-void" aria-labelledby="why-heading">
+    <div class="container">
+      <div class="grid-2 align-center gap-5">
+
+        <!-- Left: large statement -->
+        <div class="reveal">
+          <span class="text-label">— <span>01</span> / Why It Matters</span>
+          <h2 class="heading-2" id="why-heading">
+            Something Most People Have <em>Never Seen</em>
+          </h2>
+          <span class="gold-rule"></span>
+          <p class="text-body" style="font-size:1.1rem; line-height:1.75;">
+            Over 80% of the world's population lives under light-polluted skies.
+            The Milky Way is invisible to them. You are probably one of them.
+            Not because you don't want to see it.
+          </p>
+          <p class="text-body mt-3">
+            Novae Glamp was built at a location specifically chosen for its minimal light
+            pollution and wide open horizon. On a new moon night here, you won't count
+            stars — you'll lose count. The sky becomes a presence you feel, not just observe.
+          </p>
+          <div class="mt-5">
+            <a href="#experience" class="btn btn--glow">See What Awaits You</a>
+          </div>
+        </div>
+
+        <!-- Right: 4 reasons list -->
+        <div class="flex-col gap-4">
+          <div class="card reveal reveal-d1">
+            <span class="text-label"><span>01</span></span>
+            <h3 class="heading-4">The First-Time Feeling</h3>
+            <p class="text-body mt-2">Guests who have never seen a truly dark sky describe it as one of the most overwhelming, humbling experiences of their lives. We've witnessed it hundreds of times. It never gets ordinary.</p>
+          </div>
+          <div class="card reveal reveal-d2">
+            <span class="text-label"><span>02</span></span>
+            <h3 class="heading-4">It Slows You Down</h3>
+            <p class="text-body mt-2">Stargazing is one of the few activities that makes the phone irrelevant without anyone asking you to put it down. You just forget it's there.</p>
+          </div>
+          <div class="card reveal reveal-d3">
+            <span class="text-label"><span>03</span></span>
+            <h3 class="heading-4">It Changes Conversations</h3>
+            <p class="text-body mt-2">Something about looking at a sky full of stars makes people talk differently. More openly. More meaningfully. We call it the Novae effect.</p>
+          </div>
+          <div class="card reveal reveal-d4">
+            <span class="text-label"><span>04</span></span>
+            <h3 class="heading-4">It's Right Here</h3>
+            <p class="text-body mt-2">You don't need to fly to Ladakh. Bhuvanagiri — 30 km from Hyderabad — has some of the darkest accessible skies in South India. Novae Glamp sits inside it.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ WHAT YOU'LL SEE — constellation cards ═══ -->
+  <section class="section bg-deep" aria-labelledby="sky-heading">
+    <div class="container">
+
+      <div class="section-header section-header--center reveal">
+        <span class="text-label">— <span>02</span> / The Night Sky at Novae</span>
+        <h2 class="heading-2" id="sky-heading">What You'll See <em>Above You</em></h2>
+        <span class="gold-rule gold-rule--center"></span>
+        <p class="text-body" style="margin:0 auto;">Our guides have mapped the sky as it appears from Novae Glamp across every season.</p>
+      </div>
+
+      <div class="sky-grid mt-5">
+
+        <!-- Card 1: Orion -->
+        <div class="sky-card reveal">
+          <svg class="sky-card__stars-svg" viewBox="0 0 60 60" aria-hidden="true">
+            <circle cx="10" cy="12" r="1.2" fill="#c9a96e" opacity="0.9"/>
+            <circle cx="25" cy="8"  r="0.8" fill="#e8cc99" opacity="0.7"/>
+            <circle cx="40" cy="18" r="1.5" fill="#c9a96e" opacity="0.8"/>
+            <circle cx="30" cy="28" r="1.0" fill="#e8cc99" opacity="0.6"/>
+            <circle cx="48" cy="10" r="1.0" fill="#c9a96e" opacity="0.75"/>
+            <circle cx="20" cy="40" r="0.8" fill="#e8cc99" opacity="0.5"/>
+            <circle cx="5"  cy="45" r="1.2" fill="#c9a96e" opacity="0.6"/>
+          </svg>
+          <span class="sky-card__glyph">Constellation · Visible Year-Round</span>
+          <h3 class="sky-card__name">Orion</h3>
+          <p class="sky-card__latin">The Hunter — Orion Major</p>
+          <p class="sky-card__desc">One of the night sky's most recognisable figures — the three-star belt, the Orion Nebula glowing faintly beneath it. Spectacular through binoculars from Novae.</p>
+          <span class="sky-card__season">Best: Nov — Feb</span>
+        </div>
+
+        <!-- Card 2: Saturn -->
+        <div class="sky-card reveal reveal-d1">
+          <svg class="sky-card__stars-svg" viewBox="0 0 60 60" aria-hidden="true">
+            <circle cx="30" cy="10" r="2.0" fill="#c9a96e" opacity="0.9"/>
+            <circle cx="20" cy="25" r="1.2" fill="#e8cc99" opacity="0.7"/>
+            <circle cx="40" cy="25" r="1.2" fill="#e8cc99" opacity="0.7"/>
+            <circle cx="15" cy="42" r="0.8" fill="#c9a96e" opacity="0.6"/>
+            <circle cx="45" cy="42" r="0.8" fill="#c9a96e" opacity="0.6"/>
+            <circle cx="12" cy="15" r="0.6" fill="#e8cc99" opacity="0.5"/>
+            <circle cx="50" cy="20" r="0.7" fill="#c9a96e" opacity="0.55"/>
+          </svg>
+          <span class="sky-card__glyph">Planet · Naked-Eye Visible</span>
+          <h3 class="sky-card__name">Saturn</h3>
+          <p class="sky-card__latin">The Ringed Giant</p>
+          <p class="sky-card__desc">Through our telescope, Saturn's rings are clearly visible — one of the most emotionally impactful sights in astronomy. Guests frequently go speechless at this view.</p>
+          <span class="sky-card__season">Best: Jun — Oct</span>
+        </div>
+
+        <!-- Card 3: Milky Way -->
+        <div class="sky-card reveal reveal-d2">
+          <svg class="sky-card__stars-svg" viewBox="0 0 60 60" aria-hidden="true">
+            <circle cx="8"  cy="8"  r="1.0" fill="#c9a96e" opacity="0.8"/>
+            <circle cx="18" cy="6"  r="0.7" fill="#e8cc99" opacity="0.6"/>
+            <circle cx="28" cy="10" r="1.3" fill="#c9a96e" opacity="0.85"/>
+            <circle cx="40" cy="5"  r="0.8" fill="#e8cc99" opacity="0.7"/>
+            <circle cx="52" cy="12" r="1.1" fill="#c9a96e" opacity="0.75"/>
+            <circle cx="35" cy="22" r="0.6" fill="#e8cc99" opacity="0.5"/>
+            <circle cx="15" cy="30" r="1.2" fill="#c9a96e" opacity="0.65"/>
+            <circle cx="45" cy="35" r="0.9" fill="#e8cc99" opacity="0.6"/>
+            <circle cx="25" cy="48" r="0.7" fill="#c9a96e" opacity="0.55"/>
+          </svg>
+          <span class="sky-card__glyph">Planet · Brightest Object After Moon</span>
+          <h3 class="sky-card__name">The Venus</h3>
+          <p class="sky-card__latin">The Evening Star</p>
+          <p class="sky-card__desc">Unmistakably brilliant in the western sky after sunset - Venus outshines every star and is often the first "star" guests spot each evening. Through our telescope, its crescent phase reveals it's a world, not a point of light, surprising most first-time viewers.</p>
+          <span class="sky-card__season">Best: Feb — Oct</span>
+        </div>
+
+        <!-- Card 4: Jupiter -->
+        <div class="sky-card reveal">
+          <svg class="sky-card__stars-svg" viewBox="0 0 60 60" aria-hidden="true">
+            <circle cx="15" cy="15" r="1.5" fill="#c9a96e" opacity="0.9"/>
+            <circle cx="45" cy="10" r="1.0" fill="#e8cc99" opacity="0.7"/>
+            <circle cx="30" cy="30" r="0.7" fill="#c9a96e" opacity="0.6"/>
+            <circle cx="10" cy="40" r="1.2" fill="#e8cc99" opacity="0.75"/>
+            <circle cx="50" cy="45" r="0.8" fill="#c9a96e" opacity="0.65"/>
+            <circle cx="38" cy="22" r="1.1" fill="#c9a96e" opacity="0.8"/>
+          </svg>
+          <span class="sky-card__glyph">Planet · Brightest Object After Moon</span>
+          <h3 class="sky-card__name">Jupiter</h3>
+          <p class="sky-card__latin">The Gas Giant</p>
+          <p class="sky-card__desc">Jupiter's four Galilean moons — Io, Europa, Ganymede, Callisto — are visible through our telescope, lined up like tiny pearls beside the planet.</p>
+          <span class="sky-card__season">Best: Aug — Dec</span>
+        </div>
+
+        <!-- Card 5: Perseids -->
+        <div class="sky-card reveal reveal-d1">
+          <svg class="sky-card__stars-svg" viewBox="0 0 60 60" aria-hidden="true">
+            <circle cx="20" cy="10" r="0.8" fill="#c9a96e" opacity="0.7"/>
+            <circle cx="35" cy="15" r="1.4" fill="#e8cc99" opacity="0.85"/>
+            <circle cx="50" cy="8"  r="0.6" fill="#c9a96e" opacity="0.6"/>
+            <circle cx="12" cy="25" r="1.1" fill="#e8cc99" opacity="0.75"/>
+            <circle cx="42" cy="30" r="0.9" fill="#c9a96e" opacity="0.65"/>
+            <circle cx="25" cy="45" r="1.3" fill="#e8cc99" opacity="0.8"/>
+            <circle cx="8"  cy="52" r="1.0" fill="#c9a96e" opacity="0.65"/>
+          </svg>
+          <span class="sky-card__glyph">Meteor Shower · Annual Event</span>
+          <h3 class="sky-card__name">Perseids</h3>
+          <p class="sky-card__latin">August Meteor Shower</p>
+          <p class="sky-card__desc">Up to 100 meteors per hour at peak. Novae Glamp organises special watch events during the Perseids — lying on mats under a sky that's actively falling.</p>
+          <span class="sky-card__season">Peak: Aug 12–13 each year</span>
+        </div>
+
+        <!-- Card 6: Pleiades -->
+        <div class="sky-card reveal reveal-d2">
+          <svg class="sky-card__stars-svg" viewBox="0 0 60 60" aria-hidden="true">
+            <circle cx="30" cy="5"  r="1.8" fill="#c9a96e" opacity="0.9"/>
+            <circle cx="10" cy="20" r="1.0" fill="#e8cc99" opacity="0.7"/>
+            <circle cx="50" cy="20" r="1.0" fill="#e8cc99" opacity="0.7"/>
+            <circle cx="18" cy="42" r="1.3" fill="#c9a96e" opacity="0.8"/>
+            <circle cx="42" cy="42" r="1.3" fill="#c9a96e" opacity="0.8"/>
+            <circle cx="22" cy="14" r="0.6" fill="#c9a96e" opacity="0.55"/>
+            <circle cx="38" cy="14" r="0.6" fill="#c9a96e" opacity="0.55"/>
+          </svg>
+          <span class="sky-card__glyph">Deep Sky Object · Telescope</span>
+          <h3 class="sky-card__name">The Pleiades</h3>
+          <p class="sky-card__latin">Seven Sisters — M45</p>
+          <p class="sky-card__desc">An open star cluster of over 800 stars. With the naked eye you see six or seven — through a telescope, hundreds emerge wrapped in faint blue nebulosity.</p>
+          <span class="sky-card__season">Best: Oct — Mar</span>
+        </div>
+
+      </div><!-- /sky-grid -->
+    </div>
+  </section>
+
+
+  <!-- ═══ THE EXPERIENCE — how your night unfolds ═══ -->
+  <section class="section bg-cosmos" id="experience" aria-labelledby="exp-heading">
+    <div class="container">
+      <div class="section-header section-header--center reveal">
+        <span class="text-label">— <span>03</span> / Your Stargazing Night</span>
+        <h2 class="heading-2" id="exp-heading">How the <em>Night Unfolds</em></h2>
+        <span class="gold-rule gold-rule--center"></span>
+        <p class="text-body" style="margin:0 auto;">From arrival to dawn — a carefully designed flow that builds toward the sky.</p>
+      </div>
+
+      <!-- Two-column timeline -->
+      <div class="sg-timeline">
+
+        <!-- Left column -->
+        <div class="sg-timeline__col">
+          <div class="sg-timeline__item reveal">
+            <div class="sg-timeline__time">7:00 PM · Arrival</div>
+            <h3 class="sg-timeline__title">Welcome &amp; Orientation</h3>
+            <p class="sg-timeline__desc">You're welcomed at the Bali-themed entrance and briefed on the night ahead. Your tent is ready; the property is yours to explore. Eyes begin adjusting to the absence of city light.</p>
+          </div>
+          <div class="sg-timeline__item reveal reveal-d1">
+            <div class="sg-timeline__time">8:30 PM · Dinner</div>
+            <h3 class="sg-timeline__title">Dinner Under Open Skies</h3>
+            <p class="sg-timeline__desc">Meals at Novae happen in the dome dining space or at open-air tables. As you eat, the sky deepens. Stars begin appearing one by one — then all at once.</p>
+          </div>
+          <div class="sg-timeline__item reveal reveal-d2">
+            <div class="sg-timeline__time">10:30 PM · Free Time</div>
+            <h3 class="sg-timeline__title">Lie Back. Look Up.</h3>
+            <p class="sg-timeline__desc">After the guided session, the sky is yours. Lie on the mats, photograph with long exposure, count shooting stars. This is the time guests remember most.</p>
+          </div>
+          <div class="sg-timeline__item reveal reveal-d3">
+            <div class="sg-timeline__time">6:00 AM · Morning</div>
+            <h3 class="sg-timeline__title">Sunrise &amp; Solar Observation</h3>
+            <p class="sg-timeline__desc">Early risers are rewarded. A guided nature walk, the slow arrival of colour in the sky, and safe solar observation through a filtered telescope.</p>
+          </div>
+        </div>
+
+        <div class="sg-timeline__line" aria-hidden="true"></div>
+
+        <!-- Right column (offset lower) -->
+        <div class="sg-timeline__col sg-timeline__col--right">
+          <div class="sg-timeline__item reveal">
+            <div class="sg-timeline__time">9:00 PM · Guided Session</div>
+            <h3 class="sg-timeline__title">Introductory Astronomy Session</h3>
+            <p class="sg-timeline__desc">This introductory session is designed for anyone curious about the universe. Participants will explore the fundamentals of astronomy, understand how the night sky works, learn about celestial objects, and discover how astronomers observe the cosmos. No prior knowledge is required.</p>
+          </div>
+          <div class="sg-timeline__item reveal reveal-d1">
+            <div class="sg-timeline__time">9:45 PM · Telescope</div>
+            <h3 class="sg-timeline__title">Telescope Viewing Session</h3>
+            <p class="sg-timeline__desc">The telescope opens up a different universe — Saturn's rings in sharp definition, Jupiter's moons as individual dots, the Moon's craters so close they feel touchable.</p>
+          </div>
+          <div class="sg-timeline__item reveal reveal-d2">
+            <div class="sg-timeline__time">11:30 PM · Bonfire</div>
+            <h3 class="sg-timeline__title">Bonfire &amp; Night Conversations</h3>
+            <p class="sg-timeline__desc">The bonfire pulls people together. Music, stories, woodsmoke. Conversations that wouldn't happen in daylight. The sky is still above you. You're in no hurry to leave.</p>
+          </div>
+          <div class="sg-timeline__item reveal reveal-d3">
+            <div class="sg-timeline__time">8:00 AM · Departure</div>
+            <h3 class="sg-timeline__title">Breakfast &amp; Farewell</h3>
+            <p class="sg-timeline__desc">A full breakfast before you leave. Most guests report feeling deeply rested — not because they slept a lot, but because they genuinely disconnected.</p>
+          </div>
+        </div>
+
+      </div><!-- /sg-timeline -->
+    </div>
+  </section>
+
+
+  <!-- ═══ TELESCOPE & EQUIPMENT ═══ -->
+  <section class="section bg-void" aria-labelledby="scope-heading">
+    <div class="container">
+      <div class="grid-2 align-center gap-5">
+
+        <!-- Animated scope visual -->
+        <div class="scope-visual reveal">
+          <div class="scope-ring"></div>
+          <div class="scope-ring"></div>
+          <div class="scope-ring"></div>
+          <div class="scope-ring"></div>
+          <div class="scope-center">
+            <div class="scope-star"></div>
+          </div>
+        </div>
+
+        <!-- Equipment details -->
+        <div class="reveal reveal-d1">
+          <span class="text-label">— <span>04</span> / Equipment &amp; Setup</span>
+          <h2 class="heading-2" id="scope-heading">Our Telescope &amp; <em>Observation Setup</em></h2>
+          <span class="gold-rule"></span>
+          <p class="text-body">We've invested in professional-grade equipment to ensure every guest sees the sky in full detail — not as a blur, but as something that takes your breath away.</p>
+
+          <div class="flex-col gap-3 mt-4">
+            <div class="feature-row">
+              <div class="feature-row__icon">🔭</div>
+              <div>
+                <div class="feature-row__title">12 inch Dobsonian</div>
+                <p class="feature-row__desc">Reveals Saturn's rings, Jupiter's bands, lunar craters, and deep sky objects at up to 180× magnification.</p>
+              </div>
+            </div>
+            <div class="feature-row">
+              <div class="feature-row__icon">🗺</div>
+              <div>
+                <div class="feature-row__title">Red-Light Star Maps</div>
+                <p class="feature-row__desc">Custom constellation maps for this exact latitude and season. Red-light torches preserve night vision during sessions.</p>
+              </div>
+            </div>
+            <div class="feature-row">
+              <div class="feature-row__icon">📸</div>
+              <div>
+                <div class="feature-row__title">Astrophotography Guidance</div>
+                <p class="feature-row__desc">Manual settings guidance for capturing star trails, Milky Way shots, and moon photography — no specialist gear needed.</p>
+              </div>
+            </div>
+            <div class="feature-row">
+              <div class="feature-row__icon">🌙</div>
+              <div>
+                <div class="feature-row__title">Open Sky Observation Area</div>
+                <p class="feature-row__desc">Dedicated zone away from all structures — mats laid out, full 360° horizon access, zero light interference.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ CELESTIAL EVENTS CALENDAR ═══ -->
+  <section class="section bg-cosmos" aria-labelledby="events-heading">
+    <div class="container">
+
+      <div class="section-header section-header--center reveal">
+        <span class="text-label">— <span>05</span> / Celestial Events</span>
+        <h2 class="heading-2" id="events-heading">Special <em>Sky Events</em> at Novae</h2>
+        <span class="gold-rule gold-rule--center"></span>
+        <p class="text-body" style="margin:0 auto;">We plan special overnight events around nature's most spectacular celestial shows. These nights sell out fast.</p>
+      </div>
+
+      <div class="grid-4 mt-5">
+
+        <div class="event-card event-card--featured reveal">
+          <div class="event-card__glow" aria-hidden="true"></div>
+          <span class="event-card__month">August · Annual</span>
+          <h3 class="event-card__name">Perseids Meteor Watch</h3>
+          <p class="event-card__desc">Peak meteor shower night — up to 100+ meteors per hour. Ground mats, expert briefing, stay up until 3 AM together.</p>
+          <span class="badge">★ Most Anticipated</span>
+        </div>
+
+        <div class="event-card reveal reveal-d1">
+          <span class="event-card__month">November · Annual</span>
+          <h3 class="event-card__name">Leonid Shower Night</h3>
+          <p class="event-card__desc">Intense bursts of fast, bright meteors. Intimate watch event with smaller groups for a more personal experience.</p>
+          <span class="badge">Limited Capacity</span>
+        </div>
+
+        <div class="event-card reveal reveal-d2">
+          <span class="event-card__month">December · Annual</span>
+          <h3 class="event-card__name">Geminid Meteor Shower</h3>
+          <p class="event-card__desc">Richest shower of the year — up to 120 per hour, with unusually bright fireballs. One of the warmest nights to watch from Telangana.</p>
+          <span class="badge">Family Friendly</span>
+        </div>
+
+        <div class="event-card reveal reveal-d3">
+          <span class="event-card__month">Full Moon · Monthly</span>
+          <h3 class="event-card__name">Full Moon Meditation Night</h3>
+          <p class="event-card__desc">Silver-lit landscape, moonrise over the horizon. Includes sound healing and outdoor meditation session.</p>
+          <span class="badge">Couples &amp; Wellness</span>
+        </div>
+
+        <div class="event-card reveal">
+          <span class="event-card__month">New Moon · Monthly</span>
+          <h3 class="event-card__name">Dark Sky Night</h3>
+          <p class="event-card__desc">Our darkest and most spectacular nights. No moonlight — just thousands of stars, the Milky Way's full arch, and complete silence.</p>
+          <span class="badge">Astronomers' Pick</span>
+        </div>
+
+        <div class="event-card event-card--featured reveal reveal-d1">
+          <div class="event-card__glow" aria-hidden="true"></div>
+          <span class="event-card__month">Seasonal · Quarterly</span>
+          <h3 class="event-card__name">Planetary Alignment Nights</h3>
+          <p class="event-card__desc">When Jupiter, Saturn and Mars align in the same part of the sky, we plan special telescope nights with extended viewing hours.</p>
+          <span class="badge">★ Expert Guided</span>
+        </div>
+
+        <div class="event-card reveal reveal-d2">
+          <span class="event-card__month">Jul — Sep</span>
+          <h3 class="event-card__name">Milky Way Core Season</h3>
+          <p class="event-card__desc">The galactic centre is highest in the summer sky — the richest, most dense part of the Milky Way directly overhead.</p>
+          <span class="badge">Photography Special</span>
+        </div>
+
+        <div class="event-card reveal reveal-d3">
+          <span class="event-card__month">Custom · Any Night</span>
+          <h3 class="event-card__name">Private Stargazing Booking</h3>
+          <p class="event-card__desc">Book a private guided session for your group on any clear night. Fully personalised to your group's interests and size.</p>
+          <span class="badge">Book in Advance</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ DARK SKY FACTS ═══ -->
+  <section class="section bg-void" aria-labelledby="facts-heading">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="text-label">— <span>06</span> / The Dark Sky Difference</span>
+        <h2 class="heading-2" id="facts-heading">Why <em>Location Matters</em></h2>
+        <span class="gold-rule"></span>
+      </div>
+
+      <div class="facts-grid">
+        <div class="fact-item reveal">
+          <div class="fact-num">80<span class="fact-unit">%</span></div>
+          <h3 class="fact-title">of humanity can't see the Milky Way</h3>
+          <p class="fact-desc">Light pollution has erased the night sky for most of the world's population. The galaxy we live inside is invisible from most cities — including Hyderabad. Bhuvanagiri is different.</p>
+        </div>
+        <div class="fact-item reveal reveal-d1">
+          <div class="fact-num">4<span class="fact-unit"> Bortle</span></div>
+          <h3 class="fact-title">Dark sky rating at our site</h3>
+          <p class="fact-desc">The Bortle Scale measures light pollution from 1 (darkest) to 9 (city centre). At Bortle 4, the Milky Way is clearly visible and thousands of stars are countable by naked eye.</p>
+        </div>
+        <div class="fact-item reveal reveal-d2">
+          <div class="fact-num">6,500<span class="fact-unit">+</span></div>
+          <h3 class="fact-title">Stars visible on a clear night</h3>
+          <p class="fact-desc">From a Bortle 9 city, you see perhaps 200 stars. From Novae Glamp on a clear new moon night, you can see over 6,500 with the naked eye alone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ BEST CONDITIONS ═══ -->
+  <section class="section bg-deep" aria-labelledby="conditions-heading">
+    <div class="container">
+      <div class="grid-2 gap-5">
+
+        <!-- Conditions list -->
+        <div class="reveal">
+          <span class="text-label">— <span>07</span> / Viewing Conditions</span>
+          <h2 class="heading-2" id="conditions-heading">When to Come for the <em>Best Sky</em></h2>
+          <span class="gold-rule"></span>
+          <p class="text-body">The sky at Novae Glamp is remarkable year-round, but some nights are genuinely transcendent. Here's what affects what you'll see.</p>
+
+          <div class="flex-col mt-4">
+            <div class="condition-row">
+              <span class="condition-icon">🌑</span>
+              <span class="condition-label">New Moon Night</span>
+              <span class="condition-val">Best Possible</span>
+            </div>
+            <div class="condition-row">
+              <span class="condition-icon">🌒</span>
+              <span class="condition-label">Crescent Moon Night</span>
+              <span class="condition-val">Excellent</span>
+            </div>
+            <div class="condition-row">
+              <span class="condition-icon">🌕</span>
+              <span class="condition-label">Full Moon Night</span>
+              <span class="condition-val">Moon Photography</span>
+            </div>
+            <div class="condition-row">
+              <span class="condition-icon">💨</span>
+              <span class="condition-label">Post-Rain, Clear Sky</span>
+              <span class="condition-val">Exceptional</span>
+            </div>
+            <div class="condition-row">
+              <span class="condition-icon">❄️</span>
+              <span class="condition-label">Winter (Nov–Feb)</span>
+              <span class="condition-val">Orion &amp; Pleiades</span>
+            </div>
+            <div class="condition-row">
+              <span class="condition-icon">☀️</span>
+              <span class="condition-label">Summer (Jul–Sep)</span>
+              <span class="condition-val">Milky Way Core</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rating bars -->
+        <div class="reveal reveal-d2">
+          <span class="text-label" style="margin-bottom:1.5rem; display:block;">Stargazing Score by Season</span>
+
+          <div class="rating-bar-wrap">
+            <div class="rating-row">
+              <span class="rating-name">July – September</span>
+              <div class="rating-bar-bg"><div class="rating-bar-fill" data-pct="97%" style="width:0%"></div></div>
+              <span class="rating-pct">97%</span>
+            </div>
+            <div class="rating-row">
+              <span class="rating-name">Oct – November</span>
+              <div class="rating-bar-bg"><div class="rating-bar-fill" data-pct="90%" style="width:0%"></div></div>
+              <span class="rating-pct">90%</span>
+            </div>
+            <div class="rating-row">
+              <span class="rating-name">Dec – February</span>
+              <div class="rating-bar-bg"><div class="rating-bar-fill" data-pct="85%" style="width:0%"></div></div>
+              <span class="rating-pct">85%</span>
+            </div>
+            <div class="rating-row">
+              <span class="rating-name">March – May</span>
+              <div class="rating-bar-bg"><div class="rating-bar-fill" data-pct="75%" style="width:0%"></div></div>
+              <span class="rating-pct">75%</span>
+            </div>
+            <div class="rating-row">
+              <span class="rating-name">Monsoon (Jun)</span>
+              <div class="rating-bar-bg"><div class="rating-bar-fill" data-pct="45%" style="width:0%"></div></div>
+              <span class="rating-pct">45%</span>
+            </div>
+          </div>
+
+          <div class="card mt-4">
+            <span class="text-label"><span>Weather Policy</span></span>
+            <p class="text-body mt-2">If cloud cover prevents stargazing, we offer alternative evening activities — bonfire, sound healing, astronomy workshop — and the option to reschedule at no extra cost.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ TESTIMONIALS MARQUEE ═══ -->
+  <section class="section bg-void" aria-labelledby="reviews-heading">
+    <div class="container">
+      <div class="section-header section-header--center reveal">
+        <span class="text-label">— <span>08</span> / What Guests Say</span>
+        <h2 class="heading-2" id="reviews-heading">Moments That <em>Stay With You</em></h2>
+        <span class="gold-rule gold-rule--center"></span>
+        <p class="text-body" style="margin:0 auto;">The most common thing guests say after a Novae night isn't about the tents or the food. It's about the sky.</p>
+      </div>
+    </div>
+
+    <!-- Scrolling marquee — full width -->
+    <div class="marquee-wrap mt-5">
+      <div class="marquee-track">
+
+        <div class="testimonial-card" style="width:380px; flex-shrink:0;">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p class="testimonial-card__text">"I genuinely did not expect to cry looking at stars. But watching the Milky Way stretch across the entire sky — my family stood in silence for almost 10 minutes. Nobody wanted to speak."</p>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">SM</div>
+            <div><div class="testimonial-card__name">Swetha Murali</div><div class="testimonial-card__role">Family Stay · Hut Tents</div></div>
+          </div>
+        </div>
+
+        <div class="testimonial-card" style="width:380px; flex-shrink:0;">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p class="testimonial-card__text">"Our team outing was supposed to be a quick getaway. We ended up staying up until 2 AM — first talking about the stars, then about everything else. The sky broke our barriers."</p>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">KM</div>
+            <div><div class="testimonial-card__name">Karthik Madem</div><div class="testimonial-card__role">Corporate Group · 28 people</div></div>
+          </div>
+        </div>
+
+        <div class="testimonial-card" style="width:380px; flex-shrink:0;">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p class="testimonial-card__text">"I proposed to her under the Milky Way at 11:30 PM. The guide had quietly stepped away. The stars were doing all the work. She said yes."</p>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">RV</div>
+            <div><div class="testimonial-card__name">Rahul Venkat</div><div class="testimonial-card__role">Tepee Stay · Proposal Night</div></div>
+          </div>
+        </div>
+
+        <div class="testimonial-card" style="width:380px; flex-shrink:0;">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p class="testimonial-card__text">"I've been to dark sky sites in Rajasthan and Ladakh. Novae Glamp gives you a comparable sky with none of the travel. 30 km from Hyderabad and I saw Saturn's rings. Legitimately incredible."</p>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">AP</div>
+            <div><div class="testimonial-card__name">Arjun Prasad</div><div class="testimonial-card__role">Astronomy Enthusiast · Solo</div></div>
+          </div>
+        </div>
+
+        <div class="testimonial-card" style="width:380px; flex-shrink:0;">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p class="testimonial-card__text">"45 students. The kids who never stop talking — completely silent during the stargazing session. Three students said they want to study astrophysics now."</p>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">PL</div>
+            <div><div class="testimonial-card__name">Padma Lakshmi</div><div class="testimonial-card__role">Science Teacher · School Group</div></div>
+          </div>
+        </div>
+
+        <!-- Duplicate set for seamless loop -->
+        <div class="testimonial-card" style="width:380px; flex-shrink:0;">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p class="testimonial-card__text">"I genuinely did not expect to cry looking at stars. But watching the Milky Way stretch across the entire sky — my family stood in silence for almost 10 minutes. Nobody wanted to speak."</p>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">SM</div>
+            <div><div class="testimonial-card__name">Swetha Murali</div><div class="testimonial-card__role">Family Stay · Hut Tents</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card" style="width:380px; flex-shrink:0;">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p class="testimonial-card__text">"Our team outing was supposed to be a quick getaway. We ended up staying up until 2 AM — first talking about the stars, then about everything else. The sky broke our barriers."</p>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">KM</div>
+            <div><div class="testimonial-card__name">Karthik Madem</div><div class="testimonial-card__role">Corporate Group · 28 people</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card" style="width:380px; flex-shrink:0;">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p class="testimonial-card__text">"I proposed to her under the Milky Way at 11:30 PM. The guide had quietly stepped away. The stars were doing all the work. She said yes."</p>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">RV</div>
+            <div><div class="testimonial-card__name">Rahul Venkat</div><div class="testimonial-card__role">Tepee Stay · Proposal Night</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card" style="width:380px; flex-shrink:0;">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p class="testimonial-card__text">"I've been to dark sky sites in Rajasthan and Ladakh. Novae Glamp gives you a comparable sky with none of the travel. 30 km from Hyderabad and I saw Saturn's rings. Legitimately incredible."</p>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">AP</div>
+            <div><div class="testimonial-card__name">Arjun Prasad</div><div class="testimonial-card__role">Astronomy Enthusiast · Solo</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card" style="width:380px; flex-shrink:0;">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p class="testimonial-card__text">"45 students. The kids who never stop talking — completely silent during the stargazing session. Three students said they want to study astrophysics now."</p>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">PL</div>
+            <div><div class="testimonial-card__name">Padma Lakshmi</div><div class="testimonial-card__role">Science Teacher · School Group</div></div>
+          </div>
+        </div>
+
+      </div><!-- /marquee-track -->
+    </div><!-- /marquee-wrap -->
+  </section>
+
+
+  <!-- ═══ LOCATION ═══ -->
+  <section class="section bg-cosmos" aria-labelledby="location-heading">
+    <div class="container">
+      <div class="grid-2 gap-5 align-center">
+
+        <div class="reveal">
+          <span class="text-label">— <span>09</span> / How to Find Us</span>
+          <h2 class="heading-2" id="location-heading">30 km from Hyderabad. <em>A World Away.</em></h2>
+          <span class="gold-rule"></span>
+          <p class="text-body">Far enough for the sky to open up completely. Close enough for a spontaneous weekend decision.</p>
+
+          <div class="flex-col gap-3 mt-4">
+            <div class="feature-row">
+              <div class="feature-row__icon">📍</div>
+              <div>
+                <div class="feature-row__title">Address</div>
+                <p class="feature-row__desc">Maryala Village Road, towards Pillugundla Thanda, Bhuvanagiri, Telangana 508117</p>
+              </div>
+            </div>
+            <div class="feature-row">
+              <div class="feature-row__icon">🚗</div>
+              <div>
+                <div class="feature-row__title">From Hyderabad</div>
+                <p class="feature-row__desc">~45–50 minutes by car via NH65. Search "Novae Glamp" on Google Maps for turn-by-turn directions.</p>
+              </div>
+            </div>
+            <div class="feature-row">
+              <div class="feature-row__icon">📞</div>
+              <div>
+                <div class="feature-row__title">Reservations &amp; Directions</div>
+                <p class="feature-row__desc"><a href="tel:8886866631" style="color:var(--clr-gold)">8886866631</a> · <a href="mailto:Bookings@novaeglamp.com" style="color:var(--clr-gold)">Bookings@novaeglamp.com</a></p>
+              </div>
+            </div>
+            <div class="feature-row">
+              <div class="feature-row__icon">⏰</div>
+              <div>
+                <div class="feature-row__title">Check-in / Check-out</div>
+                <p class="feature-row__desc">Arrival from 6:30 PM · Departure by 10:30 AM the next morning</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map placeholder -->
+        <div class="map-placeholder reveal reveal-d2">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3803.6756647176103!2d78.8242302!3d17.570621900000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb7b65006be757%3A0xd1f1e2bf7808e3fb!2sNovae%20glamp!5e0!3m2!1sen!2sin!4v1783535632351!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ FINAL CTA ═══ -->
+  <div class="cta-banner" style="position:relative; overflow:hidden;">
+    <div class="cta-nebula" aria-hidden="true"></div>
+    <div class="container" style="position:relative; z-index:2;">
+      <span class="text-label text-center" style="display:block; justify-content:center;">Ready to Look Up?</span>
+      <h2 class="heading-2 text-center reveal">The Sky Is Waiting. <em>So Is Your Night.</em></h2>
+      <p class="text-body text-center reveal reveal-d1" style="margin:var(--space-3) auto var(--space-5);">
+        Weekends fill fast — especially on new moon nights and meteor shower dates. Book early or reach out and we'll find the perfect night for you.
+      </p>
+      <div class="btn-group flex-center reveal reveal-d2">
+        <a href="https://wa.me/918886866631?text=Hi%20Novae%20Glamp%2C%20I%20want%20to%20book%20a%20stargazing%20night."
+           class="btn btn--glow" target="_blank" rel="noopener">Book a Stargazing Night</a>
+        <a href="stays.html" class="btn btn--outline">Explore Stay Options</a>
+      </div>
+      <p class="text-center text-sm mt-4" style="color:var(--clr-star-dim);">
+        Or call us: <a href="tel:8886866631" style="color:var(--clr-gold);">8886866631</a>
+        · <a href="mailto:Bookings@novaeglamp.com" style="color:var(--clr-gold);">Bookings@novaeglamp.com</a>
+      </p>
+    </div>
+  </div>
+
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="footer__grid">
+
+      <div>
+        
+        <p class="footer__tagline">Hyderabad's premier sustainable glamping destination — where people reconnect with nature while enjoying thoughtful luxury and unforgettable curated experiences.</p>
+      </div>
+
+      <div>
+        <div class="footer__col-title">Explore</div>
+        <div class="footer__links">
+          <a href="index.html">Home</a>
+          <a href="stays.html">Stays &amp; Pricing</a>
+          <a href="stargazing.html">Stargazing</a>
+          <a href="activities.html">Activities</a>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer__col-title">Stay Types</div>
+        <div class="footer__links">
+          <a href="stays.html#luxury">Luxury Tepee Stays</a>
+          <a href="stays.html#american">American Style Tents</a>
+          <a href="stays.html#suite">Suite Rooms</a>
+          <a href="stays.html#hut">Hut Style Tents</a>
+          <a href="stays.html#dorm">Dormitory</a>
+          <a href="stays.html#camping">Camping Tents</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer__col-title">Contact &amp; Find Us</div>
+        <div class="footer__contact">
+          <div>📍 Maryala Village Road, Bhuvanagiri, Telangana 508117</div>
+          <div>📞 <a href="tel:8886866631">8886866631</a></div>
+          <div>✉ <a href="mailto:Bookings@novaeglamp.com">Bookings@novaeglamp.com</a></div>
+          <div style="margin-top:0.8rem;">
+            <a href="https://wa.me/918886866631" target="_blank" rel="noopener" class="text-gold">
+              💬 Chat on WhatsApp →
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer__bottom">
+      <span>© 2025 Novae Glamp. All rights reserved.</span>
+      <div class="footer__social">
+        <a href="https://www.instagram.com/novaeglamphyd?igsh=ZmFjdjg3azR0N3Vk" aria-label="Instagram">IG</a>
+        <a href="https://www.facebook.com/profile.php?id=61577842907541&mibextid=wwXIfr" aria-label="Facebook">FB</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp float -->
+  <a href="https://wa.me/918886866631?text=Hi%20Novae%20Glamp%2C%20I%20want%20to%20book%20a%20stargazing%20night."
+     class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </svg>
+  </a>
+
+  <!-- Scripts -->
+  <script src="js/global.js"></script>
+  <script src="js/stargazing.js"></script>
+
+</body>
+</html>

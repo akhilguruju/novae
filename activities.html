@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Outdoor Activities Near Hyderabad — Stargazing, Bonfire, Drum Circle &amp; More | Novae Glamp</title>
+  <meta name="description" content="10+ outdoor activities near Hyderabad at Novae Glamp — stargazing, bonfire, drum circle, sound healing, outdoor games, pottery, nature walks, water rockets and more in Telangana." />
+  <meta name="keywords" content="outdoor activities near Hyderabad, camping activities Telangana, stargazing activities near Hyderabad, team building activities near Hyderabad, nature activities Telangana, drum circle near Hyderabad, sound healing near Hyderabad" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Novae Glamp" />
+  <link rel="canonical" href="https://novaeglamp.com/activities.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Novae Glamp" />
+  <meta property="og:title" content="Outdoor Activities Near Hyderabad — Stargazing, Bonfire, Drum Circle &amp; More | Novae Glamp" />
+  <meta property="og:description" content="10+ outdoor activities near Hyderabad — stargazing, bonfire, drum circle, sound healing, outdoor games, pottery, nature walks and water rockets at Novae Glamp." />
+  <meta property="og:url" content="https://novaeglamp.com/activities.html" />
+  <meta property="og:image" content="https://novaeglamp.com/assets/home/nightsky.jpeg" />
+  <meta property="og:image:alt" content="Outdoor activities at Novae Glamp glamping resort near Hyderabad" />
+  <meta property="og:locale" content="en_IN" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Outdoor Activities Near Hyderabad | Novae Glamp" />
+  <meta name="twitter:description" content="10+ outdoor activities at Novae Glamp — stargazing, bonfire, drum circle, sound healing, games, pottery, nature walks and more near Hyderabad." />
+  <meta name="twitter:image" content="https://novaeglamp.com/assets/home/nightsky.jpeg" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/NG_logo.svg" />
+  <link rel="apple-touch-icon" href="/assets/NG_logo.svg" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Activities at Novae Glamp",
+    "description": "10+ outdoor activities near Hyderabad including stargazing, bonfire, drum circle, sound healing, outdoor games, pottery, nature walks and water rockets.",
+    "url": "https://novaeglamp.com/activities.html",
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://novaeglamp.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Activities", "item": "https://novaeglamp.com/activities.html"}
+      ]
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="css/global.css" />
+  <style>
+    /* ── Activities grid ── */
+    .act-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-3);
+      margin-top: var(--space-5);
+    }
+    .act-card {
+      padding: var(--space-4) var(--space-3);
+      border: var(--border-gold-dim);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition-base), background var(--transition-base), transform var(--transition-base);
+    }
+    .act-card:hover {
+      border-color: rgba(201,169,110,0.28);
+      background: rgba(201,169,110,0.03);
+      transform: translateY(-3px);
+    }
+    .act-card__icon {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(201,169,110,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: var(--space-3);
+    }
+    .act-card__name {
+      font-family: var(--font-display);
+      font-size: var(--fs-lg);
+      color: var(--clr-star);
+      margin-bottom: var(--space-1);
+    }
+    .act-card__tag {
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      color: var(--clr-gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-2);
+      display: block;
+    }
+    .act-card__desc {
+      font-size: var(--fs-sm);
+      color: var(--clr-star-dim);
+      line-height: 1.75;
+    }
+
+    /* ── Featured activity — large card ── */
+    .act-featured {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+      align-items: center;
+      border: var(--border-gold-dim);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-bottom: var(--space-5);
+    }
+    .act-featured__img {
+      aspect-ratio: 4 / 3;
+    }
+    .act-featured__body {
+      padding: var(--space-5) var(--space-5) var(--space-5) 0;
+    }
+    .act-featured__label {
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--clr-gold);
+      display: block;
+      margin-bottom: var(--space-2);
+    }
+
+    @media (max-width: 1024px) { .act-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px)  {
+      .act-grid { grid-template-columns: 1fr 1fr; }
+      .act-featured { grid-template-columns: 1fr; }
+      .act-featured__body { padding: var(--space-4); }
+    }
+    @media (max-width: 480px)  { .act-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAV ═══ -->
+  <header>
+    <nav class="nav" id="nav" aria-label="Main navigation">
+      <a href="index.html" class="nav__logo">
+       <img src="assets/NG_logo.svg" alt="Novae Glamp — Luxury Glamping Near Hyderabad" width="120" height="48" />
+      </a>
+      <button class="nav__hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav__links">
+        <li><a href="index.html"       class="nav__link is-active">Home</a></li>
+        <li><a href="about.html"       class="nav__link">About</a></li>
+
+        <!-- Stays dropdown -->
+        <li class="nav__dropdown">
+          <a href="stays.html" class="nav__link">Stays</a>
+          <div class="nav__dropdown-menu">
+            <a href="stays.html#luxury"   class="nav__link">Luxury Tepee — ₹14,999</a>
+            <a href="stays.html#american" class="nav__link">American Tents — ₹11,999</a>
+            <a href="stays.html#suite"    class="nav__link">Suite Rooms — ₹11,999</a>
+            <a href="stays.html#hut"      class="nav__link">Hut Tents — ₹3,499/person</a>
+            <a href="stays.html#dorm"     class="nav__link">Dormitory — ₹2,999/person</a>
+            <a href="stays.html#camping"  class="nav__link">Camping Tents — ₹2,299/person</a>
+          </div>
+        </li>
+
+        <!-- Experiences dropdown -->
+        <li class="nav__dropdown">
+          <a href="experiences.html" class="nav__link">Experiences</a>
+          <div class="nav__dropdown-menu">
+            <a href="experiences.html#families"  class="nav__link">Families &amp; Friends</a>
+            <a href="experiences.html#couples"   class="nav__link">Couples</a>
+            <a href="experiences.html#corporate" class="nav__link">Corporates &amp; Groups</a>
+            <a href="experiences.html#schools"   class="nav__link">Schools &amp; Students</a>
+            <a href="experiences.html#events"    class="nav__link">Events</a>
+            <a href="experiences.html#astronomy" class="nav__link">Astronomy Enthusiasts</a>
+          </div>
+        </li>
+
+        <li><a href="stargazing.html"  class="nav__link">Stargazing</a></li>
+        <li><a href="activities.html"  class="nav__link">Activities</a></li>
+        <li><a href="contact.html"     class="nav__link">Contact</a></li>
+        <li>
+          <a href="https://wa.me/918886866631?text=Hi%20Novae%20Glamp%2C%20I%20would%20like%20to%20enquire%20about%20a%20stay."
+             class="nav__link nav__cta" target="_blank" rel="noopener">
+            Book Now
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+
+  <!-- ═══ PAGE HERO ═══ -->
+  <section class="page-hero bg-navy">
+    <div class="container">
+      <span class="text-label reveal">Activities at Novae Glamp</span>
+      <h1 class="heading-1 reveal reveal-d1">
+        Something for <em>Everyone</em>
+      </h1>
+      <span class="gold-rule reveal reveal-d2"></span>
+      <p class="text-body reveal reveal-d3" style="max-width:580px;">
+        Every activity at Novae Glamp is chosen to create real engagement — not just entertainment. From the silent awe of stargazing to the energetic chaos of a drum circle, each one adds something meaningful to your night.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ═══ FEATURED — STARGAZING ═══ -->
+  <section class="section bg-navy" aria-labelledby="sg-heading">
+    <div class="container">
+      <span class="text-label reveal">Signature Activity</span>
+      <div class="act-featured reveal reveal-d1">
+        <div class="act-featured__img img-placeholder img-placeholder--cosmos" style="border-radius:0;">
+          <img src="/assets/activities/telescope_pointing.jpg" alt="Guest using telescope for stargazing at Novae Glamp near Hyderabad" loading="lazy" width="800" height="600" />
+        </div>
+        <div class="act-featured__body">
+          <span class="act-featured__label">⭐ What We're Built Around</span>
+          <h2 class="heading-2" id="sg-heading">Guided <em>Stargazing Sessions</em></h2>
+          <span class="gold-rule"></span>
+          <p class="text-body">
+            Every Novae stay includes a guided stargazing session led by our astronomy host. Identify constellations, track visible planets, and observe through our telescope. On a clear night, guests can see over 6,500 stars with the naked eye alone.
+          </p>
+          <ul class="check-list mt-4">
+            <li class="check-list__item">Constellation identification — Orion, Scorpius, Cassiopeia &amp; more</li>
+            <li class="check-list__item">Telescope viewing — Saturn's rings, Jupiter's moons, Orion Nebula</li>
+            <li class="check-list__item">Planet tracking — Jupiter, Saturn, Mars, Venus visible to naked eye</li>
+            <li class="check-list__item">Milky Way viewing on new moon nights</li>
+            <li class="check-list__item">Astrophotography guidance for camera users</li>
+            <li class="check-list__item">Special sessions on meteor shower nights</li>
+          </ul>
+          <div class="btn-group mt-4">
+            <a href="stargazing.html" class="btn btn--primary">Full Stargazing Page →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ ALL ACTIVITIES GRID ═══ -->
+  <section class="section bg-navy-mid" aria-labelledby="all-act-heading">
+    <div class="container">
+      <div class="section-header">
+        <span class="text-label">All Activities</span>
+        <h2 class="heading-2 reveal" id="all-act-heading">
+          The Full <em>Novae Experience</em>
+        </h2>
+        <span class="gold-rule reveal reveal-d1"></span>
+        <p class="text-body reveal reveal-d1">All activities below are included with your overnight stay. Some can be added to day-visit packages — ask us when booking.</p>
+      </div>
+
+      <div class="act-grid">
+
+        <div class="act-card reveal">
+          <div class="act-card__icon">🔥</div>
+          <span class="act-card__tag">Evening · All Groups</span>
+          <div class="act-card__name">Bonfire Evenings</div>
+          <p class="act-card__desc">Gather around a real campfire with music, storytelling, and woodsmoke. The social heart of every Novae stay — conversations here go differently.</p>
+        </div>
+
+        <div class="act-card reveal reveal-d1">
+          <div class="act-card__icon">🌿</div>
+          <span class="act-card__tag">Morning · All Groups</span>
+          <div class="act-card__name">Nature Walks</div>
+          <p class="act-card__desc">Sunrise and sunset trails with a local naturalist — flora, fauna, birds, and quiet that city life erases. Available as guided or self-paced walks.</p>
+        </div>
+
+        <div class="act-card reveal reveal-d2">
+          <div class="act-card__icon">🎯</div>
+          <span class="act-card__tag">Evening · Groups &amp; Families</span>
+          <div class="act-card__name">Outdoor Games</div>
+          <p class="act-card__desc">Box cricket, human foosball, tug-of-war, relay races — high-energy team games that work for all ages and group sizes without any special equipment.</p>
+        </div>
+
+        <div class="act-card reveal reveal-d3">
+          <div class="act-card__icon">🎨</div>
+          <span class="act-card__tag">Afternoon · All Groups</span>
+          <div class="act-card__name">Art &amp; Pottery Workshops</div>
+          <p class="act-card__desc">Hands-on creative sessions — clay pottery, canvas painting, or guided art projects under open skies. Great for all ages, no experience needed.</p>
+        </div>
+
+        <div class="act-card reveal">
+          <div class="act-card__icon">🥁</div>
+          <span class="act-card__tag">Evening · Corporates &amp; Schools</span>
+          <div class="act-card__name">Drum Circle</div>
+          <p class="act-card__desc">High-energy group activity that builds rhythm, unity, and full participation. Everyone plays — no prior experience needed. Popular with corporate teams and school groups for breaking barriers fast.</p>
+        </div>
+
+        <div class="act-card reveal reveal-d1">
+          <div class="act-card__icon">🧘</div>
+          <span class="act-card__tag">Morning / Evening · All Groups</span>
+          <div class="act-card__name">Sound Healing Sessions</div>
+          <p class="act-card__desc">Guided Tibetan sound bowl meditation for relaxation and mindfulness — for couples, wellness groups, or corporate teams who need to decompress before they can truly bond.</p>
+        </div>
+
+        <div class="act-card reveal reveal-d2">
+          <div class="act-card__icon">🚀</div>
+          <span class="act-card__tag">Afternoon · Schools &amp; Students</span>
+          <div class="act-card__name">Water Rockets</div>
+          <p class="act-card__desc">STEM activity where students build and launch water-powered rockets — applying physics, working in teams, and having actual fun in the process. Designed specifically for school groups.</p>
+        </div>
+
+        <div class="act-card reveal reveal-d3">
+          <div class="act-card__icon">🎵</div>
+          <span class="act-card__tag">Evening · All Groups</span>
+          <div class="act-card__name">Live Music Sessions</div>
+          <p class="act-card__desc">Curated live music evenings around the bonfire — acoustic performances that set the tone for a night of open conversations and shared memories. Available on select nights.</p>
+        </div>
+
+        <div class="act-card reveal">
+          <div class="act-card__icon">🦅</div>
+          <span class="act-card__tag">Morning · Families &amp; Schools</span>
+          <div class="act-card__name">Bird Watching</div>
+          <p class="act-card__desc">Early morning guided bird watching with binoculars through the property's natural landscape. Over 40 species have been spotted at various times of year.</p>
+        </div>
+
+        <div class="act-card reveal reveal-d1">
+          <div class="act-card__icon">🌅</div>
+          <span class="act-card__tag">Morning · All Guests</span>
+          <div class="act-card__name">Sunrise Observation</div>
+          <p class="act-card__desc">Wake up early and watch the landscape transform from night to morning. On clear days, a filtered solar telescope is set up for safe sun observation — sunspots visible on good days.</p>
+        </div>
+
+        <div class="act-card reveal reveal-d2">
+          <div class="act-card__icon">🏏</div>
+          <span class="act-card__tag">Evening · Groups</span>
+          <div class="act-card__name">Box Cricket</div>
+          <p class="act-card__desc">Cricket played in a compact boxed pitch — fast-paced, inclusive, and endlessly entertaining. Works for mixed-age groups and creates friendly competition that carries into the bonfire conversations.</p>
+        </div>
+
+        <div class="act-card reveal reveal-d3">
+          <div class="act-card__icon">🎲</div>
+          <span class="act-card__tag">Anytime · All Groups</span>
+          <div class="act-card__name">Indoor Games &amp; Carrom</div>
+          <p class="act-card__desc">A relaxed indoor game zone for downtime — carrom, board games, and card games available throughout the stay for guests who want a quieter alternative between activities.</p>
+        </div>
+
+      </div><!-- /act-grid -->
+    </div>
+  </section>
+
+
+  <!-- ═══ ACTIVITY BY GROUP TYPE ═══ -->
+  <section class="section bg-navy" aria-labelledby="bygroup-heading">
+    <div class="container">
+      <span class="text-label reveal">Activity Guide</span>
+      <h2 class="heading-2 reveal reveal-d1" id="bygroup-heading">
+        Which Activities Suit <em>Your Group?</em>
+      </h2>
+      <span class="gold-rule reveal reveal-d2"></span>
+
+      <div class="grid-3 mt-5">
+        <div class="card reveal">
+          <h3 class="heading-3" style="margin-bottom:var(--space-3);">👨‍👩‍👧‍👦 Families &amp; Kids</h3>
+          <ul class="check-list">
+            <li class="check-list__item">Stargazing (kid-friendly, guided)</li>
+            <li class="check-list__item">Outdoor games &amp; box cricket</li>
+            <li class="check-list__item">Art &amp; pottery workshops</li>
+            <li class="check-list__item">Nature walks &amp; bird watching</li>
+            <li class="check-list__item">Bonfire storytelling</li>
+            <li class="check-list__item">Indoor games</li>
+          </ul>
+        </div>
+        <div class="card reveal reveal-d1">
+          <h3 class="heading-3" style="margin-bottom:var(--space-3);">🏢 Corporates &amp; Groups</h3>
+          <ul class="check-list">
+            <li class="check-list__item">Drum circle (team activity)</li>
+            <li class="check-list__item">Team building challenges</li>
+            <li class="check-list__item">Bonfire jamming &amp; live music</li>
+            <li class="check-list__item">Stargazing (shared experience)</li>
+            <li class="check-list__item">Sound healing session</li>
+            <li class="check-list__item">Outdoor sports &amp; treks</li>
+          </ul>
+        </div>
+        <div class="card reveal reveal-d2">
+          <h3 class="heading-3" style="margin-bottom:var(--space-3);">🎒 Schools &amp; Students</h3>
+          <ul class="check-list">
+            <li class="check-list__item">Astronomy workshop + telescope</li>
+            <li class="check-list__item">Water rockets (STEM activity)</li>
+            <li class="check-list__item">Nature trails &amp; bird watching</li>
+            <li class="check-list__item">Art &amp; pottery</li>
+            <li class="check-list__item">Stargazing (guided, educational)</li>
+            <li class="check-list__item">Outdoor team games</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ CTA ═══ -->
+  <div class="cta-banner">
+    <div class="container">
+      <h2 class="heading-2 text-center reveal">
+        Activities Are Better <em>When You're Actually There.</em>
+      </h2>
+      <p class="text-body text-center reveal reveal-d1" style="margin:var(--space-3) auto var(--space-5);">
+        All activities are included with your stay. Book your night and experience them all.
+      </p>
+      <div class="btn-group flex-center reveal reveal-d2">
+        <a href="stays.html"   class="btn btn--primary">View Stays &amp; Book</a>
+        <a href="https://wa.me/918886866631?text=Hi%20Novae%20Glamp%2C%20I%20have%20questions%20about%20activities."
+           class="btn btn--outline" target="_blank" rel="noopener">Ask Us on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="footer__grid">
+
+      <div>
+        
+        <p class="footer__tagline">Hyderabad's premier sustainable glamping destination — where people reconnect with nature while enjoying thoughtful luxury and unforgettable curated experiences.</p>
+      </div>
+
+      <div>
+        <div class="footer__col-title">Explore</div>
+        <div class="footer__links">
+          <a href="index.html">Home</a>
+          <a href="stays.html">Stays &amp; Pricing</a>
+          <a href="stargazing.html">Stargazing</a>
+          <a href="activities.html">Activities</a>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer__col-title">Stay Types</div>
+        <div class="footer__links">
+          <a href="stays.html#luxury">Luxury Tepee Stays</a>
+          <a href="stays.html#american">American Style Tents</a>
+          <a href="stays.html#suite">Suite Rooms</a>
+          <a href="stays.html#hut">Hut Style Tents</a>
+          <a href="stays.html#dorm">Dormitory</a>
+          <a href="stays.html#camping">Camping Tents</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer__col-title">Contact &amp; Find Us</div>
+        <div class="footer__contact">
+          <div>📍 Maryala Village Road, Bhuvanagiri, Telangana 508117</div>
+          <div>📞 <a href="tel:8886866631">8886866631</a></div>
+          <div>✉ <a href="mailto:Bookings@novaeglamp.com">Bookings@novaeglamp.com</a></div>
+          <div style="margin-top:0.8rem;">
+            <a href="https://wa.me/918886866631" target="_blank" rel="noopener" class="text-gold">
+              💬 Chat on WhatsApp →
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer__bottom">
+      <span>© 2025 Novae Glamp. All rights reserved.</span>
+      <div class="footer__social">
+        <a href="https://www.instagram.com/novaeglamphyd?igsh=ZmFjdjg3azR0N3Vk" aria-label="Instagram">IG</a>
+        <a href="https://www.facebook.com/profile.php?id=61577842907541&mibextid=wwXIfr" aria-label="Facebook">FB</a>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/918886866631?text=Hi%20Novae%20Glamp%2C%20I%20would%20like%20to%20enquire%20about%20a%20stay."
+     class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </svg>
+  </a>
+
+  <script src="js/global.js"></script>
+</body>
+</html>

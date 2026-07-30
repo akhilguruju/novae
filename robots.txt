@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disallow admin/staging areas
+Disallow: /old-layout/
+Disallow: /default.php
+
+# Sitemap location
+Sitemap: https://novaeglamp.com/sitemap.xml
