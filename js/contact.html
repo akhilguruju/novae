@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Contact Novae Glamp — Book your stargazing glamping experience near Hyderabad. Call 888 686 6631 or WhatsApp us to plan your perfect night."/>
+  <title>Contact Us — Novae Glamp</title>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="css/pages.css"/>
+</head>
+<body>
+  <header><nav class="nav" id="nav" aria-label="Main navigation">
+    <a href="index.html" class="nav__logo">
+       <img src="assets/NG_logo.svg"/>
+      </a>
+    <button class="nav__hamburger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li class="nav__dropdown"><a href="stays.html" class="nav__link">Stays</a><div class="nav__dropdown-menu">
+        <a href="stay-tepee.html" class="nav__link">Luxury Tepee — ₹14,999</a>
+        <a href="stay-american.html" class="nav__link">American Tents — ₹11,999</a>
+        <a href="stay-suite.html" class="nav__link">Suite Rooms — ₹11,999</a>
+        <a href="stay-hut.html" class="nav__link">Hut Tents — ₹3,499/person</a>
+        <a href="stay-dorm.html" class="nav__link">Dormitory — ₹2,999/person</a>
+        <a href="stay-camping.html" class="nav__link">Camping Tents — ₹2,299/person</a>
+      </div></li>
+      <li class="nav__dropdown"><a href="experiences.html" class="nav__link">Experiences</a><div class="nav__dropdown-menu">
+        <a href="families.html" class="nav__link">Families &amp; Friends</a>
+        <a href="couples.html" class="nav__link">Couples</a>
+        <a href="corporate.html" class="nav__link">Corporates &amp; Groups</a>
+        <a href="schools.html" class="nav__link">Schools &amp; Students</a>
+        <a href="events.html" class="nav__link">Events</a>
+        <a href="astronomy.html" class="nav__link">Astronomy Enthusiasts</a>
+      </div></li>
+      <li><a href="stargazing.html" class="nav__link">Stargazing</a></li>
+      <li><a href="activities.html" class="nav__link">Activities</a></li>
+      <li><a href="contact.html" class="nav__link is-active">Contact</a></li>
+      <li><a href="https://wa.me/918886866631?text=Hi%20Novae%20Glamp%2C%20I%20would%20like%20to%20enquire." class="nav__link nav__cta" target="_blank" rel="noopener">Book Now</a></li>
+    </ul>
+  </nav></header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero bg-void" style="padding-top:calc(var(--nav-h) + var(--space-6)); padding-bottom:var(--space-5);">
+    <div class="container">
+      <span class="text-label">Get in Touch</span>
+      <h1 class="heading-1 mt-2">Plan Your Night <em>Under the Stars</em></h1>
+      <span class="gold-rule"></span>
+      <p class="text-body">Tell us about your group, your date, and what you're looking for — we'll take it from there. Most enquiries get a response within 2 hours on WhatsApp.</p>
+    </div>
+  </section>
+
+  <!-- MAIN CONTACT SECTION -->
+  <section class="section bg-void" style="padding-top:var(--space-4);" aria-labelledby="contact-heading">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- FORM COLUMN -->
+        <div>
+          <span class="text-label"><span>Booking Enquiry Form</span></span>
+          <h2 class="heading-2 mt-2" id="contact-heading">Send Us Your <em>Details</em></h2>
+          <span class="gold-rule"></span>
+          <p class="text-body mb-4">Fill in the form and we'll reply with availability, stay recommendations and pricing tailored to your group. Or just WhatsApp us directly — it's faster.</p>
+
+          <form class="contact-form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="name">Your Name *</label>
+                <input class="form-input" type="text" id="name" name="name" placeholder="Full name" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="phone">Phone / WhatsApp *</label>
+                <input class="form-input" type="tel" id="phone" name="phone" placeholder="+91 XXXXX XXXXX" required/>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="email">Email Address</label>
+                <input class="form-input" type="email" id="email" name="email" placeholder="you@example.com"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="guests">Number of Guests *</label>
+                <input class="form-input" type="number" id="guests" name="guests" placeholder="e.g. 6" min="1" required/>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="date">Preferred Date *</label>
+                <input class="form-input" type="date" id="date" name="date" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="group">Experience Type *</label>
+                <select class="form-select" id="group" name="group" required>
+                  <option value="" disabled selected>Select experience</option>
+                  <option>Families &amp; Friends</option>
+                  <option>Couples / Anniversary / Proposal</option>
+                  <option>Corporate Team Outing</option>
+                  <option>School / Student Trip</option>
+                  <option>Event / Celebration</option>
+                  <option>Astronomy / Stargazing</option>
+                  <option>Not sure — help me decide</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="stay">Preferred Stay Type</label>
+              <select class="form-select" id="stay" name="stay">
+                <option value="" selected>No preference / help me choose</option>
+                <option>Luxury Tepee — ₹14,999/night</option>
+                <option>American Style Tents — ₹11,999/night</option>
+                <option>Suite Rooms (Boho) — ₹11,999/night</option>
+                <option>Hut Style Tents — ₹3,499/person</option>
+                <option>Dormitory — ₹2,999/person</option>
+                <option>Camping Tents — ₹2,299/person</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="message">Anything Else We Should Know?</label>
+              <textarea class="form-textarea" id="message" name="message" placeholder="Special occasion, dietary needs, accessibility requirements, questions..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn--primary" style="width:100%; justify-content:center;">
+              Send Enquiry via WhatsApp →
+            </button>
+            <p class="form-hint mt-2" style="text-align:center;">This opens WhatsApp with your details pre-filled. No account needed.</p>
+          </form>
+        </div>
+
+        <!-- INFO COLUMN -->
+        <div>
+          <span class="text-label"><span>Contact Information</span></span>
+          <h2 class="heading-2 mt-2">Reach Us <em>Directly</em></h2>
+          <span class="gold-rule"></span>
+
+          <div class="contact-info-panel">
+            <div class="contact-info-item">
+              <div class="contact-info-item__icon">📞</div>
+              <div>
+                <div class="contact-info-item__label">Phone &amp; WhatsApp</div>
+                <div class="contact-info-item__val">
+                  <a href="tel:8886866631">888 686 6631</a><br/>
+                  <span style="font-size:var(--fs-xs);color:var(--clr-muted);">Mon–Sun · 9 AM – 9 PM</span>
+                </div>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-info-item__icon">✉</div>
+              <div>
+                <div class="contact-info-item__label">Email</div>
+                <div class="contact-info-item__val">
+                  <a href="mailto:Bookings@novaeglamp.com">Bookings@novaeglamp.com</a><br/>
+                  <span style="font-size:var(--fs-xs);color:var(--clr-muted);">Replies within 4–6 hours</span>
+                </div>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-info-item__icon">📍</div>
+              <div>
+                <div class="contact-info-item__label">Location</div>
+                <div class="contact-info-item__val">Maryala Village Road, towards Pillugundla Thanda,<br/>Bhuvanagiri, Telangana 508117<br/>
+                <span style="font-size:var(--fs-xs);color:var(--clr-muted);">~30 km / 45–50 min from Hyderabad via NH65</span></div>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-info-item__icon">⏰</div>
+              <div>
+                <div class="contact-info-item__label">Check-in / Check-out</div>
+                <div class="contact-info-item__val">Arrival from <strong>6:30 PM</strong> · Departure by <strong>10:30 AM</strong></div>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-info-item__icon">🗓</div>
+              <div>
+                <div class="contact-info-item__label">Advance Booking</div>
+                <div class="contact-info-item__val">Weekends book 1–2 weeks ahead. Special events (meteor showers, full moon nights) book 3–4 weeks ahead.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- WhatsApp CTA card -->
+          <a href="https://wa.me/918886866631?text=Hi%20Novae%20Glamp%2C%20I%20would%20like%20to%20enquire%20about%20a%20stay." class="wa-cta-card" target="_blank" rel="noopener">
+            <div class="wa-cta-card__icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            </div>
+            <div>
+              <div class="wa-cta-card__title">Chat on WhatsApp — fastest response</div>
+              <div class="wa-cta-card__sub">888 686 6631 · Usually replies within 30 minutes</div>
+            </div>
+          </a>
+
+          <!-- Map placeholder -->
+          <div class="contact-map mt-5">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3803.6756647176103!2d78.8242302!3d17.570621900000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb7b65006be757%3A0xd1f1e2bf7808e3fb!2sNovae%20glamp!5e0!3m2!1sen!2sin!4v1783535632351!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          </div>
+
+          <!-- Directions -->
+          <div class="mt-4">
+            <span class="text-label mt-4"><span>How to Get Here</span></span>
+            <div class="directions-list mt-2">
+              <div class="direction-step"><span class="direction-step__num">01</span>Head out of Hyderabad via NH65 towards Nalgonda</div>
+              <div class="direction-step"><span class="direction-step__num">02</span>Take the exit for Bhuvanagiri / Bhongir</div>
+              <div class="direction-step"><span class="direction-step__num">03</span>Follow signs towards Maryala Village Road</div>
+              <div class="direction-step"><span class="direction-step__num">04</span>Search <strong style="color:var(--clr-gold);">"Novae Glamp"</strong> on Google Maps for turn-by-turn. We'll share our exact pin at booking confirmation.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ SECTION -->
+  <section class="section bg-navy-mid" aria-labelledby="faq-contact">
+    <div class="container">
+      <div class="section-header section-header--center reveal">
+        <span class="text-label">Common Questions</span>
+        <h2 class="heading-2" id="faq-contact">Before You <em>Book</em></h2>
+        <span class="gold-rule gold-rule--center"></span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);margin-top:var(--space-5);">
+        <div class="faq-item reveal"><div class="faq-item__q">What is the best time to visit for stargazing?</div><div class="faq-item__a">New moon nights and the weeks around them offer the darkest skies and the most stars. July–September is peak season for Milky Way viewing. November–February is excellent for Orion and winter constellations. Any clear night is genuinely spectacular.</div></div>
+        <div class="faq-item reveal reveal-d1"><div class="faq-item__q">Can I visit without an overnight stay?</div><div class="faq-item__a">Currently Novae Glamp operates as an overnight glamping retreat. Day visit packages for school groups are available — contact us with your group size and we'll share details and pricing.</div></div>
+        <div class="faq-item reveal"><div class="faq-item__q">Is there a cancellation policy?</div><div class="faq-item__a">Cancellations made 7+ days before check-in receive a full refund. Cancellations within 3–7 days receive a 50% refund or a free reschedule. Less than 72 hours — we offer a reschedule credit valid for 60 days.</div></div>
+        <div class="faq-item reveal reveal-d1"><div class="faq-item__q">What if the weather is bad?</div><div class="faq-item__a">All activities except stargazing run regardless of weather. If cloud cover prevents stargazing, we run an indoor astronomy session and offer a free reschedule for the sky portion of your stay at no extra charge.</div></div>
+        <div class="faq-item reveal"><div class="faq-item__q">Are children allowed? Any age restrictions?</div><div class="faq-item__a">Children of all ages are welcome. The property is enclosed and safe for young children. Telescope sessions are suitable from age 5+. Specific activities like water rockets are designed for students aged 10+.</div></div>
+        <div class="faq-item reveal reveal-d1"><div class="faq-item__q">Is food included and can you accommodate dietary needs?</div><div class="faq-item__a">Yes — snacks, dinner and breakfast are included in every stay. Vegetarian, vegan and Jain options are available. Please mention any dietary requirements at the time of booking and we'll accommodate them.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-banner"><div class="container">
+    <h2 class="heading-2 text-center reveal">The Sky Is Waiting. <em>Are You?</em></h2>
+    <p class="text-body text-center reveal reveal-d1" style="margin:var(--space-3) auto var(--space-5);">Weekends fill fast — especially on new moon and meteor shower nights. Reach out today.</p>
+    <div class="btn-group flex-center reveal reveal-d2">
+      <a href="https://wa.me/918886866631?text=Hi%20Novae%20Glamp%2C%20I%20would%20like%20to%20book%20a%20stay." class="btn btn--primary" target="_blank" rel="noopener">Book via WhatsApp</a>
+      <a href="tel:8886866631" class="btn btn--outline">📞 888 686 6631</a>
+      <a href="stays.html" class="btn btn--outline">View All Stays</a>
+    </div>
+  </div></div>
+
+  <footer class="footer"><div class="footer__grid">
+    <div><p class="footer__tagline">Hyderabad's premier dark-sky glamping destination — 30 km from Hyderabad, a world away from everything else.</p></div>
+    <div><div class="footer__col-title">Quick Links</div><div class="footer__links"><a href="index.html">Home</a><a href="stays.html">Stays &amp; Pricing</a><a href="stargazing.html">Stargazing</a><a href="activities.html">Activities</a><a href="about.html">About Us</a><a href="contact.html">Contact</a></div></div>
+    <div><div class="footer__col-title">Experiences</div><div class="footer__links"><a href="families.html">Families &amp; Friends</a><a href="couples.html">Couples</a><a href="corporate.html">Corporates</a><a href="schools.html">Schools</a><a href="events.html">Events</a><a href="astronomy.html">Astronomy</a></div></div>
+    <div><div class="footer__col-title">Contact</div><div class="footer__contact"><div>📍 Bhuvanagiri, Telangana 508117</div><div>📞 <a href="tel:8886866631">888 686 6631</a></div><div>✉ <a href="mailto:Bookings@novaeglamp.com">Bookings@novaeglamp.com</a></div></div></div>
+  </div><div class="footer__bottom"><span>© 2025 Novae Glamp. All rights reserved.</span><div class="footer__social"><a href="https://www.instagram.com/novaeglamphyd?igsh=ZmFjdjg3azR0N3Vk" aria-label="Instagram">IG</a>
+        <a href="https://www.facebook.com/profile.php?id=61577842907541&mibextid=wwXIfr" aria-label="Facebook">FB</a></div></div></footer>
+  <a href="https://wa.me/918886866631?text=Hi%20Novae%20Glamp%2C%20I%20would%20like%20to%20enquire." class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
+  <script src="js/global.js"></script>
+  <script>
+    (function(){
+      var form = document.querySelector('.contact-form');
+      if(!form) return;
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        var ok = true;
+        form.querySelectorAll('[required]').forEach(function(f){
+          if(!f.value.trim()){ ok=false; f.style.borderColor='rgba(220,80,60,.5)'; f.addEventListener('input',function(){f.style.borderColor='';},{once:true}); }
+        });
+        if(!ok) return;
+        var d = {
+          name:    form.querySelector('[name="name"]').value,
+          phone:   form.querySelector('[name="phone"]').value,
+          guests:  form.querySelector('[name="guests"]').value,
+          date:    form.querySelector('[name="date"]').value,
+          group:   form.querySelector('[name="group"]').value,
+          stay:    form.querySelector('[name="stay"]').value,
+          message: form.querySelector('[name="message"]').value
+        };
+        var msg = 'Hi Novae Glamp,\n\nName: '+d.name+'\nPhone: '+d.phone+'\nGuests: '+d.guests+'\nDate: '+d.date+'\nExperience: '+d.group+'\nStay Preference: '+d.stay+'\nMessage: '+d.message;
+        window.open('https://wa.me/918886866631?text='+encodeURIComponent(msg),'_blank');
+      });
+    })();
+  </script>
+</body>
+</html>
