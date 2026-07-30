@@ -3,6 +3,7 @@ import Nav from '@/components/Nav.astro';
 import Footer from '@/components/Footer.astro';
 import Preloader from '@/components/Preloader.astro';
 import Grain from '@/components/Grain.astro';
+import Starfield from '@/components/Starfield.astro';
 import '@/styles/global.css';
 
 interface Props {
@@ -53,6 +54,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <meta name="twitter:image" content={ogImage} />
 </head>
 <body>
+  <Starfield />
   <Preloader />
   <Nav />
 
@@ -111,10 +113,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       }
 
       const initial: gsap.TweenVars = { opacity: 0 };
-      if (type === 'up') initial.y = 60;
-      else if (type === 'scale') initial.scale = 0.95;
+      if (type === 'up') initial.y = 100;
+      else if (type === 'scale') { initial.scale = 0.85; initial.y = 40; }
       else if (type === 'fade') { /* just opacity */ }
-      else initial.y = 30;
+      else initial.y = 60;
 
       gsap.set(el, initial);
 
@@ -122,9 +124,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 1,
+        duration: 1.4,
         delay,
-        ease: 'power3.out',
+        ease: 'expo.out',
         scrollTrigger: {
           trigger: el,
           start: 'top 85%',

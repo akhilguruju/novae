@@ -9,8 +9,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         src={`${base}/assets/NG_logo.svg`}
         alt=""
         class="preloader__logo"
-        width="64"
-        height="64"
       />
     </div>
     <div class="preloader__counter-wrap">
@@ -18,6 +16,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </div>
     <div class="preloader__line-wrap">
       <div class="preloader__line" id="preloader-line"></div>
+    </div>
+    <div class="preloader__tagline-wrap">
+      <span class="preloader__tagline">Glamp. Gaze. Glow.</span>
     </div>
   </div>
 </div>
@@ -38,7 +39,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-lg);
+    gap: var(--space-md);
   }
 
   .preloader__logo-wrap {
@@ -46,10 +47,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   }
 
   .preloader__logo {
-    width: 56px;
-    height: 56px;
+    width: 120px;
+    height: 120px;
     opacity: 0;
-    transform: translateY(100%);
+    transform: scale(0.8) translateY(40px);
   }
 
   .preloader__counter-wrap {
@@ -59,16 +60,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   .preloader__counter {
     display: block;
     font-family: var(--font-display);
-    font-size: var(--fs-lg);
+    font-size: var(--fs-2xl);
     font-weight: 300;
-    letter-spacing: 0.2em;
-    color: var(--starlight-dim);
+    letter-spacing: 0.3em;
+    color: var(--starlight);
     opacity: 0;
     transform: translateY(100%);
   }
 
   .preloader__line-wrap {
-    width: 120px;
+    width: 200px;
     height: 1px;
     background: var(--starlight-faint);
     overflow: hidden;
@@ -81,18 +82,40 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     transform: scaleX(0);
     transform-origin: left;
   }
+
+  .preloader__tagline-wrap {
+    overflow: hidden;
+  }
+
+  .preloader__tagline {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--fs-sm);
+    font-style: italic;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--starlight-dim);
+    opacity: 0;
+    transform: translateY(100%);
+  }
 </style>
 
 <script>
   import { gsap } from 'gsap';
 
   const preloader = document.getElementById('preloader');
+  const starfield = document.getElementById('starfield-canvas');
+
+  if (starfield) {
+    (starfield as HTMLElement).style.opacity = '0';
+  }
 
   if (preloader) {
     const shown = sessionStorage.getItem('novae-preloader-shown');
 
     if (shown) {
       preloader.remove();
+      if (starfield) (starfield as HTMLElement).style.opacity = '1';
       document.documentElement.classList.add('preloader-done');
       window.dispatchEvent(new CustomEvent('preloader:complete'));
     } else {
@@ -101,6 +124,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       const logo = preloader.querySelector('.preloader__logo') as HTMLElement;
       const counter = document.getElementById('preloader-counter')!;
       const line = document.getElementById('preloader-line')!;
+      const tagline = preloader.querySelector('.preloader__tagline') as HTMLElement;
       const proxy = { val: 0 };
 
       const tl = gsap.timeline({
@@ -117,63 +141,73 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 0.8,
+        duration: 1.2,
         ease: 'power3.out',
       })
+        .to(
+          tagline,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+          },
+          0.4
+        )
         .to(
           counter,
           {
             opacity: 1,
             y: 0,
-            duration: 0.5,
+            duration: 0.6,
             ease: 'power3.out',
           },
-          0.2
+          0.6
         )
         .to(
           proxy,
           {
             val: 100,
-            duration: 2,
+            duration: 1.8,
             ease: 'power2.inOut',
             onUpdate() {
               counter.textContent = String(Math.round(proxy.val));
             },
           },
-          0.4
+          0.8
         )
         .to(
           line,
           {
             scaleX: 1,
-            duration: 2,
+            duration: 1.8,
             ease: 'power2.inOut',
           },
-          0.4
+          0.8
         )
         .to(
-          [logo, counter],
+          [logo, counter, tagline, line],
           {
             opacity: 0,
-            scale: 1.05,
-            duration: 0.4,
+            duration: 0.5,
             ease: 'power2.in',
           },
-          '+=0.3'
+          '+=0.2'
         )
-        .to(
-          line,
-          {
-            opacity: 0,
-            duration: 0.3,
-          },
-          '<'
-        )
+        .add(() => {
+          if (starfield) {
+            gsap.to(starfield, {
+              opacity: 1,
+              duration: 1.2,
+              ease: 'power2.out',
+            });
+          }
+        })
         .to(preloader, {
           clipPath: 'inset(0 0 100% 0)',
-          duration: 1,
-          ease: 'power3.inOut',
-        });
+          duration: 1.2,
+          ease: 'expo.inOut',
+        }, '-=0.6');
     }
   }
 </script>

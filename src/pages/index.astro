@@ -258,6 +258,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     font-weight: 300;
     line-height: 1.05;
     letter-spacing: -0.03em;
+    perspective: 1000px;
   }
 
   .hero__title em {
@@ -592,6 +593,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           span.className = 'hero-char';
           span.style.display = 'inline-block';
           span.style.opacity = '0';
+          span.style.transform = 'translateY(80px) rotateX(90deg)';
           span.textContent = char;
           frag.appendChild(span);
         }
@@ -609,9 +611,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     function animateHeroChars(delay: number) {
       gsap.to(chars, {
         opacity: 1,
-        duration: 0.6,
-        stagger: 0.03,
-        ease: 'power3.out',
+        y: 0,
+        rotateX: 0,
+        duration: 1.2,
+        stagger: 0.04,
+        ease: 'expo.out',
         delay,
       });
     }
@@ -619,7 +623,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     if (document.documentElement.classList.contains('preloader-done')) {
       animateHeroChars(0.3);
     } else {
-      window.addEventListener('preloader:complete', () => animateHeroChars(0.15), { once: true });
+      window.addEventListener('preloader:complete', () => animateHeroChars(0.8), { once: true });
     }
   }
 
