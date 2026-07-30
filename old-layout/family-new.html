@@ -1,0 +1,677 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>Novae Glamp</title>
+    <meta name="description" content="Novae Glamp is a luxury hotel, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.">
+    <meta name="author" content="Novae Glamp by FlexDevStudio">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" href="img/favicon.png" type="image/png" sizes="32x32">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400&family=Barlow:wght@400&family=Gilda+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/plugins.css" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader-bg"></div>
+    <div id="preloader">
+        <div id="preloader-status">
+            <div class="preloader-position loader"> <span></span> </div>
+        </div>
+    </div>
+    <!-- Progress scroll totop -->
+    <div class="progress-wrap cursor-pointer">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+        </svg>
+    </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <!-- Logo -->
+            <div class="logo-wrapper">
+                <a class="logo" href="index.html"> <img src="img/logo.svg" class="logo-img" alt=""> </a>
+                <!-- <a class="logo" href="index.html"> <h2>Novae Glamp</h2> </a> -->
+            </div>
+            <!-- Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"><i class="ti-menu"></i></span> </button>
+            <!-- Menu -->
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
+                    <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Stays<i class="ti-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="camping-tent.html" class="dropdown-item"><span>Camping Style Tents</span></a></li>
+                            <li><a href="hut-tent.html" class="dropdown-item"><span>Hut Style Tents</span></a></li>
+                            <li><a href="suite.html" class="dropdown-item"><span>Suite Rooms</span></a></li>
+                            <li><a href="dormitory.html" class="dropdown-item"><span>Dormitory</span></a></li>
+                            <li><a href="american-tent.html" class="dropdown-item"><span>American style tents</span></a></li>
+                            <li><a href="luxury.html" class="dropdown-item"><span>Luxury Themed stays</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Experiences <i class="ti-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="families-friends.html" class="dropdown-item"><span>Families & Friends</span></a></li>
+                            <li><a href="corporates-groups.html" class="dropdown-item"><span>Corporates & Groups</span></a></li>
+                            <li><a href="schools-students.html" class="dropdown-item"><span>Schools & Students</span></a></li>
+                            <li><a href="couples.html" class="dropdown-item"><span>Couples</span></a></li>
+                            <li><a href="events.html" class="dropdown-item"><span>Events</span></a></li>
+                            <li><a href="astronomy-enthusiasts.html" class="dropdown-item"><span>Astronomy enthusiasts</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="activities.html">Activities</a></li>
+                    <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
+                    <li class="nav-item"><a class="nav-link " href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Spa-Wellness Slider -->
+    <header class="header slider">
+        <div class="owl-carousel owl-theme">
+            <!-- The opacity on the image is made with "data-overlay-dark="number". You can change it using the numbers 0-9. -->
+            <div class="text-center item bg-img" data-overlay-dark="3" data-background="/img/family%26friends/family1.png"></div>
+            <div class="text-center item bg-img" data-overlay-dark="3" data-background="/img/family%26friends/family2.png"></div>
+            <div class="text-center item bg-img" data-overlay-dark="3" data-background="/img/family%26friends/family1.png"></div>
+        </div>
+        <!-- arrow down -->
+        <div class="arrow bounce text-center">
+            <a href="#" data-scroll-nav="1" class=""> <i class="ti-arrow-down"></i> </a>
+        </div>
+    </header>
+    <!-- Spa-Wellness Content -->
+    <section class="rooms-page section-padding" data-scroll-index="1">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12"> 
+                    <span>
+                        <i class="star-rating"></i>
+                        <i class="star-rating"></i>
+                        <i class="star-rating"></i>
+                        <i class="star-rating"></i>
+                        <i class="star-rating"></i>
+                    </span>
+                    <div class="section-title">Family & Friends</div>
+                    <div class="section-subtitle">Create Nights You’ll Talk About for Years</div>
+                </div>
+                <br>
+                <div class="col-md-7">
+                    <p class="mb-30">Step away from screens, noise, and routine—
+and gather under a sky full of stars.
+Stay in beautifully lit tents, laugh around a glowing bonfire,
+and experience the magic of stargazing together.
+From spotting constellations to late-night conversations,
+this is where friends and families connect in the most unforgettable way.</p>
+                   
+
+
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h6>When was the last time everyone was truly present?</h6>
+                            <ul class="list-unstyled page-list mb-30">
+                                <li>
+                                    <div class="page-list-icon"> <span class="ti-check"></span> </div>
+                                    <div class="page-list-text">
+                                        <p>No phones. No distractions.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="page-list-icon"> <span class="ti-check"></span> </div>
+                                    <div class="page-list-text">
+                                        <p>Just laughter, conversations, and moments that actually stay.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <p>At Novae Glamp, families bond deeper and friends reconnect—
+under a sky full of stars.
+</p>
+                        <div class="col-md-12">
+                            <h6>Why Families & Friends Love This</h6>
+                            <ul><li>Open space for kids to play freely</li></ul>
+                            <ul><li>Safe, secure, and monitored environment</li></ul>
+                            <ul><li>Activities for all age groups</li></ul>
+                            <ul><li>No pressure itinerary—relax at your pace</li></ul>
+                            <ul><li>A rare chance to disconnect and bond</li></ul>
+                            
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="butn-dark mt-15 mb-30"> <a href="rooms2.html"><span>Book Your Night</span></a> </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="butn-dark mt-15 mb-30"> <a href="rooms2.html"><span>whatsapp icon we will use</span></a> </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 offset-md-1">
+                    <h6>WHAT YOUR NIGHT LOOKS LIKE</h6>
+                    <ul class="list-unstyled page-list mb-30">
+                        <li>
+                            <div class="page-list-icon"> <span class="flaticon-group"></span> </div>
+                            <div class="page-list-text">
+                                <p><b>7:00 PM</b> – Arrival & welcome</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="page-list-icon"> <span class="flaticon-wifi"></span> </div>
+                            <div class="page-list-text">
+                                <p><b>7:30 PM</b> – Settle into tents & explore</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="page-list-icon"> <span class="flaticon-clock-1"></span> </div>
+                            <div class="page-list-text">
+                                <p><b>8:30 PM</b> – Dinner & group time</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="page-list-icon"> <span class="flaticon-breakfast"></span> </div>
+                            <div class="page-list-text">
+                                <p><b>9:30 PM</b> – Guided stargazing session</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="page-list-icon"> <span class="flaticon-towel"></span> </div>
+                            <div class="page-list-text">
+                                <p><b>10:30 PM</b> – Games / music / free time</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="page-list-icon"> <span class="flaticon-swimming"></span> </div>
+                            <div class="page-list-text">
+                                <p><b>11:30 PM</b> – Bonfire conversations </p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="page-list-icon"> <span class="flaticon-swimming"></span> </div>
+                            <div class="page-list-text">
+                                <p><b>Morning</b> – Sunrise + breakfast + chill</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-left caption">
+                    <h1>Activities</h1>
+                    <h6>At Novae Glamp, activities are designed to complement nature rather than overpower it. Each experience encourages guests to slow down, relax, and be present.</h6>
+                </div>
+            </div>
+        </div>
+        
+        <section class="services section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 p-0 animate-box fadeInLeft animated" data-animate-effect="fadeInLeft">
+                    <div class="img left">
+                        <a href="restaurant.html"><img src="img/restaurant/1.jpg" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-md-6 p-0 bg-cream valign animate-box fadeInRight animated" data-animate-effect="fadeInRight">
+                    <div class="content">
+                        <div class="cont text-left">
+                            <div class="info">
+                                <h6>Discover</h6>
+                            </div>
+                            <h4>Stargazing Sessions</h4>
+                            <p>Guided stargazing experiences designed to help guests observe constellations and celestial objects in a calm, distraction-free environment.</p>
+                            <div class="butn-dark"> <a href="restaurant.html"><span>Learn More</span></a> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 bg-cream p-0 order2 valign animate-box" data-animate-effect="fadeInLeft">
+                    <div class="content">
+                        <div class="cont text-left">
+                            <div class="info">
+                                <h6>Experiences</h6>
+                            </div>
+                            <h4>Bonfire Evenings</h4>
+                            <p>Warm, relaxed evenings around the bonfire with music, conversations, and shared moments.</p>
+                            <div class="butn-dark"> <a href="spa-wellness.html"><span>Learn More</span></a> </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 p-0 order1 animate-box" data-animate-effect="fadeInRight">
+                    <div class="img">
+                        <a href="spa-wellness.html"><img src="img/spa/3.jpg" alt=""></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 p-0 animate-box" data-animate-effect="fadeInLeft">
+                    <div class="img left">
+                        <a href="spa-wellness.html"><img src="img/spa/2.jpg" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-md-6 p-0 bg-cream valign animate-box" data-animate-effect="fadeInRight">
+                    <div class="content">
+                        <div class="cont text-left">
+                            <div class="info">
+                                <h6>Modern</h6>
+                            </div>
+                            <h4>Free Exploration </h4>
+                            <p>Lie down, talk, and enjoy the sky</p>
+                            <div class="butn-dark"> <a href="spa-wellness.html"><span>Learn More</span></a> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 bg-cream p-0 order2 valign animate-box" data-animate-effect="fadeInLeft">
+                    <div class="content">
+                        <div class="cont text-left">
+                            <div class="info">
+                                <h6>Experiences</h6>
+                            </div>
+                            <h4>Outdoor Games / Indoor Games</h4>
+                            <p>For relaxed downtime and Box cricket, group challenges, fun activities</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 p-0 order1 animate-box" data-animate-effect="fadeInRight">
+                    <div class="img">
+                        <a href="spa-wellness.html"><img src="img/spa/1.jpg" alt=""></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="rooms1 section-padding bg-blck">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="section-subtitle"><span>Luxury Stays</span></div>
+                    <div class="section-title"><span>Similar Rooms</span></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="owl-carousel owl-theme owl-loaded owl-drag">
+                        
+                        
+                        
+                        
+                        
+                        
+                    <div class="owl-stage-outer"><div class="owl-stage" style="transform: translate3d(-1146px, 0px, 0px); transition: all; width: 4584px;"><div class="owl-item cloned" style="width: 352px; margin-right: 30px;"><div class="item">
+                            <div class="position-re o-hidden"> <img src="img/rooms/6.jpg" alt=""> </div> <span class="category"><a href="rooms2.html">Book</a></span>
+                            <div class="con">
+                                <h6><a href="room-details.html">300$ / Night</a></h6>
+                                <h5><a href="room-details.html">Deluxe Room</a></h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col col-md-7">
+                                        <ul>
+                                            <li><i class="flaticon-bed"></i></li>
+                                            <li><i class="flaticon-bath"></i></li>
+                                            <li><i class="flaticon-breakfast"></i></li>
+                                            <li><i class="flaticon-towel"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col col-md-5 text-end">
+                                        <div class="permalink"><a href="room-details.html">Details <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></div><div class="owl-item cloned" style="width: 352px; margin-right: 30px;"><div class="item">
+                            <div class="position-re o-hidden"> <img src="img/rooms/8.jpg" alt=""> </div> <span class="category"><a href="rooms2.html">Book</a></span>
+                            <div class="con">
+                                <h6><a href="room-details.html">150$ / Night</a></h6>
+                                <h5><a href="room-details.html">Superior Room</a></h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col col-md-7">
+                                        <ul>
+                                            <li><i class="flaticon-bed"></i></li>
+                                            <li><i class="flaticon-bath"></i></li>
+                                            <li><i class="flaticon-breakfast"></i></li>
+                                            <li><i class="flaticon-towel"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col col-md-5 text-end">
+                                        <div class="permalink"><a href="room-details.html">Details <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></div><div class="owl-item cloned" style="width: 352px; margin-right: 30px;"><div class="item">
+                            <div class="position-re o-hidden"> <img src="img/rooms/5.jpg" alt=""> </div> <span class="category"><a href="rooms2.html">Book</a></span>
+                            <div class="con">
+                                <h6><a href="room-details.html">400$ / Night</a></h6>
+                                <h5><a href="room-details.html">Wellness Room</a></h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col col-md-7">
+                                        <ul>
+                                            <li><i class="flaticon-bed"></i></li>
+                                            <li><i class="flaticon-bath"></i></li>
+                                            <li><i class="flaticon-breakfast"></i></li>
+                                            <li><i class="flaticon-towel"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col col-md-5 text-end">
+                                        <div class="permalink"><a href="room-details.html">Details <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></div><div class="owl-item active" style="width: 352px; margin-right: 30px;"><div class="item">
+                            <div class="position-re o-hidden"> <img src="img/rooms/1.jpg" alt=""> </div> <span class="category"><a href="rooms2.html">Book</a></span>
+                            <div class="con">
+                                <h5><a href="room-details.html">Basic Camping Tents</a> </h5>
+                                <h6><a href="room-details.html">Budget-friendly, raw experience</a></h6>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col col-md-7">
+                                        <ul>
+                                            <li><i class="flaticon-bed"></i></li>
+                                            <li><i class="flaticon-bath"></i></li>
+                                            <li><i class="flaticon-breakfast"></i></li>
+                                            <li><i class="flaticon-towel"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col col-md-5 text-end">
+                                        <div class="permalink"><a href="room-details.html">Details <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></div><div class="owl-item active" style="width: 352px; margin-right: 30px;"><div class="item">
+                            <div class="position-re o-hidden"> <img src="img/rooms/2.jpg" alt=""> </div> <span class="category"><a href="rooms2.html">Book</a></span>
+                            <div class="con">
+                                <h6><a href="room-details.html">Premium Tents </a></h6>
+                                <h5><a href="room-details.html">Better comfort + aesthetics</a></h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col col-md-7">
+                                        <ul>
+                                            <li><i class="flaticon-bed"></i></li>
+                                            <li><i class="flaticon-bath"></i></li>
+                                            <li><i class="flaticon-breakfast"></i></li>
+                                            <li><i class="flaticon-towel"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col col-md-5 text-end">
+                                        <div class="permalink"><a href="room-details.html">Details <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></div><div class="owl-item active" style="width: 352px; margin-right: 30px;"><div class="item">
+                            <div class="position-re o-hidden"> <img src="img/rooms/5.jpg" alt=""> </div> <span class="category"><a href="rooms2.html">Book</a></span>
+                            <div class="con">
+                                <h6><a href="room-details.html">Family Tents </a></h6>
+                                <h5><a href="room-details.html">Spacious & convenient</a></h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col col-md-7">
+                                        <ul>
+                                            <li><i class="flaticon-bed"></i></li>
+                                            <li><i class="flaticon-bath"></i></li>
+                                            <li><i class="flaticon-breakfast"></i></li>
+                                            <li><i class="flaticon-towel"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col col-md-5 text-end">
+                                        <div class="permalink"><a href="room-details.html">Details <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></div><div class="owl-item" style="width: 352px; margin-right: 30px;"><div class="item">
+                            <div class="position-re o-hidden"> <img src="img/rooms/6.jpg" alt=""> </div> <span class="category"><a href="rooms2.html">Book</a></span>
+                            <div class="con">
+                                <h6><a href="room-details.html">Group Setup</a></h6>
+                                <h5><a href="room-details.html">Stay together, enjoy together</a></h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col col-md-7">
+                                        <ul>
+                                            <li><i class="flaticon-bed"></i></li>
+                                            <li><i class="flaticon-bath"></i></li>
+                                            <li><i class="flaticon-breakfast"></i></li>
+                                            <li><i class="flaticon-towel"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col col-md-5 text-end">
+                                        <div class="permalink"><a href="room-details.html">Details <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></div><div class="owl-item" style="width: 352px; margin-right: 30px;"><div class="item">
+                            <div class="position-re o-hidden"> <img src="img/rooms/8.jpg" alt=""> </div> <span class="category"><a href="rooms2.html">Book</a></span>
+                            <div class="con">
+                                <h6><a href="room-details.html">150$ / Night</a></h6>
+                                <h5><a href="room-details.html">Superior Room</a></h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col col-md-7">
+                                        <ul>
+                                            <li><i class="flaticon-bed"></i></li>
+                                            <li><i class="flaticon-bath"></i></li>
+                                            <li><i class="flaticon-breakfast"></i></li>
+                                            <li><i class="flaticon-towel"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col col-md-5 text-end">
+                                        <div class="permalink"><a href="room-details.html">Details <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></div><div class="owl-item" style="width: 352px; margin-right: 30px;"><div class="item">
+                            <div class="position-re o-hidden"> <img src="img/rooms/5.jpg" alt=""> </div> <span class="category"><a href="rooms2.html">Book</a></span>
+                            <div class="con">
+                                <h6><a href="room-details.html">400$ / Night</a></h6>
+                                <h5><a href="room-details.html">Wellness Room</a></h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col col-md-7">
+                                        <ul>
+                                            <li><i class="flaticon-bed"></i></li>
+                                            <li><i class="flaticon-bath"></i></li>
+                                            <li><i class="flaticon-breakfast"></i></li>
+                                            <li><i class="flaticon-towel"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col col-md-5 text-end">
+                                        <div class="permalink"><a href="room-details.html">Details <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></div><div class="owl-item cloned" style="width: 352px; margin-right: 30px;"><div class="item">
+                            <div class="position-re o-hidden"> <img src="img/rooms/1.jpg" alt=""> </div> <span class="category"><a href="rooms2.html">Book</a></span>
+                            <div class="con">
+                                <h6><a href="room-details.html">150$ / Night</a></h6>
+                                <h5><a href="room-details.html">Junior Suite</a> </h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col col-md-7">
+                                        <ul>
+                                            <li><i class="flaticon-bed"></i></li>
+                                            <li><i class="flaticon-bath"></i></li>
+                                            <li><i class="flaticon-breakfast"></i></li>
+                                            <li><i class="flaticon-towel"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col col-md-5 text-end">
+                                        <div class="permalink"><a href="room-details.html">Details <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></div><div class="owl-item cloned" style="width: 352px; margin-right: 30px;"><div class="item">
+                            <div class="position-re o-hidden"> <img src="img/rooms/2.jpg" alt=""> </div> <span class="category"><a href="rooms2.html">Book</a></span>
+                            <div class="con">
+                                <h6><a href="room-details.html">200$ / Night</a></h6>
+                                <h5><a href="room-details.html">Family Room</a></h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col col-md-7">
+                                        <ul>
+                                            <li><i class="flaticon-bed"></i></li>
+                                            <li><i class="flaticon-bath"></i></li>
+                                            <li><i class="flaticon-breakfast"></i></li>
+                                            <li><i class="flaticon-towel"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col col-md-5 text-end">
+                                        <div class="permalink"><a href="room-details.html">Details <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></div><div class="owl-item cloned" style="width: 352px; margin-right: 30px;"><div class="item">
+                            <div class="position-re o-hidden"> <img src="img/rooms/5.jpg" alt=""> </div> <span class="category"><a href="rooms2.html">Book</a></span>
+                            <div class="con">
+                                <h6><a href="room-details.html">250$ / Night</a></h6>
+                                <h5><a href="room-details.html">Double Room</a></h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col col-md-7">
+                                        <ul>
+                                            <li><i class="flaticon-bed"></i></li>
+                                            <li><i class="flaticon-bath"></i></li>
+                                            <li><i class="flaticon-breakfast"></i></li>
+                                            <li><i class="flaticon-towel"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col col-md-5 text-end">
+                                        <div class="permalink"><a href="room-details.html">Details <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></div></div></div><div class="owl-nav disabled"><button type="button" role="presentation" class="owl-prev"><span class="lnr ti-angle-left"></span></button><button type="button" role="presentation" class="owl-next"><span class="lnr ti-angle-right"></span></button></div><div class="owl-dots"><button role="button" class="owl-dot active"><span></span></button><button role="button" class="owl-dot"><span></span></button></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Testiominals -->
+    <section class="testimonials">
+        <div class="background bg-img bg-fixed section-padding pb-0" data-background="img/spa/4.jpg" data-overlay-dark="3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <div class="testimonials-box">
+                            <div class="head-box">
+                                <h6>Testimonials</h6>
+                                <h4>What Client's Say?</h4>
+                                <div class="line"></div>
+                            </div>
+                            <div class="owl-carousel owl-theme">
+                                <div class="item"> <span class="quote"><img src="img/quot.png" alt=""></span>
+                                    <p>Hotel dapibus asue metus the nec feusiate eraten miss hendreri net ve ante the lemon sanleo nectan feugiat erat hendrerit necuis ve ante otel inilla duiman at finibus viverra neca the sene on satien the miss drana inc fermen norttito sit space, mus nellentesque habitan.</p>
+                                    <div class="info">
+                                        <div class="author-img"> <img src="img/team/4.jpg" alt=""> </div>
+                                        <div class="cont"> <span><i class="star-rating"></i><i class="star-rating"></i><i class="star-rating"></i><i class="star-rating"></i><i class="star-rating"></i></span>
+                                            <h6>Emily Brown</h6> <span>Guest review</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item"> <span class="quote"><img src="img/quot.png" alt=""></span>
+                                    <p>Hotel dapibus asue metus the nec feusiate eraten miss hendreri net ve ante the lemon sanleo nectan feugiat erat hendrerit necuis ve ante otel inilla duiman at finibus viverra neca the sene on satien the miss drana inc fermen norttito sit space, mus nellentesque habitan.</p>
+                                    <div class="info">
+                                        <div class="author-img"> <img src="img/team/1.jpg" alt=""> </div>
+                                        <div class="cont"> <span><i class="star-rating"></i><i class="star-rating"></i><i class="star-rating"></i><i class="star-rating"></i><i class="star-rating"></i></span>
+                                            <h6>Nolan White</h6> <span>Guest review</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item"> <span class="quote"><img src="img/quot.png" alt=""></span>
+                                    <p>Hotel dapibus asue metus the nec feusiate eraten miss hendreri net ve ante the lemon sanleo nectan feugiat erat hendrerit necuis ve ante otel inilla duiman at finibus viverra neca the sene on satien the miss drana inc fermen norttito sit space, mus nellentesque habitan.</p>
+                                    <div class="info">
+                                        <div class="author-img"> <img src="img/team/5.jpg" alt=""> </div>
+                                        <div class="cont"> <span><i class="star-rating"></i><i class="star-rating"></i><i class="star-rating"></i><i class="star-rating"></i><i class="star-rating"></i></span>
+                                            <h6>Olivia Martin</h6> <span>Guest review</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="footer-column footer-about">
+                            <h3 class="footer-title">About Novae</h3>
+                            <p class="footer-about-text">We are premier sustainable glamping destination where people reconnect with nature while enjoying thoughtful luxury and unforgettable Curated experiences. </p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 offset-md-1">
+                        <div class="footer-column footer-explore clearfix">
+                            <h3 class="footer-title">Explore</h3>
+                            <ul class="footer-explore-list list-unstyled">
+                                <li><a href="index.html">Home</a></li>
+                                <li><a href="rooms.html">Rooms & Camps</a></li>
+                                <li><a href="restaurant.html">Restaurant</a></li>
+                                <li><a href="spa-wellness.html">Spa & Wellness</a></li>
+                                <li><a href="about.html">About Us</a></li>
+                                <li><a href="contact.html">Contact</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="footer-column footer-contact">
+                            <h3 class="footer-title">Contact</h3>
+                            <p class="footer-contact-text">Maryala village road towards pillugundla Thanda, Bhuvanagiri, Telangana 508117</p>
+                            <div class="footer-contact-info">
+                                <p class="footer-contact-phone"><span class="flaticon-call"></span> 855 100 4444</p>
+                                <p class="footer-contact-mail">info@novaeglamp.com</p>
+                            </div>
+                            <div class="footer-about-social-list">
+                                <a href="#"><i class="ti-instagram"></i></a>
+                                <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                                <a href="#"><i class="ti-youtube"></i></a>
+                                <a href="#"><i class="ti-facebook"></i></a>
+                                <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="footer-bottom-inner">
+                            <p class="footer-bottom-copy-right">© Copyright 2025 by <a href="#">Novae Glamp</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- jQuery -->
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="js/jquery-migrate-3.5.0.min.js"></script>
+    <script src="js/modernizr-2.6.2.min.js"></script>
+    <script src="js/imagesloaded.pkgd.min.js"></script>
+    <script src="js/jquery.isotope.v3.0.2.js"></script>
+    <script src="js/pace.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scrollIt.min.js"></script>
+    <script src="js/jquery.waypoints.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.stellar.min.js"></script>
+    <script src="js/jquery.magnific-popup.js"></script>
+    <script src="js/YouTubePopUp.js"></script>
+    <script src="js/select2.js"></script>
+    <script src="js/datepicker.js"></script>
+    <script src="js/smooth-scroll.min.js"></script>
+    <script src="js/custom.js"></script>
+</body>
+</html>
