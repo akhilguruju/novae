@@ -1,0 +1,123 @@
+---
+
+---
+
+<div class="cursor" id="custom-cursor" aria-hidden="true">
+  <div class="cursor__dot"></div>
+  <div class="cursor__circle"></div>
+</div>
+
+<style>
+  .cursor {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+    pointer-events: none;
+    mix-blend-mode: difference;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .cursor {
+      display: block;
+    }
+  }
+
+  .cursor__dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--starlight);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .cursor__circle {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--starlight);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.5;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.3s ease,
+                background 0.3s ease;
+  }
+
+  .cursor.is-hovering .cursor__circle {
+    width: 64px;
+    height: 64px;
+    opacity: 0.3;
+    background: rgba(240, 235, 227, 0.06);
+  }
+
+  .cursor.is-clicking .cursor__dot {
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+
+  .cursor.is-clicking .cursor__circle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .cursor.is-hidden {
+    opacity: 0;
+  }
+</style>
+
+<script>
+  const cursor = document.getElementById('custom-cursor');
+
+  if (cursor && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const dot = cursor.querySelector('.cursor__dot') as HTMLElement;
+    const circle = cursor.querySelector('.cursor__circle') as HTMLElement;
+
+    let mx = -100;
+    let my = -100;
+    let cx = -100;
+    let cy = -100;
+
+    document.addEventListener('mousemove', (e) => {
+      mx = e.clientX;
+      my = e.clientY;
+      dot.style.left = mx + 'px';
+      dot.style.top = my + 'px';
+    });
+
+    function lerp(a: number, b: number, t: number) {
+      return a + (b - a) * t;
+    }
+
+    function tick() {
+      cx = lerp(cx, mx, 0.15);
+      cy = lerp(cy, my, 0.15);
+      circle.style.left = cx + 'px';
+      circle.style.top = cy + 'px';
+      requestAnimationFrame(tick);
+    }
+    tick();
+
+    const interactives = 'a, button, .btn, .stay-card, .nav__burger, input, textarea, [data-cursor-hover]';
+
+    document.addEventListener('mouseover', (e) => {
+      if ((e.target as Element).closest(interactives)) {
+        cursor.classList.add('is-hovering');
+      }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      if ((e.target as Element).closest(interactives)) {
+        cursor.classList.remove('is-hovering');
+      }
+    });
+
+    document.addEventListener('mousedown', () => cursor.classList.add('is-clicking'));
+    document.addEventListener('mouseup', () => cursor.classList.remove('is-clicking'));
+
+    document.addEventListener('mouseleave', () => cursor.classList.add('is-hidden'));
+    document.addEventListener('mouseenter', () => cursor.classList.remove('is-hidden'));
+  }
+</script>

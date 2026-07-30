@@ -41,19 +41,19 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <section class="data-ribbon section">
     <div class="data-ribbon__grid container">
       <div class="data-ribbon__item" data-reveal data-reveal-delay="0">
-        <span class="data-ribbon__number" data-count="3">3</span>
+        <span class="data-ribbon__number" data-count-to="3">0</span>
         <span class="data-ribbon__label">Bortle Class</span>
       </div>
       <div class="data-ribbon__item" data-reveal data-reveal-delay="0.1">
-        <span class="data-ribbon__number">2,847</span>
+        <span class="data-ribbon__number" data-count-to="2847" data-count-format="comma">0</span>
         <span class="data-ribbon__label">Visible Stars</span>
       </div>
       <div class="data-ribbon__item" data-reveal data-reveal-delay="0.2">
-        <span class="data-ribbon__number">30</span>
+        <span class="data-ribbon__number" data-count-to="30">0</span>
         <span class="data-ribbon__label">Min from Hyderabad</span>
       </div>
       <div class="data-ribbon__item" data-reveal data-reveal-delay="0.3">
-        <span class="data-ribbon__number">100%</span>
+        <span class="data-ribbon__number" data-count-to="100" data-count-suffix="%">0</span>
         <span class="data-ribbon__label">Off-Grid Darkness</span>
       </div>
     </div>
@@ -76,7 +76,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           To remind you what silence sounds like.
         </p>
       </div>
-      <div class="story__image" data-reveal="scale" data-reveal-delay="0.2">
+      <div class="story__image" data-clip-reveal>
         <img
           src={`${base}/assets/about/novaeabout.png`}
           alt="The Novae Glamp grounds at dusk"
@@ -159,40 +159,62 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </div>
 
       <div class="stays-preview__cta" data-reveal="fade" data-reveal-delay="0.2">
-        <a href={`${base}/stays`} class="btn"><span>View All Stays</span></a>
+        <a href={`${base}/stays`} class="btn" data-magnetic><span>View All Stays</span></a>
       </div>
     </div>
   </section>
 
-  <!-- === EXPERIENCES TEASER === -->
-  <section class="experiences-teaser section" id="experiences">
-    <div class="container">
+  <!-- === EXPERIENCES HORIZONTAL SCROLL === -->
+  <section class="exp-scroll" id="experiences">
+    <div class="exp-scroll__header container">
       <h2 data-reveal="up">More than a stay.<br /><em>An experience.</em></h2>
-      <div class="experiences-teaser__grid">
-        <div class="exp-card" data-reveal data-reveal-delay="0">
-          <span class="exp-card__number">01</span>
-          <h3 class="exp-card__title">Stargazing</h3>
-          <p class="exp-card__desc">Guided telescope sessions under Bortle Class 3 skies. See Saturn's rings. Trace the Milky Way.</p>
+    </div>
+    <div class="exp-scroll__wrapper" id="exp-scroll-wrapper">
+      <div class="exp-scroll__track" id="exp-scroll-track">
+        <div class="exp-panel">
+          <div class="exp-panel__image">
+            <img src={`${base}/assets/experiences/astronomy.jpg`} alt="Stargazing at Novae" loading="lazy" />
+          </div>
+          <div class="exp-panel__content">
+            <span class="exp-panel__number">01</span>
+            <h3 class="exp-panel__title">Stargazing</h3>
+            <p class="exp-panel__desc">Guided telescope sessions under Bortle Class 3 skies. See Saturn's rings. Trace the Milky Way with your naked eyes.</p>
+          </div>
         </div>
-        <div class="exp-card" data-reveal data-reveal-delay="0.1">
-          <span class="exp-card__number">02</span>
-          <h3 class="exp-card__title">Campfire Nights</h3>
-          <p class="exp-card__desc">Stories, music, and marshmallows around the fire pit as the sky turns overhead.</p>
+        <div class="exp-panel">
+          <div class="exp-panel__image">
+            <img src={`${base}/assets/experiences/couples_dusk.jpg`} alt="Campfire nights" loading="lazy" />
+          </div>
+          <div class="exp-panel__content">
+            <span class="exp-panel__number">02</span>
+            <h3 class="exp-panel__title">Campfire Nights</h3>
+            <p class="exp-panel__desc">Stories, music, and marshmallows around the fire pit as the sky turns overhead. The kind of night you'll talk about for years.</p>
+          </div>
         </div>
-        <div class="exp-card" data-reveal data-reveal-delay="0.2">
-          <span class="exp-card__number">03</span>
-          <h3 class="exp-card__title">Farm & Nature</h3>
-          <p class="exp-card__desc">Wake up to birdsong. Walk the organic farm. Feed the animals. Breathe.</p>
+        <div class="exp-panel">
+          <div class="exp-panel__image">
+            <img src={`${base}/assets/experiences/family&kids.jpg`} alt="Farm and nature" loading="lazy" />
+          </div>
+          <div class="exp-panel__content">
+            <span class="exp-panel__number">03</span>
+            <h3 class="exp-panel__title">Farm & Nature</h3>
+            <p class="exp-panel__desc">Wake up to birdsong. Walk the organic farm. Feed the animals. Let your children discover the world without a screen.</p>
+          </div>
         </div>
-        <div class="exp-card" data-reveal data-reveal-delay="0.3">
-          <span class="exp-card__number">04</span>
-          <h3 class="exp-card__title">Adventure</h3>
-          <p class="exp-card__desc">Trekking, cycling, archery, and outdoor games across our sprawling grounds.</p>
+        <div class="exp-panel">
+          <div class="exp-panel__image">
+            <img src={`${base}/assets/experiences/corporates.jpg`} alt="Adventure activities" loading="lazy" />
+          </div>
+          <div class="exp-panel__content">
+            <span class="exp-panel__number">04</span>
+            <h3 class="exp-panel__title">Adventure</h3>
+            <p class="exp-panel__desc">Trekking, cycling, archery, and outdoor games across our sprawling grounds. Push your limits under an open sky.</p>
+          </div>
         </div>
       </div>
-      <div class="experiences-teaser__cta" data-reveal="fade" data-reveal-delay="0.2">
-        <a href={`${base}/experiences`} class="btn"><span>All Experiences</span></a>
-      </div>
+    </div>
+    <div class="exp-scroll__cta container" data-reveal="fade">
+      <a href={`${base}/experiences`} class="btn" data-magnetic><span>All Experiences</span></a>
     </div>
   </section>
 
@@ -229,7 +251,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         Tonight,<br /><em>look up.</em>
       </h2>
       <div class="closing-cta__actions" data-reveal="fade" data-reveal-delay="0.3">
-        <a href={`${base}/contact`} class="btn btn--ember"><span>Reserve Your Night</span></a>
+        <a href={`${base}/contact`} class="btn btn--ember" data-magnetic><span>Reserve Your Night</span></a>
       </div>
     </div>
   </section>
@@ -442,49 +464,92 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     text-align: center;
   }
 
-  /* === EXPERIENCES === */
-  .experiences-teaser__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+  /* === EXPERIENCES HORIZONTAL SCROLL === */
+  .exp-scroll {
+    padding-top: var(--space-3xl);
+  }
+
+  .exp-scroll__header {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .exp-scroll__wrapper {
+    overflow: hidden;
+  }
+
+  .exp-scroll__track {
+    display: flex;
     gap: var(--space-lg);
-    margin-top: var(--space-2xl);
+    padding-left: var(--container-pad);
+    will-change: transform;
   }
 
-  .exp-card {
-    padding: var(--space-xl);
+  .exp-panel {
+    flex: 0 0 70vw;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
     border: 1px solid var(--starlight-faint);
-    border-radius: var(--radius-md);
-    transition: border-color var(--duration-base) ease;
+    transition: border-color var(--duration-slow) ease;
   }
 
-  .exp-card:hover {
+  .exp-panel:hover {
     border-color: var(--starlight-dim);
   }
 
-  .exp-card__number {
+  .exp-panel__image {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+
+  .exp-panel__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease-out-expo);
+  }
+
+  .exp-panel:hover .exp-panel__image img {
+    transform: scale(1.08);
+  }
+
+  .exp-panel__content {
+    padding: var(--space-xl);
+  }
+
+  .exp-panel__number {
     font-family: var(--font-display);
     font-size: var(--fs-sm);
     color: var(--ember);
     letter-spacing: 0.05em;
   }
 
-  .exp-card__title {
+  .exp-panel__title {
     font-family: var(--font-display);
     font-size: var(--fs-xl);
     font-weight: 400;
-    margin-top: var(--space-sm);
+    margin-top: var(--space-xs);
     margin-bottom: var(--space-sm);
   }
 
-  .exp-card__desc {
+  .exp-panel__desc {
     font-size: var(--fs-sm);
     color: var(--starlight-dim);
-    line-height: 1.6;
+    line-height: 1.7;
+    max-width: 50ch;
   }
 
-  .experiences-teaser__cta {
-    margin-top: var(--space-2xl);
+  .exp-scroll__cta {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-3xl);
     text-align: center;
+  }
+
+  /* === IMAGE CLIP REVEAL === */
+  [data-clip-reveal] {
+    clip-path: inset(100% 0 0 0);
   }
 
   /* === TESTIMONIALS === */
@@ -561,8 +626,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       grid-template-columns: 1fr;
     }
 
-    .experiences-teaser__grid {
-      grid-template-columns: 1fr;
+    .exp-panel {
+      flex: 0 0 85vw;
     }
 
     .testimonials__inner {
@@ -641,4 +706,88 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       },
     });
   }
+
+  // Counter animation
+  document.querySelectorAll('[data-count-to]').forEach((el) => {
+    const target = parseInt(el.getAttribute('data-count-to')!, 10);
+    const format = el.getAttribute('data-count-format');
+    const suffix = el.getAttribute('data-count-suffix') || '';
+    const proxy = { val: 0 };
+
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 85%',
+      once: true,
+      onEnter() {
+        gsap.to(proxy, {
+          val: target,
+          duration: 2,
+          ease: 'power2.out',
+          onUpdate() {
+            let v = Math.round(proxy.val);
+            let str = format === 'comma' ? v.toLocaleString() : String(v);
+            el.textContent = str + suffix;
+          },
+        });
+      },
+    });
+  });
+
+  // Image clip-path reveal
+  document.querySelectorAll('[data-clip-reveal]').forEach((el) => {
+    gsap.to(el, {
+      clipPath: 'inset(0% 0 0 0)',
+      duration: 1.4,
+      ease: 'expo.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 80%',
+        once: true,
+      },
+    });
+  });
+
+  // Horizontal scroll for experiences
+  const track = document.getElementById('exp-scroll-track');
+  const wrapper = document.getElementById('exp-scroll-wrapper');
+  if (track && wrapper) {
+    const getScrollAmount = () => -(track.scrollWidth - wrapper.offsetWidth);
+
+    gsap.to(track, {
+      x: getScrollAmount,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: wrapper,
+        start: 'top 15%',
+        end: () => `+=${Math.abs(getScrollAmount())}`,
+        pin: true,
+        scrub: 1,
+        invalidateOnRefresh: true,
+      },
+    });
+  }
+
+  // Magnetic hover on buttons
+  document.querySelectorAll('[data-magnetic]').forEach((el) => {
+    const btn = el as HTMLElement;
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      gsap.to(btn, {
+        x: x * 0.3,
+        y: y * 0.3,
+        duration: 0.4,
+        ease: 'power2.out',
+      });
+    });
+    btn.addEventListener('mouseleave', () => {
+      gsap.to(btn, {
+        x: 0,
+        y: 0,
+        duration: 0.7,
+        ease: 'elastic.out(1, 0.3)',
+      });
+    });
+  });
 </script>
