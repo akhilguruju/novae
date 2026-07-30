@@ -1,0 +1,33 @@
+---
+import Layout from '@/layouts/Layout.astro';
+---
+
+<Layout title="Stays" description="Six ways to sleep under the stars at Novae Glamp — from luxury tepees to open-sky camping.">
+  <section class="page-hero section--full">
+    <div class="container">
+      <h1 data-reveal="up">Find your <em>night</em></h1>
+      <p class="page-hero__sub" data-reveal="fade" data-reveal-delay="0.2">
+        Six ways to sleep under the stars — choose your sky.
+      </p>
+    </div>
+  </section>
+
+  <section class="section container">
+    <p class="text-dim" data-reveal>Stays page — coming in Phase 5 (lookbook-style scroll).</p>
+  </section>
+</Layout>
+
+<style>
+  .page-hero {
+    padding-top: calc(var(--nav-h) + var(--space-2xl));
+    text-align: center;
+  }
+
+  .page-hero__sub {
+    margin-top: var(--space-md);
+    font-size: var(--fs-lg);
+    color: var(--starlight-dim);
+    max-width: 50ch;
+    margin-inline: auto;
+  }
+</style>

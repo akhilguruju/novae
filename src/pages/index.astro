@@ -1,0 +1,630 @@
+---
+import Layout from '@/layouts/Layout.astro';
+---
+
+<Layout title="Where the Sky Remembers Your Name">
+  <!-- === HERO === -->
+  <section class="hero section--full" id="hero">
+    <div class="hero__content">
+      <h1 class="hero__title" id="hero-title">
+        Where the sky<br /><em>remembers your name</em>
+      </h1>
+      <p class="hero__sub" data-reveal="fade" data-reveal-delay="0.8">
+        Luxury glamping under the darkest skies — 30 minutes from Hyderabad
+      </p>
+    </div>
+    <div class="scroll-indicator" data-reveal="fade" data-reveal-delay="1.2">
+      <span class="scroll-indicator__label">Scroll</span>
+      <div class="scroll-indicator__line"></div>
+    </div>
+  </section>
+
+  <!-- === NIGHT SKY REVEAL === -->
+  <section class="reveal-sky section--full" id="sky-reveal">
+    <div class="reveal-sky__image-wrap">
+      <img
+        src="/assets/home/nightsky.jpeg"
+        alt="The Milky Way visible from Novae Glamp"
+        class="reveal-sky__image"
+        loading="eager"
+      />
+    </div>
+    <div class="reveal-sky__text container">
+      <p class="reveal-sky__statement" data-reveal="up">
+        30 minutes from the city.<br /><em>A universe away.</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- === DATA RIBBON === -->
+  <section class="data-ribbon section">
+    <div class="data-ribbon__grid container">
+      <div class="data-ribbon__item" data-reveal data-reveal-delay="0">
+        <span class="data-ribbon__number" data-count="3">3</span>
+        <span class="data-ribbon__label">Bortle Class</span>
+      </div>
+      <div class="data-ribbon__item" data-reveal data-reveal-delay="0.1">
+        <span class="data-ribbon__number">2,847</span>
+        <span class="data-ribbon__label">Visible Stars</span>
+      </div>
+      <div class="data-ribbon__item" data-reveal data-reveal-delay="0.2">
+        <span class="data-ribbon__number">30</span>
+        <span class="data-ribbon__label">Min from Hyderabad</span>
+      </div>
+      <div class="data-ribbon__item" data-reveal data-reveal-delay="0.3">
+        <span class="data-ribbon__number">100%</span>
+        <span class="data-ribbon__label">Off-Grid Darkness</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- === OUR STORY === -->
+  <section class="story section" id="story">
+    <div class="story__inner container">
+      <div class="story__text">
+        <h2 class="story__heading" data-reveal="up">
+          Born from a love<br />of <em>dark skies</em>
+        </h2>
+        <p data-reveal data-reveal-delay="0.15">
+          Novae Glamp began with a simple question: what if the best night of your life
+          was only 30 minutes away? Nestled in the quiet countryside of Bhuvanagiri,
+          we created a place where the Milky Way isn't a photograph — it's your ceiling.
+        </p>
+        <p data-reveal data-reveal-delay="0.25">
+          Every detail here is designed to slow you down. To make you look up.
+          To remind you what silence sounds like.
+        </p>
+      </div>
+      <div class="story__image" data-reveal="scale" data-reveal-delay="0.2">
+        <img
+          src="/assets/about/novaeabout.png"
+          alt="The Novae Glamp grounds at dusk"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- === STAYS PREVIEW === -->
+  <section class="stays-preview section" id="stays">
+    <div class="container">
+      <div class="stays-preview__header">
+        <h2 data-reveal="up">Find your <em>night</em></h2>
+        <p class="stays-preview__sub" data-reveal data-reveal-delay="0.1">
+          Six ways to sleep under the stars — from luxury tepees to open-sky camping.
+        </p>
+      </div>
+
+      <div class="stays-preview__grid">
+        <a href="/stays#luxury-tepee" class="stay-card" data-reveal data-reveal-delay="0">
+          <div class="stay-card__image">
+            <img src="/assets/stays-page/tipi.png" alt="Luxury Tepee" loading="lazy" />
+          </div>
+          <div class="stay-card__info">
+            <h3 class="stay-card__name">Luxury Tepee</h3>
+            <span class="stay-card__price">From <em>&#8377;14,999</em>/night</span>
+          </div>
+        </a>
+
+        <a href="/stays#american-tent" class="stay-card" data-reveal data-reveal-delay="0.08">
+          <div class="stay-card__image">
+            <img src="/assets/stays-page/american.png" alt="American Tent" loading="lazy" />
+          </div>
+          <div class="stay-card__info">
+            <h3 class="stay-card__name">American Tent</h3>
+            <span class="stay-card__price">From <em>&#8377;11,999</em>/night</span>
+          </div>
+        </a>
+
+        <a href="/stays#suite-room" class="stay-card" data-reveal data-reveal-delay="0.16">
+          <div class="stay-card__image">
+            <img src="/assets/stays-page/suite-rooms.png" alt="Suite Room" loading="lazy" />
+          </div>
+          <div class="stay-card__info">
+            <h3 class="stay-card__name">Suite Room</h3>
+            <span class="stay-card__price">From <em>&#8377;11,999</em>/night</span>
+          </div>
+        </a>
+
+        <a href="/stays#hut-tent" class="stay-card" data-reveal data-reveal-delay="0.24">
+          <div class="stay-card__image">
+            <img src="/assets/stays-page/hut-tents.png" alt="Hut Tent" loading="lazy" />
+          </div>
+          <div class="stay-card__info">
+            <h3 class="stay-card__name">Hut Tent</h3>
+            <span class="stay-card__price">From <em>&#8377;3,499</em>/person</span>
+          </div>
+        </a>
+
+        <a href="/stays#dormitory" class="stay-card" data-reveal data-reveal-delay="0.32">
+          <div class="stay-card__image">
+            <img src="/assets/stays-page/dormitory.png" alt="Dormitory" loading="lazy" />
+          </div>
+          <div class="stay-card__info">
+            <h3 class="stay-card__name">Dormitory</h3>
+            <span class="stay-card__price">From <em>&#8377;2,999</em>/person</span>
+          </div>
+        </a>
+
+        <a href="/stays#camping" class="stay-card" data-reveal data-reveal-delay="0.4">
+          <div class="stay-card__image">
+            <img src="/assets/stays-page/camping-tents.png" alt="Camping Tents" loading="lazy" />
+          </div>
+          <div class="stay-card__info">
+            <h3 class="stay-card__name">Camping</h3>
+            <span class="stay-card__price">From <em>&#8377;2,299</em>/person</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="stays-preview__cta" data-reveal="fade" data-reveal-delay="0.2">
+        <a href="/stays" class="btn"><span>View All Stays</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- === EXPERIENCES TEASER === -->
+  <section class="experiences-teaser section" id="experiences">
+    <div class="container">
+      <h2 data-reveal="up">More than a stay.<br /><em>An experience.</em></h2>
+      <div class="experiences-teaser__grid">
+        <div class="exp-card" data-reveal data-reveal-delay="0">
+          <span class="exp-card__number">01</span>
+          <h3 class="exp-card__title">Stargazing</h3>
+          <p class="exp-card__desc">Guided telescope sessions under Bortle Class 3 skies. See Saturn's rings. Trace the Milky Way.</p>
+        </div>
+        <div class="exp-card" data-reveal data-reveal-delay="0.1">
+          <span class="exp-card__number">02</span>
+          <h3 class="exp-card__title">Campfire Nights</h3>
+          <p class="exp-card__desc">Stories, music, and marshmallows around the fire pit as the sky turns overhead.</p>
+        </div>
+        <div class="exp-card" data-reveal data-reveal-delay="0.2">
+          <span class="exp-card__number">03</span>
+          <h3 class="exp-card__title">Farm & Nature</h3>
+          <p class="exp-card__desc">Wake up to birdsong. Walk the organic farm. Feed the animals. Breathe.</p>
+        </div>
+        <div class="exp-card" data-reveal data-reveal-delay="0.3">
+          <span class="exp-card__number">04</span>
+          <h3 class="exp-card__title">Adventure</h3>
+          <p class="exp-card__desc">Trekking, cycling, archery, and outdoor games across our sprawling grounds.</p>
+        </div>
+      </div>
+      <div class="experiences-teaser__cta" data-reveal="fade" data-reveal-delay="0.2">
+        <a href="/experiences" class="btn"><span>All Experiences</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- === TESTIMONIALS === -->
+  <section class="testimonials section" id="testimonials">
+    <div class="container">
+      <div class="testimonials__inner">
+        <blockquote class="testimonial" data-reveal="up">
+          <p class="testimonial__text">
+            &ldquo;We could see the Milky Way with our naked eyes. My kids still talk about it every week.&rdquo;
+          </p>
+          <cite class="testimonial__cite">— Priya & Family, Hyderabad</cite>
+        </blockquote>
+        <blockquote class="testimonial" data-reveal="up" data-reveal-delay="0.15">
+          <p class="testimonial__text">
+            &ldquo;The most peaceful night I've had in years. Woke up to mist and birdsong. Already planning our return.&rdquo;
+          </p>
+          <cite class="testimonial__cite">— Arjun & Meera</cite>
+        </blockquote>
+        <blockquote class="testimonial" data-reveal="up" data-reveal-delay="0.3">
+          <p class="testimonial__text">
+            &ldquo;Perfect for our corporate offsite. The team disconnected from screens and actually talked to each other.&rdquo;
+          </p>
+          <cite class="testimonial__cite">— Rahul, TechCorp</cite>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- === CLOSING CTA === -->
+  <section class="closing-cta section--full" id="cta">
+    <div class="closing-cta__content">
+      <h2 class="closing-cta__title" data-reveal="up">
+        Tonight,<br /><em>look up.</em>
+      </h2>
+      <div class="closing-cta__actions" data-reveal="fade" data-reveal-delay="0.3">
+        <a href="/contact" class="btn btn--ember"><span>Reserve Your Night</span></a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* === HERO === */
+  .hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: var(--nav-h);
+    overflow: hidden;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero__title {
+    font-size: var(--fs-hero);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+
+  .hero__title em {
+    font-size: 1.05em;
+  }
+
+  .hero__sub {
+    margin-top: var(--space-lg);
+    font-size: var(--fs-md);
+    color: var(--starlight-dim);
+    max-width: 40ch;
+    margin-inline: auto;
+  }
+
+  /* === NIGHT SKY REVEAL === */
+  .reveal-sky {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .reveal-sky__image-wrap {
+    position: absolute;
+    inset: 0;
+  }
+
+  .reveal-sky__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+  }
+
+  .reveal-sky__text {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+
+  .reveal-sky__statement {
+    font-family: var(--font-display);
+    font-size: var(--fs-3xl);
+    font-weight: 300;
+    line-height: 1.2;
+    max-width: none;
+  }
+
+  /* === DATA RIBBON === */
+  .data-ribbon {
+    border-top: 1px solid var(--starlight-faint);
+    border-bottom: 1px solid var(--starlight-faint);
+    padding-block: var(--space-2xl);
+  }
+
+  .data-ribbon__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-lg);
+    text-align: center;
+  }
+
+  .data-ribbon__number {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--fs-2xl);
+    font-weight: 400;
+    color: var(--ember);
+  }
+
+  .data-ribbon__label {
+    display: block;
+    margin-top: var(--space-xs);
+    font-size: var(--fs-sm);
+    color: var(--starlight-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* === STORY === */
+  .story__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .story__heading {
+    margin-bottom: var(--space-lg);
+  }
+
+  .story__text p {
+    color: var(--starlight-dim);
+    margin-bottom: var(--space-md);
+  }
+
+  .story__image {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .story__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 4 / 5;
+  }
+
+  /* === STAYS PREVIEW === */
+  .stays-preview__header {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .stays-preview__sub {
+    margin-top: var(--space-sm);
+    color: var(--starlight-dim);
+    font-size: var(--fs-md);
+  }
+
+  .stays-preview__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .stay-card {
+    display: block;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--starlight-faint);
+    transition: border-color var(--duration-base) ease;
+  }
+
+  .stay-card:hover {
+    border-color: var(--starlight-dim);
+  }
+
+  .stay-card__image {
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+
+  .stay-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .stay-card:hover .stay-card__image img {
+    transform: scale(1.05);
+  }
+
+  .stay-card__info {
+    padding: var(--space-md) var(--space-md) var(--space-lg);
+  }
+
+  .stay-card__name {
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    font-weight: 400;
+  }
+
+  .stay-card__price {
+    display: block;
+    margin-top: var(--space-xs);
+    font-size: var(--fs-sm);
+    color: var(--starlight-dim);
+  }
+
+  .stay-card__price em {
+    color: var(--ember);
+    font-family: var(--font-body);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .stays-preview__cta {
+    margin-top: var(--space-2xl);
+    text-align: center;
+  }
+
+  /* === EXPERIENCES === */
+  .experiences-teaser__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+    margin-top: var(--space-2xl);
+  }
+
+  .exp-card {
+    padding: var(--space-xl);
+    border: 1px solid var(--starlight-faint);
+    border-radius: var(--radius-md);
+    transition: border-color var(--duration-base) ease;
+  }
+
+  .exp-card:hover {
+    border-color: var(--starlight-dim);
+  }
+
+  .exp-card__number {
+    font-family: var(--font-display);
+    font-size: var(--fs-sm);
+    color: var(--ember);
+    letter-spacing: 0.05em;
+  }
+
+  .exp-card__title {
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    font-weight: 400;
+    margin-top: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .exp-card__desc {
+    font-size: var(--fs-sm);
+    color: var(--starlight-dim);
+    line-height: 1.6;
+  }
+
+  .experiences-teaser__cta {
+    margin-top: var(--space-2xl);
+    text-align: center;
+  }
+
+  /* === TESTIMONIALS === */
+  .testimonials__inner {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .testimonial {
+    padding: var(--space-xl);
+    border-left: 1px solid var(--ember-dim);
+  }
+
+  .testimonial__text {
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.5;
+    max-width: none;
+  }
+
+  .testimonial__cite {
+    display: block;
+    margin-top: var(--space-md);
+    font-family: var(--font-body);
+    font-size: var(--fs-sm);
+    font-style: normal;
+    color: var(--starlight-dim);
+  }
+
+  /* === CLOSING CTA === */
+  .closing-cta {
+    text-align: center;
+  }
+
+  .closing-cta__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xl);
+  }
+
+  .closing-cta__title {
+    font-size: clamp(3rem, 2.5rem + 5vw, 10rem);
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 1024px) {
+    .stays-preview__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .story__inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+
+    .story__image {
+      order: -1;
+    }
+
+    .data-ribbon__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-md);
+    }
+
+    .stays-preview__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .experiences-teaser__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .testimonials__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Hero title — walk text nodes and wrap each character
+  function splitTextNodes(root: Element) {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const textNodes: Text[] = [];
+    let node;
+    while ((node = walker.nextNode())) textNodes.push(node as Text);
+
+    textNodes.forEach(tn => {
+      const frag = document.createDocumentFragment();
+      tn.textContent!.split('').forEach(char => {
+        if (char === ' ') {
+          frag.appendChild(document.createTextNode(' '));
+        } else {
+          const span = document.createElement('span');
+          span.className = 'hero-char';
+          span.style.display = 'inline-block';
+          span.style.opacity = '0';
+          span.textContent = char;
+          frag.appendChild(span);
+        }
+      });
+      tn.parentNode!.replaceChild(frag, tn);
+    });
+  }
+
+  const heroTitle = document.getElementById('hero-title');
+  if (heroTitle) {
+    splitTextNodes(heroTitle);
+
+    const chars = heroTitle.querySelectorAll('.hero-char');
+    gsap.to(chars, {
+      opacity: 1,
+      duration: 0.6,
+      stagger: 0.03,
+      ease: 'power3.out',
+      delay: 0.3,
+    });
+  }
+
+  // Night sky parallax
+  const skyImage = document.querySelector('.reveal-sky__image') as HTMLElement;
+  if (skyImage) {
+    gsap.to(skyImage, {
+      yPercent: -15,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.reveal-sky',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true,
+      },
+    });
+  }
+</script>

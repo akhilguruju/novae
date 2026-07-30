@@ -1,0 +1,33 @@
+---
+import Layout from '@/layouts/Layout.astro';
+---
+
+<Layout title="Stargazing" description="Bortle Class 3 dark skies, guided telescope sessions, and the Milky Way with your naked eyes.">
+  <section class="page-hero section--full">
+    <div class="container">
+      <h1 data-reveal="up">The sky<br /><em>is the show</em></h1>
+      <p class="page-hero__sub" data-reveal="fade" data-reveal-delay="0.2">
+        Bortle Class 3 darkness. 2,847 visible stars. Your eyes adjust. The universe appears.
+      </p>
+    </div>
+  </section>
+
+  <section class="section container">
+    <p class="text-dim" data-reveal>Stargazing page — coming in Phase 6 (interactive WebGL night sky).</p>
+  </section>
+</Layout>
+
+<style>
+  .page-hero {
+    padding-top: calc(var(--nav-h) + var(--space-2xl));
+    text-align: center;
+  }
+
+  .page-hero__sub {
+    margin-top: var(--space-md);
+    font-size: var(--fs-lg);
+    color: var(--starlight-dim);
+    max-width: 50ch;
+    margin-inline: auto;
+  }
+</style>
