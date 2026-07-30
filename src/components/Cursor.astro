@@ -3,8 +3,12 @@
 ---
 
 <div class="cursor" id="custom-cursor" aria-hidden="true">
-  <div class="cursor__dot"></div>
-  <div class="cursor__circle"></div>
+  <div class="cursor__glow"></div>
+  <div class="cursor__star">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2L12 22M2 12L22 12M4.93 4.93L19.07 19.07M19.07 4.93L4.93 19.07" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+    </svg>
+  </div>
 </div>
 
 <style>
@@ -13,9 +17,10 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 9998;
+    z-index: 10001;
     pointer-events: none;
-    mix-blend-mode: difference;
+    opacity: 0;
+    transition: opacity 0.4s ease;
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -24,47 +29,58 @@
     }
   }
 
-  .cursor__dot {
+  .cursor.is-visible {
+    opacity: 1;
+  }
+
+  .cursor__glow {
     position: absolute;
-    width: 6px;
-    height: 6px;
-    background: var(--starlight);
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     transform: translate(-50%, -50%);
+    background: radial-gradient(
+      circle,
+      rgba(232, 148, 74, 0.12) 0%,
+      rgba(232, 148, 74, 0.06) 25%,
+      rgba(232, 148, 74, 0.02) 50%,
+      transparent 70%
+    );
+    mix-blend-mode: screen;
+    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .cursor__circle {
+  .cursor.is-hovering .cursor__glow {
+    width: 220px;
+    height: 220px;
+  }
+
+  .cursor__star {
     position: absolute;
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--starlight);
-    border-radius: 50%;
+    width: 20px;
+    height: 20px;
     transform: translate(-50%, -50%);
-    opacity: 0.5;
-    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                opacity 0.3s ease,
-                background 0.3s ease;
+    color: rgba(232, 148, 74, 0.6);
+    transition: color 0.3s ease,
+                filter 0.3s ease;
+    filter: drop-shadow(0 0 3px rgba(232, 148, 74, 0.4));
+    animation: cursorSpin 8s linear infinite;
   }
 
-  .cursor.is-hovering .cursor__circle {
-    width: 64px;
-    height: 64px;
-    opacity: 0.3;
-    background: rgba(240, 235, 227, 0.06);
+  @keyframes cursorSpin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
   }
 
-  .cursor.is-clicking .cursor__dot {
-    transform: translate(-50%, -50%) scale(0.5);
-  }
-
-  .cursor.is-clicking .cursor__circle {
-    width: 32px;
-    height: 32px;
+  .cursor.is-hovering .cursor__star {
+    color: rgba(232, 148, 74, 0.9);
+    filter: drop-shadow(0 0 6px rgba(232, 148, 74, 0.6));
+    animation-duration: 3s;
   }
 
   .cursor.is-hidden {
-    opacity: 0;
+    opacity: 0 !important;
   }
 </style>
 
@@ -72,19 +88,32 @@
   const cursor = document.getElementById('custom-cursor');
 
   if (cursor && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    const dot = cursor.querySelector('.cursor__dot') as HTMLElement;
-    const circle = cursor.querySelector('.cursor__circle') as HTMLElement;
+    document.documentElement.classList.add('has-custom-cursor');
 
-    let mx = -100;
-    let my = -100;
-    let cx = -100;
-    let cy = -100;
+    const glow = cursor.querySelector('.cursor__glow') as HTMLElement;
+    const star = cursor.querySelector('.cursor__star') as HTMLElement;
+
+    let mx = 0;
+    let my = 0;
+    let gx = 0;
+    let gy = 0;
+    let hasMoved = false;
 
     document.addEventListener('mousemove', (e) => {
       mx = e.clientX;
       my = e.clientY;
-      dot.style.left = mx + 'px';
-      dot.style.top = my + 'px';
+
+      star.style.left = mx + 'px';
+      star.style.top = my + 'px';
+
+      if (!hasMoved) {
+        hasMoved = true;
+        gx = mx;
+        gy = my;
+        glow.style.left = mx + 'px';
+        glow.style.top = my + 'px';
+        cursor.classList.add('is-visible');
+      }
     });
 
     function lerp(a: number, b: number, t: number) {
@@ -92,10 +121,10 @@
     }
 
     function tick() {
-      cx = lerp(cx, mx, 0.15);
-      cy = lerp(cy, my, 0.15);
-      circle.style.left = cx + 'px';
-      circle.style.top = cy + 'px';
+      gx = lerp(gx, mx, 0.1);
+      gy = lerp(gy, my, 0.1);
+      glow.style.left = gx + 'px';
+      glow.style.top = gy + 'px';
       requestAnimationFrame(tick);
     }
     tick();

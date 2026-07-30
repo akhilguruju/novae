@@ -107,7 +107,7 @@ img, video, svg {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  *, *::before, *::after {
+  html.has-custom-cursor, html.has-custom-cursor *, html.has-custom-cursor *::before, html.has-custom-cursor *::after {
     cursor: none !important;
   }
 }
