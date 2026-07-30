@@ -1,0 +1,563 @@
+/* ============================================================
+   NOVAE GLAMP — STARGAZING PAGE STYLES
+   File: css/stargazing.css
+   Depends on: css/global.css
+============================================================ */
+
+
+/* ── Star canvas (full-page fixed background) ── */
+#star-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── Custom cursor ── */
+.cursor {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--clr-gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s;
+  mix-blend-mode: screen;
+}
+.cursor-ring {
+  position: fixed;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  
+  /* Layered gradients: Top layers are dark patches, bottom layer is the base moon color */
+  background: 
+    radial-gradient(circle at 70% 60%, rgba(139, 131, 120, 0.4) 0%, rgba(139, 131, 120, 0) 40%), /* Patch 1 */
+    radial-gradient(circle at 40% 45%, rgba(110, 105, 95, 0.5) 0%, rgba(110, 105, 95, 0) 35%),   /* Patch 2 */
+    radial-gradient(circle at 25% 70%, rgba(120, 115, 105, 0.4) 0%, rgba(120, 115, 105, 0) 30%),  /* Patch 3 */
+    radial-gradient(circle at 30% 30%, #ffffff 0%, #e6e6e6 50%, #b3b3b3 100%);                   /* Base texture */
+  
+  /* Combines an outer glow with inner depth for craters */
+  box-shadow: 
+    0 0 20px 5px rgba(255, 255, 255, 0.4),       /* Outer atmosphere glow */
+    inset -15px -15px 30px rgba(0, 0, 0, 0.3),     /* Deepened 3D sphere shadow */
+    inset 20px 20px 40px rgba(255, 255, 255, 0.4);  /* Softened internal surface highlight */
+  
+  pointer-events: none;
+  z-index: 9998;
+  transition: width 0.3s, height 0.3s;
+}
+
+/* ── Hero — stargazing ── */
+.sg-hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Deep nebula layered background */
+.sg-hero__nebula {
+  position: absolute;
+  inset: 0; z-index: 1;
+  background:
+    radial-gradient(ellipse 120% 60% at 30% 40%, rgba(40, 70, 160, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 80%  50% at 70% 30%, rgba(120, 60, 160, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 200% 100% at 50% 100%, rgba(2, 3, 10, 0.98) 0%, transparent 50%);
+}
+
+/* Milky Way diagonal band */
+.sg-hero__milky-way {
+  position: absolute;
+  inset: 0; z-index: 1;
+  background: linear-gradient(108deg,
+    transparent 25%,
+    rgba(180, 160, 100, 0.022) 35%,
+    rgba(100, 130, 200, 0.04)  42%,
+    rgba(180, 160, 100, 0.028) 50%,
+    transparent 70%
+  );
+}
+
+/* Telescope crosshair ring decoration */
+.sg-hero__ring {
+  position: absolute;
+  z-index: 3;
+  width: clamp(280px, 50vw, 580px);
+  height: clamp(280px, 50vw, 580px);
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 110, 0.07);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ringPulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+.sg-hero__ring::before {
+  content: '';
+  position: absolute; inset: 15px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 110, 0.04);
+}
+.sg-hero__ring::after {
+  content: '';
+  position: absolute; inset: -28px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 110, 0.03);
+}
+.sg-hero__ring-mark {
+  position: absolute;
+  width: 16px; height: 1px;
+  background: var(--clr-gold-dim);
+}
+.sg-hero__ring-mark--top    { top: -1px;    left: 50%; transform: translateX(-50%); }
+.sg-hero__ring-mark--bottom { bottom: -1px; left: 50%; transform: translateX(-50%); }
+.sg-hero__ring-mark--left   { left: -1px;   top: 50%;  transform: translateY(-50%) rotate(90deg); }
+.sg-hero__ring-mark--right  { right: -1px;  top: 50%;  transform: translateY(-50%) rotate(90deg); }
+
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.02); }
+}
+
+/* Hero content */
+.sg-hero__content {
+  position: relative;
+  z-index: 5;
+  max-width: 860px;
+  padding: 0 var(--space-3);
+  animation: fadeUp 1.6s ease both;
+}
+
+.sg-hero__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--clr-gold-dim);
+  display: block;
+  margin-bottom: var(--space-4);
+  animation: fadeUp 1.2s 0.3s ease both;
+  opacity: 0;
+}
+.sg-hero__eyebrow span { color: var(--clr-gold); }
+
+.sg-hero__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-hero);
+  font-weight: 300;
+  line-height: 0.95;
+  color: var(--clr-star);
+  letter-spacing: -0.02em;
+  animation: fadeUp 1.2s 0.5s ease both;
+  opacity: 0;
+}
+.sg-hero__title-line2 {
+  display: block;
+  font-style: italic;
+  color: var(--clr-gold-bright);
+}
+.sg-hero__subtitle {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--clr-star-dim);
+  margin-top: var(--space-3);
+}
+
+.sg-hero__desc {
+  font-size: var(--fs-base);
+  color: rgba(160, 152, 136, 0.8);
+  max-width: 520px;
+  margin: var(--space-4) auto var(--space-5);
+  line-height: 1.9;
+  animation: fadeUp 1.2s 0.7s ease both;
+  opacity: 0;
+}
+
+.sg-hero__ctas {
+  animation: fadeUp 1.2s 0.9s ease both;
+  opacity: 0;
+}
+
+/* Scroll hint at bottom of hero */
+.sg-hero__scroll {
+  position: absolute;
+  bottom: 2.5rem; left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  animation: fadeUp 1.2s 1.4s ease both;
+  opacity: 0;
+}
+
+
+/* ── Telescope orbit visualisation ── */
+.scope-visual {
+  position: relative;
+  height: 460px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.scope-ring {
+  position: absolute;
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(201, 169, 110, 0.1);
+}
+.scope-ring:nth-child(1) { width: 85%; height: 85%; border-color: rgba(201, 169, 110, 0.12); }
+.scope-ring:nth-child(2) { width: 65%; height: 65%; animation: ringSpin 22s linear infinite; }
+.scope-ring:nth-child(3) { width: 42%; height: 42%; border-color: rgba(201, 169, 110, 0.14); animation: ringSpinReverse 16s linear infinite; }
+.scope-ring:nth-child(4) { width: 20%; height: 20%; border-color: rgba(201, 169, 110, 0.28); background: rgba(201, 169, 110, 0.03); }
+@keyframes ringSpin        { to { transform: translate(-50%,-50%) rotate(360deg); } }
+@keyframes ringSpinReverse { to { transform: translate(-50%,-50%) rotate(-360deg); } }
+
+.scope-center {
+  position: relative; z-index: 5;
+  width: 76px; height: 76px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 169, 110, 0.14) 0%, rgba(201, 169, 110, 0.02) 60%, transparent 100%);
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 40px rgba(201, 169, 110, 0.1), inset 0 0 20px rgba(201, 169, 110, 0.04);
+}
+.scope-star {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--clr-gold-bright);
+  box-shadow: 0 0 10px var(--clr-gold), 0 0 22px rgba(201, 169, 110, 0.5);
+  animation: starBlink 3s ease-in-out infinite;
+}
+@keyframes starBlink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.75); }
+}
+
+
+/* ── Sky object cards (constellation grid) ── */
+.sky-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(201, 169, 110, 0.05);
+  border: 1px solid rgba(201, 169, 110, 0.05);
+}
+.sky-card {
+  background: var(--clr-void);
+  padding: var(--space-6) var(--space-5);
+  position: relative;
+  overflow: hidden;
+  transition: background var(--transition-slow);
+  cursor: default;
+}
+.sky-card:hover { background: rgba(11, 17, 36, 0.85); }
+.sky-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(to right, transparent, var(--clr-gold), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-slow);
+}
+.sky-card:hover::before { opacity: 1; }
+
+.sky-card__glyph {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--clr-gold-dim);
+  letter-spacing: 0.15em;
+  display: block;
+  margin-bottom: var(--space-3);
+}
+.sky-card__name {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 300;
+  color: var(--clr-star);
+  margin-bottom: 0.2rem;
+}
+.sky-card__latin {
+  font-size: var(--fs-xs);
+  color: var(--clr-gold-dim);
+  letter-spacing: 0.1em;
+  font-style: italic;
+  margin-bottom: var(--space-2);
+}
+.sky-card__desc {
+  font-size: var(--fs-sm);
+  color: var(--clr-star-dim);
+  line-height: 1.8;
+  margin-bottom: var(--space-3);
+}
+.sky-card__season {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--clr-gold);
+  opacity: 0.7;
+}
+.sky-card__stars-svg {
+  position: absolute;
+  top: 1.5rem; right: 2rem;
+  width: 56px; height: 56px;
+  opacity: 0.3;
+}
+
+
+/* ── Experience 2-column timeline ── */
+.sg-timeline {
+  display: grid;
+  grid-template-columns: 1fr 2px 1fr;
+  gap: 0;
+  max-width: 1020px;
+  margin: var(--space-7) auto 0;
+}
+.sg-timeline__line {
+  background: linear-gradient(to bottom,
+    transparent,
+    var(--clr-gold-dim) 10%,
+    var(--clr-gold) 50%,
+    var(--clr-gold-dim) 90%,
+    transparent
+  );
+}
+.sg-timeline__col { display: flex; flex-direction: column; }
+.sg-timeline__col--right { padding-top: var(--space-7); }
+.sg-timeline__item {
+  padding: var(--space-5);
+  transition: background var(--transition-base);
+}
+.sg-timeline__item:hover { background: rgba(201, 169, 110, 0.025); }
+.sg-timeline__time {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--clr-gold);
+  letter-spacing: 0.18em;
+  margin-bottom: var(--space-1);
+}
+.sg-timeline__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  color: var(--clr-star);
+  margin-bottom: var(--space-2);
+  font-weight: 400;
+}
+.sg-timeline__desc {
+  font-size: var(--fs-sm);
+  color: var(--clr-star-dim);
+  line-height: 1.8;
+}
+
+
+/* ── Conditions rating bars ── */
+.rating-row {
+  display: grid;
+  grid-template-columns: 130px 1fr 44px;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+.rating-name { font-size: var(--fs-sm); color: var(--clr-star-dim); }
+.rating-bar-bg {
+  height: 3px;
+  background: rgba(201, 169, 110, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.rating-bar-fill {
+  height: 100%;
+  background: var(--clr-gold);
+  border-radius: 2px;
+  width: 0%;
+  transition: width 1.4s ease;
+  box-shadow: 0 0 8px rgba(201, 169, 110, 0.4);
+}
+.rating-pct {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--clr-gold);
+}
+
+
+/* ── Dark sky facts ── */
+.facts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: var(--border-gold-dim);
+}
+.fact-item {
+  padding: var(--space-6) var(--space-5);
+  border-right: var(--border-gold-dim);
+}
+.fact-item:last-child { border-right: none; }
+.fact-num {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-weight: 300;
+  color: rgba(201, 169, 110, 0.15);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+.fact-unit { font-size: 1.3rem; color: rgba(201, 169, 110, 0.25); }
+.fact-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  color: var(--clr-star);
+  margin-bottom: var(--space-2);
+  font-weight: 400;
+}
+.fact-desc { font-size: var(--fs-sm); color: var(--clr-star-dim); line-height: 1.75; }
+
+
+/* ── Location map placeholder ── */
+.map-placeholder {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-sm);
+  background: var(--clr-midnight);
+  border: var(--border-gold-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.map-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(201, 169, 110, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 169, 110, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.map-pin { position: relative; z-index: 2; text-align: center; }
+.map-pin__dot {
+  width: 12px; height: 12px;
+  border-radius: 50%; background: var(--clr-gold);
+  margin: 0 auto var(--space-2);
+  box-shadow: 0 0 0 4px rgba(201, 169, 110, 0.2), 0 0 20px rgba(201, 169, 110, 0.3);
+  animation: pinPulse 2.5s ease-in-out infinite;
+}
+.map-pin__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.12em;
+  color: var(--clr-gold);
+  background: rgba(2, 3, 10, 0.9);
+  border: var(--border-gold-dim);
+  padding: 0.3rem 0.7rem;
+  text-transform: uppercase;
+}
+@keyframes pinPulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(201,169,110,0.2), 0 0 20px rgba(201,169,110,0.3); }
+  50%       { box-shadow: 0 0 0 8px rgba(201,169,110,0.1), 0 0 30px rgba(201,169,110,0.45); }
+}
+
+
+/* ── Condition rows ── */
+.condition-row {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: var(--border-gold-dim);
+}
+.condition-row:last-child { border-bottom: none; }
+.condition-icon { font-size: var(--fs-md); }
+.condition-label { font-size: var(--fs-sm); color: var(--clr-star); }
+.condition-val {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--clr-gold);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+
+/* ── Event cards ── */
+.event-card {
+  border: var(--border-gold-dim);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4) var(--space-4);
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--transition-base), transform var(--transition-base);
+  cursor: default;
+}
+.event-card:hover {
+  border-color: rgba(201, 169, 110, 0.3);
+  transform: translateY(-4px);
+}
+.event-card--featured {
+  border-color: rgba(201, 169, 110, 0.22);
+  background: rgba(201, 169, 110, 0.025);
+}
+.event-card--featured::after {
+  content: '★ Featured';
+  position: absolute; top: 0.8rem; right: 0.8rem;
+  font-family: var(--font-mono); font-size: 0.55rem;
+  letter-spacing: 0.1em; color: var(--clr-gold);
+  text-transform: uppercase;
+}
+.event-card__glow {
+  position: absolute;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: var(--clr-gold); opacity: 0.04;
+  top: -30px; right: -30px; filter: blur(20px);
+  pointer-events: none;
+}
+.event-card__month {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--clr-gold);
+  display: block;
+  margin-bottom: var(--space-2);
+}
+.event-card__name {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 300;
+  color: var(--clr-star);
+  margin-bottom: var(--space-2);
+}
+.event-card__desc {
+  font-size: var(--fs-sm);
+  color: var(--clr-star-dim);
+  line-height: 1.75;
+  margin-bottom: var(--space-3);
+}
+
+
+/* ── Final CTA nebula glow ── */
+.cta-nebula {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 50%, rgba(40, 70, 160, 0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 30% at 50% 50%, rgba(201, 169, 110, 0.04) 0%, transparent 55%);
+}
+
+
+/* ── Responsive overrides (stargazing-specific) ── */
+@media (max-width: 900px) {
+  .sky-grid { grid-template-columns: 1fr 1fr; }
+  .facts-grid { grid-template-columns: 1fr; }
+  .fact-item { border-right: none; border-bottom: var(--border-gold-dim); }
+  .fact-item:last-child { border-bottom: none; }
+  .sg-timeline {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+  }
+  .sg-timeline__line { display: none; }
+  .sg-timeline__col--right { padding-top: 0; }
+}
+@media (max-width: 600px) {
+  .sky-grid { grid-template-columns: 1fr; }
+  .scope-visual { height: 300px; }
+}
