@@ -243,23 +243,9 @@ body::after {
   100% { top: 100%; }
 }
 
-/* --- Reveal animations (GSAP-driven) --- */
-[data-reveal] {
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-[data-reveal="up"] {
-  transform: translateY(60px);
-}
-
-[data-reveal="fade"] {
-  transform: none;
-}
-
-[data-reveal="scale"] {
-  transform: scale(0.95);
-}
+/* --- Reveal animations (GSAP-driven) ---
+   Initial hidden state is set by GSAP's gsap.set() in Layout.astro.
+   No CSS hiding here — if JS fails, content remains visible. */
 
 /* --- Link hover effect --- */
 .link-draw {

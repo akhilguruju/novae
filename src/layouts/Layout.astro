@@ -73,21 +73,25 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     });
     gsap.ticker.lagSmoothing(0);
 
-    // Reveal animations
+    // Reveal animations — GSAP owns both initial + animated state
     const reveals = document.querySelectorAll('[data-reveal]');
 
     reveals.forEach((el) => {
       const type = el.getAttribute('data-reveal') || 'default';
       const delay = parseFloat(el.getAttribute('data-reveal-delay') || '0');
 
-      const from: gsap.TweenVars = { opacity: 0 };
-      if (type === 'up') from.y = 60;
-      else if (type === 'scale') from.scale = 0.95;
+      const initial: gsap.TweenVars = { opacity: 0 };
+      if (type === 'up') initial.y = 60;
+      else if (type === 'scale') initial.scale = 0.95;
       else if (type === 'fade') { /* just opacity */ }
-      else from.y = 30;
+      else initial.y = 30;
 
-      gsap.from(el, {
-        ...from,
+      gsap.set(el, initial);
+
+      gsap.to(el, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
         duration: 1,
         delay,
         ease: 'power3.out',
