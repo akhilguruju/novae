@@ -1,22 +1,22 @@
 ---
-
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <header class="nav" id="nav">
   <div class="nav__inner">
-    <a href="/" class="nav__logo" aria-label="Novae Glamp — Home">
-      <img src="/assets/NG_logo.svg" alt="Novae Glamp" width="48" height="48" />
+    <a href={`${base}/`} class="nav__logo" aria-label="Novae Glamp — Home">
+      <img src={`${base}/assets/NG_logo.svg`} alt="Novae Glamp" width="48" height="48" />
     </a>
 
     <nav class="nav__links" aria-label="Main navigation">
-      <a href="/stays" class="nav__link link-draw">Stays</a>
-      <a href="/experiences" class="nav__link link-draw">Experiences</a>
-      <a href="/stargazing" class="nav__link link-draw">Stargazing</a>
-      <a href="/about" class="nav__link link-draw">About</a>
+      <a href={`${base}/stays`} class="nav__link link-draw">Stays</a>
+      <a href={`${base}/experiences`} class="nav__link link-draw">Experiences</a>
+      <a href={`${base}/stargazing`} class="nav__link link-draw">Stargazing</a>
+      <a href={`${base}/about`} class="nav__link link-draw">About</a>
     </nav>
 
     <a
-      href="/contact"
+      href={`${base}/contact`}
       class="nav__cta btn btn--ember"
     >
       <span>Book Now</span>
@@ -39,11 +39,11 @@
 <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
   <div class="mobile-menu__bg"></div>
   <nav class="mobile-menu__nav">
-    <a href="/stays" class="mobile-menu__link">Stays</a>
-    <a href="/experiences" class="mobile-menu__link">Experiences</a>
-    <a href="/stargazing" class="mobile-menu__link">Stargazing</a>
-    <a href="/about" class="mobile-menu__link">About</a>
-    <a href="/contact" class="mobile-menu__link mobile-menu__link--ember">Book Now</a>
+    <a href={`${base}/stays`} class="mobile-menu__link">Stays</a>
+    <a href={`${base}/experiences`} class="mobile-menu__link">Experiences</a>
+    <a href={`${base}/stargazing`} class="mobile-menu__link">Stargazing</a>
+    <a href={`${base}/about`} class="mobile-menu__link">About</a>
+    <a href={`${base}/contact`} class="mobile-menu__link mobile-menu__link--ember">Book Now</a>
   </nav>
   <div class="mobile-menu__footer">
     <a href="mailto:Bookings@novaeglamp.com" class="mobile-menu__contact">Bookings@novaeglamp.com</a>

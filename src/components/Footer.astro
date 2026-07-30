@@ -1,32 +1,32 @@
 ---
-
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <footer class="footer">
   <div class="footer__inner container">
     <div class="footer__top">
       <div class="footer__brand">
-        <img src="/assets/NG_logo.svg" alt="Novae Glamp" width="56" height="56" class="footer__logo" />
+        <img src={`${base}/assets/NG_logo.svg`} alt="Novae Glamp" width="56" height="56" class="footer__logo" />
         <p class="footer__tagline">Glamp. Gaze. Glow.</p>
       </div>
 
       <nav class="footer__nav" aria-label="Footer navigation">
         <div class="footer__col">
           <h4 class="footer__heading">Explore</h4>
-          <a href="/stays" class="footer__link link-draw">Stays</a>
-          <a href="/experiences" class="footer__link link-draw">Experiences</a>
-          <a href="/stargazing" class="footer__link link-draw">Stargazing</a>
-          <a href="/about" class="footer__link link-draw">About Us</a>
-          <a href="/gallery" class="footer__link link-draw">Gallery</a>
+          <a href={`${base}/stays`} class="footer__link link-draw">Stays</a>
+          <a href={`${base}/experiences`} class="footer__link link-draw">Experiences</a>
+          <a href={`${base}/stargazing`} class="footer__link link-draw">Stargazing</a>
+          <a href={`${base}/about`} class="footer__link link-draw">About Us</a>
+          <a href={`${base}/gallery`} class="footer__link link-draw">Gallery</a>
         </div>
         <div class="footer__col">
           <h4 class="footer__heading">Stay With Us</h4>
-          <a href="/stays#luxury-tepee" class="footer__link link-draw">Luxury Tepee</a>
-          <a href="/stays#american-tent" class="footer__link link-draw">American Tent</a>
-          <a href="/stays#suite-room" class="footer__link link-draw">Suite Room</a>
-          <a href="/stays#hut-tent" class="footer__link link-draw">Hut Tent</a>
-          <a href="/stays#dormitory" class="footer__link link-draw">Dormitory</a>
-          <a href="/stays#camping" class="footer__link link-draw">Camping</a>
+          <a href={`${base}/stays#luxury-tepee`} class="footer__link link-draw">Luxury Tepee</a>
+          <a href={`${base}/stays#american-tent`} class="footer__link link-draw">American Tent</a>
+          <a href={`${base}/stays#suite-room`} class="footer__link link-draw">Suite Room</a>
+          <a href={`${base}/stays#hut-tent`} class="footer__link link-draw">Hut Tent</a>
+          <a href={`${base}/stays#dormitory`} class="footer__link link-draw">Dormitory</a>
+          <a href={`${base}/stays#camping`} class="footer__link link-draw">Camping</a>
         </div>
         <div class="footer__col">
           <h4 class="footer__heading">Contact</h4>
