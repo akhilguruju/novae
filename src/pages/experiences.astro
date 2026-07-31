@@ -174,17 +174,21 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     border-radius: var(--radius-lg);
     overflow: hidden;
     aspect-ratio: 4 / 3;
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0);
   }
 
   .exp-feature__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
     transition: transform 1.2s var(--ease-out-expo);
   }
 
   .exp-feature:hover .exp-feature__media img {
-    transform: scale(1.05);
+    transform: scale(1.05) translate3d(0, 0, 0);
   }
 
   .exp-feature__media-overlay {
@@ -268,11 +272,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     width: 100%;
     height: 100%;
     object-fit: cover;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
     transition: transform 1.2s var(--ease-out-expo);
   }
 
   .exp-duo__card:hover .exp-duo__image img {
-    transform: scale(1.05);
+    transform: scale(1.05) translate3d(0, 0, 0);
   }
 
   .exp-duo__text {
@@ -310,6 +316,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     display: flex;
     gap: var(--space-md);
     padding-inline: var(--container-pad);
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
   }
 
   .exp-gallery__item {
@@ -323,6 +331,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     width: 100%;
     height: 100%;
     object-fit: cover;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
     transition: transform 1s var(--ease-out-expo);
   }
 
@@ -382,16 +392,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
   gsap.registerPlugin(ScrollTrigger);
 
-  // Parallax on feature images
+  // Parallax on feature images — scrub: 1.5 for smooth following
   document.querySelectorAll('.exp-feature__media img').forEach((img) => {
     gsap.to(img, {
-      yPercent: -10,
+      yPercent: -8,
       ease: 'none',
       scrollTrigger: {
         trigger: img.closest('.exp-feature'),
         start: 'top bottom',
         end: 'bottom top',
-        scrub: true,
+        scrub: 1.5,
       },
     });
   });
@@ -406,7 +416,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         trigger: '.exp-gallery',
         start: 'top bottom',
         end: 'bottom top',
-        scrub: 1,
+        scrub: 1.5,
       },
     });
   }
