@@ -159,39 +159,38 @@
 
     function createGalaxies() {
       galaxies = [];
-      // Place 2-3 galaxies per viewport-height band to ensure visibility while scrolling
-      const bands = 3;
-      const perBand = 3;
-      for (let band = 0; band < bands; band++) {
-        const bandStart = band * h;
-        const bandEnd = (band + 1) * h;
-        for (let j = 0; j < perBand; j++) {
-          galaxies.push({
-            x: (w * 0.1) + Math.random() * (w * 0.8),
-            y: bandStart + Math.random() * (bandEnd - bandStart),
-            size: 20 + Math.random() * 40,
-            angle: Math.random() * Math.PI * 2,
-            tilt: 0.3 + Math.random() * 0.5,
-            alpha: 0.08 + Math.random() * 0.1,
-            colorType: (band * perBand + j) % 5,
-            arms: Math.random() < 0.3 ? 0 : (2 + Math.floor(Math.random() * 3)),
-            layer: Math.random() < 0.5 ? 0 : 1,
-          });
-        }
+      // 8 guaranteed galaxies spread across 4 viewport bands (2 per band)
+      // ensures at least 2 visible at any scroll position
+      const positions = [
+        { bx: 0.2, by: 0.3 },  { bx: 0.75, by: 0.7 },
+        { bx: 0.15, by: 1.2 }, { bx: 0.8, by: 1.6 },
+        { bx: 0.5, by: 2.0 },  { bx: 0.25, by: 2.4 },
+        { bx: 0.7, by: 0.1 },  { bx: 0.45, by: 2.8 },
+      ];
+      for (let i = 0; i < positions.length; i++) {
+        const jitterX = (Math.random() - 0.5) * w * 0.15;
+        const jitterY = (Math.random() - 0.5) * h * 0.2;
+        galaxies.push({
+          x: positions[i].bx * w + jitterX,
+          y: positions[i].by * h + jitterY,
+          size: 30 + Math.random() * 50,
+          angle: Math.random() * Math.PI * 2,
+          tilt: 0.35 + Math.random() * 0.45,
+          alpha: 0.15 + Math.random() * 0.15,
+          colorType: i % 5,
+          arms: Math.random() < 0.25 ? 0 : (2 + Math.floor(Math.random() * 3)),
+          layer: Math.random() < 0.5 ? 0 : 1,
+        });
       }
     }
 
     const galaxyPalettes = [
-      // 0: Blue-white (classic spiral)
-      { core: [200, 215, 255], mid: [160, 180, 240], arm: [140, 170, 255], haze: [120, 150, 220] },
-      // 1: Warm gold-amber
-      { core: [255, 235, 200], mid: [240, 200, 150], arm: [230, 190, 130], haze: [210, 180, 140] },
-      // 2: Purple-violet (nebula-like)
-      { core: [220, 180, 255], mid: [180, 130, 230], arm: [160, 120, 220], haze: [140, 100, 200] },
-      // 3: Teal-cyan
-      { core: [180, 240, 240], mid: [130, 210, 220], arm: [100, 200, 210], haze: [80, 180, 200] },
-      // 4: Rose-pink
-      { core: [255, 200, 210], mid: [240, 160, 180], arm: [220, 140, 170], haze: [200, 120, 160] },
+      // Saturated, vivid colors
+      { core: [180, 200, 255], mid: [120, 150, 255], arm: [100, 140, 255], haze: [80, 120, 230] },
+      { core: [255, 230, 180], mid: [255, 200, 120], arm: [255, 180, 80],  haze: [230, 170, 100] },
+      { core: [230, 170, 255], mid: [200, 120, 255], arm: [180, 100, 255], haze: [160, 80, 230] },
+      { core: [140, 255, 245], mid: [80, 230, 220],  arm: [60, 210, 210],  haze: [50, 190, 200] },
+      { core: [255, 180, 200], mid: [255, 140, 170], arm: [255, 110, 150], haze: [230, 100, 140] },
     ];
 
     function drawGalaxy(g: Galaxy, sy: number, time: number) {
@@ -204,10 +203,11 @@
       const pal = galaxyPalettes[g.colorType];
 
       if (g.arms === 0) {
+        // Elliptical — big soft glow
         const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, g.size);
-        grad.addColorStop(0, `rgba(${pal.core[0]}, ${pal.core[1]}, ${pal.core[2]}, ${a * 3.5})`);
-        grad.addColorStop(0.25, `rgba(${pal.mid[0]}, ${pal.mid[1]}, ${pal.mid[2]}, ${a * 2})`);
-        grad.addColorStop(0.6, `rgba(${pal.haze[0]}, ${pal.haze[1]}, ${pal.haze[2]}, ${a * 0.8})`);
+        grad.addColorStop(0, `rgba(${pal.core[0]}, ${pal.core[1]}, ${pal.core[2]}, ${Math.min(a * 4, 1)})`);
+        grad.addColorStop(0.2, `rgba(${pal.mid[0]}, ${pal.mid[1]}, ${pal.mid[2]}, ${Math.min(a * 2.5, 0.8)})`);
+        grad.addColorStop(0.5, `rgba(${pal.haze[0]}, ${pal.haze[1]}, ${pal.haze[2]}, ${Math.min(a * 1.2, 0.5)})`);
         grad.addColorStop(1, 'rgba(0,0,0,0)');
 
         ctx.scale(1, g.tilt);
@@ -216,39 +216,43 @@
         ctx.fillStyle = grad;
         ctx.fill();
       } else {
+        // Spiral galaxy
         ctx.scale(1, g.tilt);
 
-        const coreGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, g.size * 0.35);
-        coreGrad.addColorStop(0, `rgba(${pal.core[0]}, ${pal.core[1]}, ${pal.core[2]}, ${a * 4})`);
-        coreGrad.addColorStop(0.5, `rgba(${pal.mid[0]}, ${pal.mid[1]}, ${pal.mid[2]}, ${a * 2})`);
+        // Bright core
+        const coreGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, g.size * 0.4);
+        coreGrad.addColorStop(0, `rgba(${pal.core[0]}, ${pal.core[1]}, ${pal.core[2]}, ${Math.min(a * 5, 1)})`);
+        coreGrad.addColorStop(0.4, `rgba(${pal.mid[0]}, ${pal.mid[1]}, ${pal.mid[2]}, ${Math.min(a * 2.5, 0.7)})`);
         coreGrad.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.beginPath();
-        ctx.arc(0, 0, g.size * 0.35, 0, Math.PI * 2);
+        ctx.arc(0, 0, g.size * 0.4, 0, Math.PI * 2);
         ctx.fillStyle = coreGrad;
         ctx.fill();
 
+        // Thick spiral arms
         for (let arm = 0; arm < g.arms; arm++) {
           const armOffset = (arm / g.arms) * Math.PI * 2;
           ctx.beginPath();
-          for (let t = 0; t < 80; t++) {
-            const theta = armOffset + t * 0.08;
-            const r = (t / 80) * g.size;
+          for (let t = 0; t < 100; t++) {
+            const theta = armOffset + t * 0.07;
+            const r = (t / 100) * g.size;
             const px = Math.cos(theta) * r;
             const py = Math.sin(theta) * r;
             if (t === 0) ctx.moveTo(px, py);
             else ctx.lineTo(px, py);
           }
-          ctx.strokeStyle = `rgba(${pal.arm[0]}, ${pal.arm[1]}, ${pal.arm[2]}, ${a * 1.8})`;
-          ctx.lineWidth = g.size * 0.07;
+          ctx.strokeStyle = `rgba(${pal.arm[0]}, ${pal.arm[1]}, ${pal.arm[2]}, ${Math.min(a * 2.5, 0.6)})`;
+          ctx.lineWidth = g.size * 0.09;
           ctx.lineCap = 'round';
           ctx.stroke();
         }
 
-        const outerGrad = ctx.createRadialGradient(0, 0, g.size * 0.15, 0, 0, g.size);
-        outerGrad.addColorStop(0, `rgba(${pal.haze[0]}, ${pal.haze[1]}, ${pal.haze[2]}, ${a * 0.7})`);
+        // Wide outer haze
+        const outerGrad = ctx.createRadialGradient(0, 0, g.size * 0.1, 0, 0, g.size * 1.2);
+        outerGrad.addColorStop(0, `rgba(${pal.haze[0]}, ${pal.haze[1]}, ${pal.haze[2]}, ${Math.min(a * 1.2, 0.4)})`);
         outerGrad.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.beginPath();
-        ctx.arc(0, 0, g.size, 0, Math.PI * 2);
+        ctx.arc(0, 0, g.size * 1.2, 0, Math.PI * 2);
         ctx.fillStyle = outerGrad;
         ctx.fill();
       }
