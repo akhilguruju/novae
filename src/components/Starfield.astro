@@ -62,9 +62,10 @@
       angle: number;
       tilt: number;
       alpha: number;
-      colorType: number; // 0=blue, 1=warm, 2=purple, 3=teal, 4=rose
+      colorType: number;
       arms: number;
       layer: number;
+      sprite: HTMLCanvasElement | null;
     }
 
     let stars: Star[] = [];
@@ -157,10 +158,114 @@
       }
     }
 
+    const galaxyPalettes = [
+      { core: [230, 235, 255], stars: [170, 190, 255], outer: [130, 155, 225] },
+      { core: [255, 245, 220], stars: [255, 218, 165], outer: [225, 185, 135] },
+      { core: [235, 220, 255], stars: [200, 175, 245], outer: [170, 145, 215] },
+      { core: [210, 250, 255], stars: [155, 228, 242], outer: [115, 195, 215] },
+      { core: [255, 230, 240], stars: [248, 190, 210], outer: [220, 160, 185] },
+    ];
+
+    function renderGalaxySprite(g: Galaxy): HTMLCanvasElement {
+      const dim = Math.ceil(g.size * 2.8);
+      const off = document.createElement('canvas');
+      off.width = dim;
+      off.height = dim;
+      const oc = off.getContext('2d')!;
+      const cx = dim / 2;
+      const cy = dim / 2;
+      const pal = galaxyPalettes[g.colorType];
+      const count = Math.floor(g.size * 12);
+
+      const coreR = g.size * (g.arms === 0 ? 0.45 : 0.28);
+      const cg = oc.createRadialGradient(cx, cy, 0, cx, cy, coreR);
+      cg.addColorStop(0, `rgba(${pal.core[0]},${pal.core[1]},${pal.core[2]},0.55)`);
+      cg.addColorStop(0.35, `rgba(${pal.stars[0]},${pal.stars[1]},${pal.stars[2]},0.15)`);
+      cg.addColorStop(1, 'rgba(0,0,0,0)');
+      oc.fillStyle = cg;
+      oc.beginPath();
+      oc.arc(cx, cy, coreR, 0, Math.PI * 2);
+      oc.fill();
+
+      if (g.arms === 0) {
+        for (let i = 0; i < count; i++) {
+          const u1 = Math.random() || 0.001;
+          const u2 = Math.random();
+          const r = Math.sqrt(-2 * Math.log(u1)) * g.size * 0.32;
+          const th = Math.PI * 2 * u2;
+          const px = cx + Math.cos(th) * r;
+          const py = cy + Math.sin(th) * r * g.tilt;
+          const d = Math.hypot(px - cx, (py - cy) / g.tilt) / g.size;
+          if (d > 1.2) continue;
+          const b = Math.max(0, 1 - d);
+          const sz = 0.3 + Math.random() * 1.2 * b;
+          const t = Math.min(d * 1.5, 1);
+          const cr = pal.core[0] + (pal.outer[0] - pal.core[0]) * t | 0;
+          const cg2 = pal.core[1] + (pal.outer[1] - pal.core[1]) * t | 0;
+          const cb = pal.core[2] + (pal.outer[2] - pal.core[2]) * t | 0;
+          oc.beginPath();
+          oc.arc(px, py, sz, 0, Math.PI * 2);
+          oc.fillStyle = `rgba(${cr},${cg2},${cb},${b * 0.6})`;
+          oc.fill();
+        }
+      } else {
+        for (let i = 0; i < count; i++) {
+          const arm = (Math.random() * g.arms) | 0;
+          const armOff = (arm / g.arms) * Math.PI * 2;
+          const t = Math.random();
+          const r = t * g.size;
+          const spiral = armOff + t * 3.2;
+          const scatter = (0.06 + t * 0.22) * g.size;
+          const sx = (Math.random() - 0.5) * scatter;
+          const sy = (Math.random() - 0.5) * scatter * g.tilt;
+          const px = cx + Math.cos(spiral) * r + sx;
+          const py = cy + Math.sin(spiral) * r * g.tilt + sy;
+          const d = Math.hypot(px - cx, (py - cy) / g.tilt) / g.size;
+          if (d > 1.3) continue;
+          const b = Math.max(0, 1 - d * 0.7);
+          const sz = 0.2 + Math.random() * 1.0 * b;
+          const ct = Math.min(t * 1.4, 1);
+          const cr = pal.core[0] + (pal.stars[0] - pal.core[0]) * ct | 0;
+          const cg2 = pal.core[1] + (pal.stars[1] - pal.core[1]) * ct | 0;
+          const cb = pal.core[2] + (pal.stars[2] - pal.core[2]) * ct | 0;
+          oc.beginPath();
+          oc.arc(px, py, sz, 0, Math.PI * 2);
+          oc.fillStyle = `rgba(${cr},${cg2},${cb},${b * 0.55})`;
+          oc.fill();
+        }
+        for (let k = 0; k < g.arms * 3; k++) {
+          const arm = k % g.arms;
+          const armOff = (arm / g.arms) * Math.PI * 2;
+          const t = 0.2 + Math.random() * 0.55;
+          const r = t * g.size;
+          const spiral = armOff + t * 3.2;
+          const jx = (Math.random() - 0.5) * g.size * 0.06;
+          const jy = (Math.random() - 0.5) * g.size * 0.06;
+          const px = cx + Math.cos(spiral) * r + jx;
+          const py = cy + Math.sin(spiral) * r * g.tilt + jy;
+          const kg = oc.createRadialGradient(px, py, 0, px, py, g.size * 0.055);
+          kg.addColorStop(0, `rgba(${pal.stars[0]},${pal.stars[1]},${pal.stars[2]},0.4)`);
+          kg.addColorStop(1, 'rgba(0,0,0,0)');
+          oc.fillStyle = kg;
+          oc.beginPath();
+          oc.arc(px, py, g.size * 0.055, 0, Math.PI * 2);
+          oc.fill();
+        }
+      }
+
+      const hg = oc.createRadialGradient(cx, cy, g.size * 0.25, cx, cy, g.size * 1.15);
+      hg.addColorStop(0, `rgba(${pal.outer[0]},${pal.outer[1]},${pal.outer[2]},0.06)`);
+      hg.addColorStop(1, 'rgba(0,0,0,0)');
+      oc.fillStyle = hg;
+      oc.beginPath();
+      oc.arc(cx, cy, g.size * 1.15, 0, Math.PI * 2);
+      oc.fill();
+
+      return off;
+    }
+
     function createGalaxies() {
       galaxies = [];
-      // 8 guaranteed galaxies spread across 4 viewport bands (2 per band)
-      // ensures at least 2 visible at any scroll position
       const positions = [
         { bx: 0.2, by: 0.3 },  { bx: 0.75, by: 0.7 },
         { bx: 0.15, by: 1.2 }, { bx: 0.8, by: 1.6 },
@@ -168,95 +273,34 @@
         { bx: 0.7, by: 0.1 },  { bx: 0.45, by: 2.8 },
       ];
       for (let i = 0; i < positions.length; i++) {
-        const jitterX = (Math.random() - 0.5) * w * 0.15;
-        const jitterY = (Math.random() - 0.5) * h * 0.2;
-        galaxies.push({
-          x: positions[i].bx * w + jitterX,
-          y: positions[i].by * h + jitterY,
-          size: 30 + Math.random() * 50,
+        const jx = (Math.random() - 0.5) * w * 0.15;
+        const jy = (Math.random() - 0.5) * h * 0.2;
+        const g: Galaxy = {
+          x: positions[i].bx * w + jx,
+          y: positions[i].by * h + jy,
+          size: 60 + Math.random() * 60,
           angle: Math.random() * Math.PI * 2,
-          tilt: 0.35 + Math.random() * 0.45,
-          alpha: 0.15 + Math.random() * 0.15,
+          tilt: 0.4 + Math.random() * 0.35,
+          alpha: 0.8 + Math.random() * 0.2,
           colorType: i % 5,
-          arms: Math.random() < 0.25 ? 0 : (2 + Math.floor(Math.random() * 3)),
+          arms: Math.random() < 0.3 ? 0 : (2 + Math.floor(Math.random() * 2)),
           layer: Math.random() < 0.5 ? 0 : 1,
-        });
+          sprite: null,
+        };
+        g.sprite = renderGalaxySprite(g);
+        galaxies.push(g);
       }
     }
 
-    const galaxyPalettes = [
-      // Saturated, vivid colors
-      { core: [180, 200, 255], mid: [120, 150, 255], arm: [100, 140, 255], haze: [80, 120, 230] },
-      { core: [255, 230, 180], mid: [255, 200, 120], arm: [255, 180, 80],  haze: [230, 170, 100] },
-      { core: [230, 170, 255], mid: [200, 120, 255], arm: [180, 100, 255], haze: [160, 80, 230] },
-      { core: [140, 255, 245], mid: [80, 230, 220],  arm: [60, 210, 210],  haze: [50, 190, 200] },
-      { core: [255, 180, 200], mid: [255, 140, 170], arm: [255, 110, 150], haze: [230, 100, 140] },
-    ];
-
     function drawGalaxy(g: Galaxy, sy: number, time: number) {
+      if (!g.sprite) return;
       ctx.save();
       ctx.translate(g.x, sy);
-      ctx.rotate(g.angle + time * 0.00002);
-
-      const pulse = 0.85 + 0.15 * Math.sin(time * 0.0003 + g.x);
-      const a = g.alpha * pulse;
-      const pal = galaxyPalettes[g.colorType];
-
-      if (g.arms === 0) {
-        // Elliptical — big soft glow
-        const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, g.size);
-        grad.addColorStop(0, `rgba(${pal.core[0]}, ${pal.core[1]}, ${pal.core[2]}, ${Math.min(a * 4, 1)})`);
-        grad.addColorStop(0.2, `rgba(${pal.mid[0]}, ${pal.mid[1]}, ${pal.mid[2]}, ${Math.min(a * 2.5, 0.8)})`);
-        grad.addColorStop(0.5, `rgba(${pal.haze[0]}, ${pal.haze[1]}, ${pal.haze[2]}, ${Math.min(a * 1.2, 0.5)})`);
-        grad.addColorStop(1, 'rgba(0,0,0,0)');
-
-        ctx.scale(1, g.tilt);
-        ctx.beginPath();
-        ctx.arc(0, 0, g.size, 0, Math.PI * 2);
-        ctx.fillStyle = grad;
-        ctx.fill();
-      } else {
-        // Spiral galaxy
-        ctx.scale(1, g.tilt);
-
-        // Bright core
-        const coreGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, g.size * 0.4);
-        coreGrad.addColorStop(0, `rgba(${pal.core[0]}, ${pal.core[1]}, ${pal.core[2]}, ${Math.min(a * 5, 1)})`);
-        coreGrad.addColorStop(0.4, `rgba(${pal.mid[0]}, ${pal.mid[1]}, ${pal.mid[2]}, ${Math.min(a * 2.5, 0.7)})`);
-        coreGrad.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.beginPath();
-        ctx.arc(0, 0, g.size * 0.4, 0, Math.PI * 2);
-        ctx.fillStyle = coreGrad;
-        ctx.fill();
-
-        // Thick spiral arms
-        for (let arm = 0; arm < g.arms; arm++) {
-          const armOffset = (arm / g.arms) * Math.PI * 2;
-          ctx.beginPath();
-          for (let t = 0; t < 100; t++) {
-            const theta = armOffset + t * 0.07;
-            const r = (t / 100) * g.size;
-            const px = Math.cos(theta) * r;
-            const py = Math.sin(theta) * r;
-            if (t === 0) ctx.moveTo(px, py);
-            else ctx.lineTo(px, py);
-          }
-          ctx.strokeStyle = `rgba(${pal.arm[0]}, ${pal.arm[1]}, ${pal.arm[2]}, ${Math.min(a * 2.5, 0.6)})`;
-          ctx.lineWidth = g.size * 0.09;
-          ctx.lineCap = 'round';
-          ctx.stroke();
-        }
-
-        // Wide outer haze
-        const outerGrad = ctx.createRadialGradient(0, 0, g.size * 0.1, 0, 0, g.size * 1.2);
-        outerGrad.addColorStop(0, `rgba(${pal.haze[0]}, ${pal.haze[1]}, ${pal.haze[2]}, ${Math.min(a * 1.2, 0.4)})`);
-        outerGrad.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.beginPath();
-        ctx.arc(0, 0, g.size * 1.2, 0, Math.PI * 2);
-        ctx.fillStyle = outerGrad;
-        ctx.fill();
-      }
-
+      ctx.rotate(g.angle + time * 0.000008);
+      ctx.globalAlpha = g.alpha;
+      const half = g.sprite.width / 2;
+      ctx.drawImage(g.sprite, -half, -half);
+      ctx.globalAlpha = 1;
       ctx.restore();
     }
 
