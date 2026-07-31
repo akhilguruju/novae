@@ -2,91 +2,32 @@
 
 ---
 
-<div class="moon" id="moon" aria-hidden="true">
-  <div class="moon__body">
-    <div class="moon__surface"></div>
-    <div class="moon__shadow" id="moon-shadow"></div>
-    <div class="moon__glow"></div>
-  </div>
-</div>
+<canvas class="moon-canvas" id="moon-canvas" aria-hidden="true"></canvas>
 
 <style>
-  .moon {
+  .moon-canvas {
     position: fixed;
-    top: 8vh;
-    right: 6vw;
-    z-index: 1;
+    top: 5vh;
+    right: 4vw;
+    z-index: 0;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 1.5s ease;
+    transition: opacity 2.5s ease;
+    width: clamp(80px, 10vw, 160px);
+    height: clamp(80px, 10vw, 160px);
   }
 
-  .moon.is-visible {
+  .moon-canvas.is-visible {
     opacity: 1;
   }
 
-  .moon__body {
-    position: relative;
-    width: clamp(60px, 8vw, 120px);
-    height: clamp(60px, 8vw, 120px);
-    border-radius: 50%;
-    overflow: hidden;
-  }
-
-  .moon__surface {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: radial-gradient(
-      circle at 35% 35%,
-      rgba(240, 235, 227, 0.18) 0%,
-      rgba(220, 215, 200, 0.12) 30%,
-      rgba(200, 195, 180, 0.08) 60%,
-      rgba(180, 175, 160, 0.05) 100%
-    );
-  }
-
-  .moon__surface::before {
-    content: '';
-    position: absolute;
-    width: 15%;
-    height: 15%;
-    top: 30%;
-    left: 25%;
-    border-radius: 50%;
-    background: rgba(160, 155, 140, 0.08);
-  }
-
-  .moon__surface::after {
-    content: '';
-    position: absolute;
-    width: 22%;
-    height: 20%;
-    top: 50%;
-    left: 55%;
-    border-radius: 50%;
-    background: rgba(160, 155, 140, 0.06);
-  }
-
-  .moon__shadow {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: var(--void, #060608);
-    transform: translateX(0%);
-    transition: none;
-  }
-
-  .moon__glow {
-    position: absolute;
-    inset: -40%;
-    border-radius: 50%;
-    background: radial-gradient(
-      circle,
-      rgba(240, 235, 227, 0.04) 0%,
-      rgba(240, 235, 227, 0.02) 40%,
-      transparent 70%
-    );
+  @media (max-width: 768px) {
+    .moon-canvas {
+      width: 60px;
+      height: 60px;
+      top: 10vh;
+      right: 5vw;
+    }
   }
 </style>
 
@@ -95,73 +36,166 @@
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
   gsap.registerPlugin(ScrollTrigger);
 
-  const moon = document.getElementById('moon');
-  const shadow = document.getElementById('moon-shadow');
+  const canvas = document.getElementById('moon-canvas') as HTMLCanvasElement;
 
-  if (moon && shadow) {
+  if (canvas) {
+    const ctx = canvas.getContext('2d')!;
+    let scrollProgress = 0;
+    let displaySize = 0;
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      displaySize = rect.width;
+      const dpr = Math.min(window.devicePixelRatio, 2);
+      canvas.width = displaySize * dpr;
+      canvas.height = displaySize * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drawMoon();
+    }
+
+    function drawMoon() {
+      const s = displaySize;
+      const cx = s / 2;
+      const cy = s / 2;
+      const r = s * 0.32;
+
+      ctx.clearRect(0, 0, s, s);
+
+      // Outer haze — makes the moon feel atmospheric
+      const haze = ctx.createRadialGradient(cx, cy, r * 0.5, cx, cy, r * 2.2);
+      haze.addColorStop(0, 'rgba(220, 215, 207, 0.03)');
+      haze.addColorStop(0.4, 'rgba(220, 215, 207, 0.015)');
+      haze.addColorStop(1, 'rgba(220, 215, 207, 0)');
+      ctx.fillStyle = haze;
+      ctx.fillRect(0, 0, s, s);
+
+      // Phase: smooth cos curve maps scroll 0→1 to a full wax/wane cycle
+      // phase = 1 → full moon, 0 → half, -1 → new moon/eclipse
+      const phase = Math.cos(scrollProgress * Math.PI * 2);
+
+      // Draw lit portion of moon using compositing
+      ctx.save();
+
+      // Moon body — soft disc
+      const bodyGrad = ctx.createRadialGradient(
+        cx - r * 0.15, cy - r * 0.15, 0,
+        cx, cy, r
+      );
+      bodyGrad.addColorStop(0, 'rgba(235, 230, 220, 0.14)');
+      bodyGrad.addColorStop(0.5, 'rgba(225, 220, 210, 0.10)');
+      bodyGrad.addColorStop(0.85, 'rgba(210, 205, 195, 0.06)');
+      bodyGrad.addColorStop(1, 'rgba(200, 195, 185, 0)');
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fillStyle = bodyGrad;
+      ctx.fill();
+
+      // Subtle surface texture (mare-like darker patches)
+      ctx.globalAlpha = 0.03;
+      ctx.beginPath();
+      ctx.arc(cx - r * 0.15, cy + r * 0.1, r * 0.18, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(100, 95, 85, 1)';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(cx + r * 0.25, cy - r * 0.2, r * 0.12, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(100, 95, 85, 1)';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(cx + r * 0.1, cy + r * 0.35, r * 0.15, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(100, 95, 85, 1)';
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // Phase shadow — the key to realistic moon phases
+      // Uses an ellipse-based terminator line like real lunar phases
+      // The shadow is drawn by clipping: we draw a dark overlay on the shadowed half
+      if (phase < 0.98) {
+        ctx.save();
+
+        // Clip to the moon circle
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.clip();
+
+        // Determine which side is lit based on scroll direction
+        // First half (0→0.5): shadow comes from the right (waning)
+        // Second half (0.5→1): shadow retreats to the right (waxing)
+        const waning = scrollProgress <= 0.5;
+
+        // The terminator is an ellipse whose x-radius = |phase| * r
+        // When phase=1: ellipse matches circle (full moon, no shadow)
+        // When phase=0: ellipse is a line (half moon)
+        // When phase=-1: ellipse matches circle on other side (new moon)
+
+        ctx.beginPath();
+
+        if (waning) {
+          // Shadow covers the right side, terminator sweeps left
+          // Right half-circle (always in shadow during waning)
+          ctx.arc(cx, cy, r, -Math.PI / 2, Math.PI / 2, false);
+          // Terminator arc: ellipse connecting top to bottom
+          ctx.ellipse(cx, cy, Math.max(0, phase) * r, r, 0, Math.PI / 2, -Math.PI / 2, false);
+        } else {
+          // Shadow covers the left side, terminator sweeps right
+          ctx.arc(cx, cy, r, Math.PI / 2, -Math.PI / 2, false);
+          ctx.ellipse(cx, cy, Math.max(0, phase) * r, r, 0, -Math.PI / 2, Math.PI / 2, false);
+        }
+
+        ctx.closePath();
+
+        // Shadow fill — matched to background so it disappears naturally
+        const shadowAlpha = Math.min(1, (1 - phase) * 0.55);
+        ctx.fillStyle = `rgba(6, 6, 8, ${shadowAlpha})`;
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      // Eclipse corona glow — only visible near new moon (phase ≈ -1)
+      const eclipseIntensity = Math.max(0, -phase - 0.3) / 0.7;
+      if (eclipseIntensity > 0) {
+        const coronaGrad = ctx.createRadialGradient(cx, cy, r * 0.9, cx, cy, r * 1.6);
+        coronaGrad.addColorStop(0, `rgba(232, 148, 74, ${eclipseIntensity * 0.08})`);
+        coronaGrad.addColorStop(0.3, `rgba(232, 148, 74, ${eclipseIntensity * 0.04})`);
+        coronaGrad.addColorStop(1, 'rgba(232, 148, 74, 0)');
+        ctx.beginPath();
+        ctx.arc(cx, cy, r * 1.6, 0, Math.PI * 2);
+        ctx.fillStyle = coronaGrad;
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
+    resize();
+    let resizeTimer: number;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(resize, 200) as unknown as number;
+    });
+
+    // Smooth scroll-driven phase
+    ScrollTrigger.create({
+      trigger: document.body,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 2,
+      onUpdate(self) {
+        scrollProgress = self.progress;
+        drawMoon();
+      },
+    });
+
+    // Show after preloader
     function showMoon() {
-      moon!.classList.add('is-visible');
+      canvas.classList.add('is-visible');
     }
 
     if (document.documentElement.classList.contains('preloader-done')) {
       setTimeout(showMoon, 500);
     } else {
-      window.addEventListener('preloader:complete', () => setTimeout(showMoon, 800), { once: true });
+      window.addEventListener('preloader:complete', () => setTimeout(showMoon, 1000), { once: true });
     }
-
-    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-
-    ScrollTrigger.create({
-      trigger: document.body,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 1,
-      onUpdate(self) {
-        const p = self.progress;
-
-        // Phase cycle: full → half → new/eclipse → half → full
-        // 0.0 = full moon (shadow fully off to the right)
-        // 0.25 = half moon (shadow covering right half)
-        // 0.5 = new moon/eclipse (shadow fully covering)
-        // 0.75 = half moon (shadow covering left half)
-        // 1.0 = full moon again
-
-        let shadowX: number;
-        let shadowOpacity: number;
-
-        if (p <= 0.25) {
-          // Full → half: shadow slides from right to center
-          shadowX = 100 - (p / 0.25) * 100;
-          shadowOpacity = p / 0.25;
-        } else if (p <= 0.5) {
-          // Half → eclipse: shadow slides past center to cover fully
-          const t = (p - 0.25) / 0.25;
-          shadowX = -t * 10;
-          shadowOpacity = 1;
-        } else if (p <= 0.75) {
-          // Eclipse → half: shadow retreats to the left
-          const t = (p - 0.5) / 0.25;
-          shadowX = -10 + t * 10 - 100 * (1 - t);
-          shadowOpacity = 1;
-        } else {
-          // Half → full: shadow slides off to the left
-          const t = (p - 0.75) / 0.25;
-          shadowX = -100 * (1 - t) - 100;
-          shadowOpacity = 1 - t;
-        }
-
-        shadow!.style.transform = `translateX(${shadowX}%)`;
-        shadow!.style.opacity = String(Math.min(1, shadowOpacity));
-      },
-    });
-
-    // Gentle floating
-    gsap.to(moon, {
-      y: 15,
-      duration: 6,
-      ease: 'sine.inOut',
-      yoyo: true,
-      repeat: -1,
-    });
   }
 </script>
