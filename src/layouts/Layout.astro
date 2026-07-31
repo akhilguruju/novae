@@ -5,7 +5,6 @@ import Preloader from '@/components/Preloader.astro';
 import Grain from '@/components/Grain.astro';
 import Starfield from '@/components/Starfield.astro';
 import Cursor from '@/components/Cursor.astro';
-import Moon from '@/components/Moon.astro';
 import ScrollProgress from '@/components/ScrollProgress.astro';
 import '@/styles/global.css';
 
@@ -58,7 +57,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 </head>
 <body>
   <Starfield />
-  <Moon />
   <Preloader />
   <ScrollProgress />
   <Nav />
@@ -141,35 +139,39 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       });
     });
 
-    // Cursor-glow proximity: update CSS custom properties on [data-cursor-glow] elements
+    // Cursor-glow proximity: highlight ALL text elements when cursor is near
     if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      const glowEls = document.querySelectorAll<HTMLElement>('[data-cursor-glow]');
-      if (glowEls.length) {
-        let gmx = -300, gmy = -300;
-        document.addEventListener('mousemove', (e) => {
-          gmx = e.clientX;
-          gmy = e.clientY;
-        });
+      const glowEls = document.querySelectorAll<HTMLElement>(
+        'p, blockquote, h1, h2, h3, h4, .hero__sub, .testimonial__text, .journey__heading, .stays-preview__sub, .story__text p, cite'
+      );
 
-        function updateGlow() {
-          for (const el of glowEls) {
-            const rect = el.getBoundingClientRect();
-            const pad = 150;
-            if (
-              gmx > rect.left - pad && gmx < rect.right + pad &&
-              gmy > rect.top - pad && gmy < rect.bottom + pad
-            ) {
-              el.style.setProperty('--glow-x', (gmx - rect.left) + 'px');
-              el.style.setProperty('--glow-y', (gmy - rect.top) + 'px');
-            } else {
-              el.style.setProperty('--glow-x', '-200px');
-              el.style.setProperty('--glow-y', '-200px');
-            }
+      glowEls.forEach(el => el.classList.add('cursor-glow'));
+
+      let gmx = -300, gmy = -300;
+      document.addEventListener('mousemove', (e) => {
+        gmx = e.clientX;
+        gmy = e.clientY;
+      });
+
+      function updateGlow() {
+        for (const el of glowEls) {
+          const rect = el.getBoundingClientRect();
+          if (rect.bottom < -100 || rect.top > window.innerHeight + 100) continue;
+          const pad = 150;
+          if (
+            gmx > rect.left - pad && gmx < rect.right + pad &&
+            gmy > rect.top - pad && gmy < rect.bottom + pad
+          ) {
+            el.style.setProperty('--glow-x', (gmx - rect.left) + 'px');
+            el.style.setProperty('--glow-y', (gmy - rect.top) + 'px');
+          } else {
+            el.style.setProperty('--glow-x', '-200px');
+            el.style.setProperty('--glow-y', '-200px');
           }
-          requestAnimationFrame(updateGlow);
         }
         requestAnimationFrame(updateGlow);
       }
+      requestAnimationFrame(updateGlow);
     }
   </script>
 </body>

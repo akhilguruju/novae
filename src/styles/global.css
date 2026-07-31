@@ -343,12 +343,12 @@ em {
 }
 
 /* --- Text cursor glow --- */
-[data-cursor-glow] {
+.cursor-glow {
   background: radial-gradient(
     circle 120px at var(--glow-x, -200px) var(--glow-y, -200px),
     var(--starlight) 0%,
     rgba(240, 235, 227, 0.7) 25%,
-    var(--starlight-dim) 60%
+    currentColor 60%
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -356,11 +356,11 @@ em {
 }
 
 @media (hover: none) {
-  [data-cursor-glow] {
+  .cursor-glow {
     background: none;
     -webkit-background-clip: border-box;
     background-clip: border-box;
-    -webkit-text-fill-color: var(--starlight-dim);
+    -webkit-text-fill-color: currentColor;
   }
 }
 

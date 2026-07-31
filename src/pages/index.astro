@@ -10,7 +10,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <h1 class="hero__title" id="hero-title">
         Where the sky<br /><em>remembers your name</em>
       </h1>
-      <p class="hero__sub" data-reveal="fade" data-reveal-delay="0.8" data-cursor-glow>
+      <p class="hero__sub" data-reveal="fade" data-reveal-delay="0.8">
         Luxury glamping under the darkest skies — 30 minutes from Hyderabad
       </p>
     </div>
@@ -68,12 +68,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <h2 class="story__heading" data-reveal="up">
           Born from a love<br />of <em>dark skies</em>
         </h2>
-        <p data-reveal data-reveal-delay="0.15" data-cursor-glow>
+        <p data-reveal data-reveal-delay="0.15">
           Novae Glamp began with a simple question: what if the best night of your life
           was only 30 minutes away? Nestled in the quiet countryside of Bhuvanagiri,
           we created a place where the Milky Way isn't a photograph — it's your ceiling.
         </p>
-        <p data-reveal data-reveal-delay="0.25" data-cursor-glow>
+        <p data-reveal data-reveal-delay="0.25">
           Every detail here is designed to slow you down. To make you look up.
           To remind you what silence sounds like.
         </p>
@@ -93,7 +93,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <div class="container">
       <div class="stays-preview__header">
         <h2 data-reveal="up">Find your <em>night</em></h2>
-        <p class="stays-preview__sub" data-reveal data-reveal-delay="0.1" data-cursor-glow>
+        <p class="stays-preview__sub" data-reveal data-reveal-delay="0.1">
           Six ways to sleep under the stars — from luxury tepees to open-sky camping.
         </p>
       </div>
@@ -168,57 +168,59 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <div class="section-stars" data-reveal="fade"><span class="section-stars__dot"></span></div>
 
-  <!-- === EXPERIENCES HORIZONTAL SCROLL === -->
-  <section class="exp-scroll" id="experiences">
-    <div class="exp-scroll__header container">
-      <h2 data-reveal="up">More than a stay.<br /><em>An experience.</em></h2>
-    </div>
-    <div class="exp-scroll__wrapper" id="exp-scroll-wrapper">
-      <div class="exp-scroll__track" id="exp-scroll-track">
-        <div class="exp-panel">
-          <div class="exp-panel__image">
-            <img src={`${base}/assets/experiences/astronomy.jpg`} alt="Stargazing at Novae" loading="lazy" />
-          </div>
-          <div class="exp-panel__content">
-            <span class="exp-panel__number">01</span>
-            <h3 class="exp-panel__title">Stargazing</h3>
-            <p class="exp-panel__desc">Guided telescope sessions under Bortle Class 3 skies. See Saturn's rings. Trace the Milky Way with your naked eyes.</p>
+  <!-- === THE JOURNEY — Fullscreen Horizontal Scroll === -->
+  <section class="journey" id="journey">
+    <div class="journey__wrapper" id="journey-wrapper">
+      <div class="journey__track" id="journey-track">
+        <div class="journey__panel" data-journey-panel>
+          <img src={`${base}/assets/activities/DSC09239.jpg`} alt="The road to Novae" class="journey__bg" loading="lazy" />
+          <div class="journey__overlay"></div>
+          <div class="journey__text">
+            <span class="journey__label">01</span>
+            <h2 class="journey__heading">Leave the city behind</h2>
           </div>
         </div>
-        <div class="exp-panel">
-          <div class="exp-panel__image">
-            <img src={`${base}/assets/experiences/couples_dusk.jpg`} alt="Campfire nights" loading="lazy" />
-          </div>
-          <div class="exp-panel__content">
-            <span class="exp-panel__number">02</span>
-            <h3 class="exp-panel__title">Campfire Nights</h3>
-            <p class="exp-panel__desc">Stories, music, and marshmallows around the fire pit as the sky turns overhead. The kind of night you'll talk about for years.</p>
+        <div class="journey__panel" data-journey-panel>
+          <img src={`${base}/assets/about/novaeabout.png`} alt="Novae entrance" class="journey__bg" loading="lazy" />
+          <div class="journey__overlay"></div>
+          <div class="journey__text">
+            <span class="journey__label">02</span>
+            <h2 class="journey__heading">Welcome to Novae</h2>
           </div>
         </div>
-        <div class="exp-panel">
-          <div class="exp-panel__image">
-            <img src={`${base}/assets/experiences/family&kids.jpg`} alt="Farm and nature" loading="lazy" />
-          </div>
-          <div class="exp-panel__content">
-            <span class="exp-panel__number">03</span>
-            <h3 class="exp-panel__title">Farm & Nature</h3>
-            <p class="exp-panel__desc">Wake up to birdsong. Walk the organic farm. Feed the animals. Let your children discover the world without a screen.</p>
+        <div class="journey__panel" data-journey-panel>
+          <img src={`${base}/assets/experiences/couples_dusk.jpg`} alt="Golden hour at Novae" class="journey__bg" loading="lazy" />
+          <div class="journey__overlay"></div>
+          <div class="journey__text">
+            <span class="journey__label">03</span>
+            <h2 class="journey__heading">Watch the sky catch fire</h2>
           </div>
         </div>
-        <div class="exp-panel">
-          <div class="exp-panel__image">
-            <img src={`${base}/assets/experiences/corporates.jpg`} alt="Adventure activities" loading="lazy" />
+        <div class="journey__panel" data-journey-panel>
+          <img src={`${base}/assets/experiences/astronomy.jpg`} alt="First stars appearing" class="journey__bg" loading="lazy" />
+          <div class="journey__overlay"></div>
+          <div class="journey__text">
+            <span class="journey__label">04</span>
+            <h2 class="journey__heading">One by one, they appear</h2>
           </div>
-          <div class="exp-panel__content">
-            <span class="exp-panel__number">04</span>
-            <h3 class="exp-panel__title">Adventure</h3>
-            <p class="exp-panel__desc">Trekking, cycling, archery, and outdoor games across our sprawling grounds. Push your limits under an open sky.</p>
+        </div>
+        <div class="journey__panel" data-journey-panel>
+          <img src={`${base}/assets/home/nightsky.jpeg`} alt="The night sky at Novae" class="journey__bg" loading="lazy" />
+          <div class="journey__overlay"></div>
+          <div class="journey__text">
+            <span class="journey__label">05</span>
+            <h2 class="journey__heading">2,847 stars. All yours.</h2>
+          </div>
+        </div>
+        <div class="journey__panel" data-journey-panel>
+          <img src={`${base}/assets/activities/DSC08846.jpg`} alt="Campfire stories" class="journey__bg" loading="lazy" />
+          <div class="journey__overlay"></div>
+          <div class="journey__text">
+            <span class="journey__label">06</span>
+            <h2 class="journey__heading">Stories that outlast the flames</h2>
           </div>
         </div>
       </div>
-    </div>
-    <div class="exp-scroll__cta container" data-reveal="fade">
-      <a href={`${base}/experiences`} class="btn" data-magnetic><span>All Experiences</span></a>
     </div>
   </section>
 
@@ -230,19 +232,19 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <h2 class="testimonials__heading" data-reveal="up">Voices from the <em>dark</em></h2>
       <div class="testimonials__inner">
         <blockquote class="testimonial" data-reveal="up">
-          <p class="testimonial__text" data-cursor-glow>
+          <p class="testimonial__text">
             &ldquo;We could see the Milky Way with our naked eyes. My kids still talk about it every week.&rdquo;
           </p>
           <cite class="testimonial__cite">— Priya & Family, Hyderabad</cite>
         </blockquote>
         <blockquote class="testimonial" data-reveal="up" data-reveal-delay="0.15">
-          <p class="testimonial__text" data-cursor-glow>
+          <p class="testimonial__text">
             &ldquo;The most peaceful night I've had in years. Woke up to mist and birdsong. Already planning our return.&rdquo;
           </p>
           <cite class="testimonial__cite">— Arjun & Meera</cite>
         </blockquote>
         <blockquote class="testimonial" data-reveal="up" data-reveal-delay="0.3">
-          <p class="testimonial__text" data-cursor-glow>
+          <p class="testimonial__text">
             &ldquo;Perfect for our corporate offsite. The team disconnected from screens and actually talked to each other.&rdquo;
           </p>
           <cite class="testimonial__cite">— Rahul, TechCorp</cite>
@@ -474,87 +476,81 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     text-align: center;
   }
 
-  /* === EXPERIENCES HORIZONTAL SCROLL === */
-  .exp-scroll {
-    padding-top: var(--space-3xl);
+  /* === THE JOURNEY — Fullscreen Horizontal Scroll === */
+  .journey {
+    position: relative;
   }
 
-  .exp-scroll__header {
-    margin-bottom: var(--space-2xl);
-  }
-
-  .exp-scroll__wrapper {
+  .journey__wrapper {
     overflow: hidden;
+    height: 100vh;
   }
 
-  .exp-scroll__track {
+  .journey__track {
     display: flex;
-    gap: var(--space-lg);
-    padding-left: var(--container-pad);
+    height: 100%;
     will-change: transform;
   }
 
-  .exp-panel {
-    flex: 0 0 70vw;
-    max-width: 800px;
+  .journey__panel {
+    position: relative;
+    flex: 0 0 100vw;
+    height: 100%;
+    overflow: hidden;
     display: flex;
-    flex-direction: column;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    border: 1px solid var(--starlight-faint);
-    transition: border-color var(--duration-slow) ease;
+    align-items: center;
+    justify-content: center;
   }
 
-  .exp-panel:hover {
-    border-color: var(--starlight-dim);
-  }
-
-  .exp-panel__image {
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
-  }
-
-  .exp-panel__image img {
+  .journey__bg {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 1.2s var(--ease-out-expo);
+    transform: scale(1.1);
+    transition: none;
   }
 
-  .exp-panel:hover .exp-panel__image img {
-    transform: scale(1.08);
+  .journey__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(6, 6, 8, 0.3) 0%,
+      rgba(6, 6, 8, 0.5) 50%,
+      rgba(6, 6, 8, 0.7) 100%
+    );
   }
 
-  .exp-panel__content {
-    padding: var(--space-xl);
-  }
-
-  .exp-panel__number {
-    font-family: var(--font-display);
-    font-size: var(--fs-sm);
-    color: var(--ember);
-    letter-spacing: 0.05em;
-  }
-
-  .exp-panel__title {
-    font-family: var(--font-display);
-    font-size: var(--fs-xl);
-    font-weight: 400;
-    margin-top: var(--space-xs);
-    margin-bottom: var(--space-sm);
-  }
-
-  .exp-panel__desc {
-    font-size: var(--fs-sm);
-    color: var(--starlight-dim);
-    line-height: 1.7;
-    max-width: 50ch;
-  }
-
-  .exp-scroll__cta {
-    padding-top: var(--space-2xl);
-    padding-bottom: var(--space-3xl);
+  .journey__text {
+    position: relative;
+    z-index: 2;
     text-align: center;
+    padding: var(--space-lg);
+  }
+
+  .journey__label {
+    display: block;
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--ember);
+    margin-bottom: var(--space-md);
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .journey__heading {
+    font-family: var(--font-display);
+    font-size: var(--fs-hero);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--starlight);
+    opacity: 0;
+    transform: translateY(40px);
   }
 
   /* === IMAGE CLIP REVEAL === */
@@ -644,10 +640,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     .stays-preview__grid {
       grid-template-columns: 1fr;
-    }
-
-    .exp-panel {
-      flex: 0 0 85vw;
     }
 
     .testimonials__inner {
@@ -767,24 +759,75 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     });
   });
 
-  // Horizontal scroll for experiences
-  const track = document.getElementById('exp-scroll-track');
-  const wrapper = document.getElementById('exp-scroll-wrapper');
-  if (track && wrapper) {
-    const getScrollAmount = () => -(track.scrollWidth - wrapper.offsetWidth);
+  // Journey — fullscreen horizontal scroll with panel animations
+  const journeyTrack = document.getElementById('journey-track');
+  const journeyWrapper = document.getElementById('journey-wrapper');
+  if (journeyTrack && journeyWrapper) {
+    const panels = journeyTrack.querySelectorAll('[data-journey-panel]');
+    const panelCount = panels.length;
+    const getScrollAmount = () => -(journeyTrack.scrollWidth - window.innerWidth);
 
-    gsap.to(track, {
+    gsap.to(journeyTrack, {
       x: getScrollAmount,
       ease: 'none',
       scrollTrigger: {
-        trigger: wrapper,
-        start: 'top 15%',
+        trigger: journeyWrapper,
+        start: 'top top',
         end: () => `+=${Math.abs(getScrollAmount())}`,
         pin: true,
         scrub: 1,
         invalidateOnRefresh: true,
       },
     });
+
+    // Animate each panel's text and image as it enters the viewport
+    panels.forEach((panel, i) => {
+      const label = panel.querySelector('.journey__label');
+      const heading = panel.querySelector('.journey__heading');
+      const bg = panel.querySelector('.journey__bg');
+
+      const startPct = i / panelCount;
+      const endPct = (i + 0.5) / panelCount;
+
+      // Text reveal
+      ScrollTrigger.create({
+        trigger: journeyWrapper,
+        start: `top+=${startPct * Math.abs(getScrollAmount())} top`,
+        end: `top+=${endPct * Math.abs(getScrollAmount())} top`,
+        scrub: 1,
+        onUpdate(self) {
+          const p = self.progress;
+          if (label) {
+            (label as HTMLElement).style.opacity = String(Math.min(1, p * 3));
+            (label as HTMLElement).style.transform = `translateY(${20 * (1 - Math.min(1, p * 3))}px)`;
+          }
+          if (heading) {
+            (heading as HTMLElement).style.opacity = String(Math.min(1, p * 2.5));
+            (heading as HTMLElement).style.transform = `translateY(${40 * (1 - Math.min(1, p * 2.5))}px)`;
+          }
+        },
+      });
+
+      // Subtle parallax on background images
+      if (bg) {
+        gsap.fromTo(bg, { x: i === 0 ? 0 : 60 }, {
+          x: -60,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: journeyWrapper,
+            start: `top+=${Math.max(0, (i - 0.5) / panelCount) * Math.abs(getScrollAmount())} top`,
+            end: `top+=${((i + 1) / panelCount) * Math.abs(getScrollAmount())} top`,
+            scrub: 1,
+          },
+        });
+      }
+    });
+
+    // First panel starts visible
+    const firstLabel = panels[0]?.querySelector('.journey__label') as HTMLElement;
+    const firstHeading = panels[0]?.querySelector('.journey__heading') as HTMLElement;
+    if (firstLabel) { firstLabel.style.opacity = '1'; firstLabel.style.transform = 'translateY(0)'; }
+    if (firstHeading) { firstHeading.style.opacity = '1'; firstHeading.style.transform = 'translateY(0)'; }
   }
 
   // Magnetic hover on buttons
