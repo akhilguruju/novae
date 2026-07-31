@@ -159,19 +159,25 @@
 
     function createGalaxies() {
       galaxies = [];
-      const count = Math.max(7, Math.floor((w * h) / 150000));
-      for (let i = 0; i < count; i++) {
-        galaxies.push({
-          x: Math.random() * w,
-          y: Math.random() * h * 3,
-          size: 16 + Math.random() * 38,
-          angle: Math.random() * Math.PI * 2,
-          tilt: 0.3 + Math.random() * 0.5,
-          alpha: 0.06 + Math.random() * 0.09,
-          colorType: Math.floor(Math.random() * 5),
-          arms: Math.random() < 0.35 ? 0 : (2 + Math.floor(Math.random() * 3)),
-          layer: Math.random() < 0.5 ? 0 : 1,
-        });
+      // Place 2-3 galaxies per viewport-height band to ensure visibility while scrolling
+      const bands = 3;
+      const perBand = 3;
+      for (let band = 0; band < bands; band++) {
+        const bandStart = band * h;
+        const bandEnd = (band + 1) * h;
+        for (let j = 0; j < perBand; j++) {
+          galaxies.push({
+            x: (w * 0.1) + Math.random() * (w * 0.8),
+            y: bandStart + Math.random() * (bandEnd - bandStart),
+            size: 20 + Math.random() * 40,
+            angle: Math.random() * Math.PI * 2,
+            tilt: 0.3 + Math.random() * 0.5,
+            alpha: 0.08 + Math.random() * 0.1,
+            colorType: (band * perBand + j) % 5,
+            arms: Math.random() < 0.3 ? 0 : (2 + Math.floor(Math.random() * 3)),
+            layer: Math.random() < 0.5 ? 0 : 1,
+          });
+        }
       }
     }
 
@@ -199,9 +205,9 @@
 
       if (g.arms === 0) {
         const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, g.size);
-        grad.addColorStop(0, `rgba(${pal.core[0]}, ${pal.core[1]}, ${pal.core[2]}, ${a * 2.5})`);
-        grad.addColorStop(0.3, `rgba(${pal.mid[0]}, ${pal.mid[1]}, ${pal.mid[2]}, ${a * 1.5})`);
-        grad.addColorStop(0.7, `rgba(${pal.haze[0]}, ${pal.haze[1]}, ${pal.haze[2]}, ${a * 0.5})`);
+        grad.addColorStop(0, `rgba(${pal.core[0]}, ${pal.core[1]}, ${pal.core[2]}, ${a * 3.5})`);
+        grad.addColorStop(0.25, `rgba(${pal.mid[0]}, ${pal.mid[1]}, ${pal.mid[2]}, ${a * 2})`);
+        grad.addColorStop(0.6, `rgba(${pal.haze[0]}, ${pal.haze[1]}, ${pal.haze[2]}, ${a * 0.8})`);
         grad.addColorStop(1, 'rgba(0,0,0,0)');
 
         ctx.scale(1, g.tilt);
@@ -212,12 +218,12 @@
       } else {
         ctx.scale(1, g.tilt);
 
-        const coreGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, g.size * 0.3);
-        coreGrad.addColorStop(0, `rgba(${pal.core[0]}, ${pal.core[1]}, ${pal.core[2]}, ${a * 3})`);
-        coreGrad.addColorStop(0.5, `rgba(${pal.mid[0]}, ${pal.mid[1]}, ${pal.mid[2]}, ${a * 1.5})`);
+        const coreGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, g.size * 0.35);
+        coreGrad.addColorStop(0, `rgba(${pal.core[0]}, ${pal.core[1]}, ${pal.core[2]}, ${a * 4})`);
+        coreGrad.addColorStop(0.5, `rgba(${pal.mid[0]}, ${pal.mid[1]}, ${pal.mid[2]}, ${a * 2})`);
         coreGrad.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.beginPath();
-        ctx.arc(0, 0, g.size * 0.3, 0, Math.PI * 2);
+        ctx.arc(0, 0, g.size * 0.35, 0, Math.PI * 2);
         ctx.fillStyle = coreGrad;
         ctx.fill();
 
@@ -232,14 +238,14 @@
             if (t === 0) ctx.moveTo(px, py);
             else ctx.lineTo(px, py);
           }
-          ctx.strokeStyle = `rgba(${pal.arm[0]}, ${pal.arm[1]}, ${pal.arm[2]}, ${a * 1.2})`;
-          ctx.lineWidth = g.size * 0.06;
+          ctx.strokeStyle = `rgba(${pal.arm[0]}, ${pal.arm[1]}, ${pal.arm[2]}, ${a * 1.8})`;
+          ctx.lineWidth = g.size * 0.07;
           ctx.lineCap = 'round';
           ctx.stroke();
         }
 
-        const outerGrad = ctx.createRadialGradient(0, 0, g.size * 0.2, 0, 0, g.size);
-        outerGrad.addColorStop(0, `rgba(${pal.haze[0]}, ${pal.haze[1]}, ${pal.haze[2]}, ${a * 0.4})`);
+        const outerGrad = ctx.createRadialGradient(0, 0, g.size * 0.15, 0, 0, g.size);
+        outerGrad.addColorStop(0, `rgba(${pal.haze[0]}, ${pal.haze[1]}, ${pal.haze[2]}, ${a * 0.7})`);
         outerGrad.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.beginPath();
         ctx.arc(0, 0, g.size, 0, Math.PI * 2);

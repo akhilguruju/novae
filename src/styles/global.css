@@ -353,6 +353,10 @@ em {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  padding: 0.15em 0.2em;
+  margin: -0.15em -0.2em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 @media (hover: none) {
