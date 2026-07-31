@@ -13,8 +13,54 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </div>
   </section>
 
-  <section class="section container">
-    <p class="text-dim" data-reveal>Experiences page — coming in Phase 4 (horizontal scroll gallery).</p>
+  <section class="exp-grid section container">
+    <div class="exp-card" data-reveal data-reveal-delay="0">
+      <div class="exp-card__image" data-clip-reveal>
+        <img src={`${base}/assets/experiences/astronomy.jpg`} alt="Stargazing through telescope" loading="lazy" />
+      </div>
+      <h3 class="exp-card__title">Stargazing</h3>
+      <p class="exp-card__desc">Guided telescope sessions under Bortle Class 3 skies. See the Milky Way, Saturn's rings, and deep-sky objects with expert astronomers.</p>
+    </div>
+
+    <div class="exp-card" data-reveal data-reveal-delay="0.1">
+      <div class="exp-card__image" data-clip-reveal>
+        <img src={`${base}/assets/experiences/couples_dusk.jpg`} alt="Couple at dusk by campfire" loading="lazy" />
+      </div>
+      <h3 class="exp-card__title">Campfire Nights</h3>
+      <p class="exp-card__desc">Gather around the fire for stories, marshmallows, and music. The kind of evening the city can never offer.</p>
+    </div>
+
+    <div class="exp-card" data-reveal data-reveal-delay="0.2">
+      <div class="exp-card__image" data-clip-reveal>
+        <img src={`${base}/assets/experiences/family&kids.jpg`} alt="Family and kids activities" loading="lazy" />
+      </div>
+      <h3 class="exp-card__title">Family Adventures</h3>
+      <p class="exp-card__desc">Farm walks, nature trails, outdoor games, and workshops designed for families. Kids discover wonder while parents find peace.</p>
+    </div>
+
+    <div class="exp-card" data-reveal data-reveal-delay="0.1">
+      <div class="exp-card__image" data-clip-reveal>
+        <img src={`${base}/assets/experiences/corporates.jpg`} alt="Corporate retreats" loading="lazy" />
+      </div>
+      <h3 class="exp-card__title">Corporate Retreats</h3>
+      <p class="exp-card__desc">Team building under the stars. Custom programs for offsites, strategy sessions, and the kind of bonding that cubicles can't create.</p>
+    </div>
+
+    <div class="exp-card" data-reveal data-reveal-delay="0.2">
+      <div class="exp-card__image" data-clip-reveal>
+        <img src={`${base}/assets/experiences/events.jpg`} alt="Private events" loading="lazy" />
+      </div>
+      <h3 class="exp-card__title">Private Events</h3>
+      <p class="exp-card__desc">Birthdays, anniversaries, sangeets, and celebrations set against a sky full of stars. Intimate venues, unforgettable settings.</p>
+    </div>
+
+    <div class="exp-card" data-reveal data-reveal-delay="0.3">
+      <div class="exp-card__image" data-clip-reveal>
+        <img src={`${base}/assets/activities/meditation.jpg`} alt="Morning meditation" loading="lazy" />
+      </div>
+      <h3 class="exp-card__title">Wellness & Meditation</h3>
+      <p class="exp-card__desc">Sunrise yoga, guided meditation, and nature sound baths. Reconnect with yourself in the quiet of the countryside.</p>
+    </div>
   </section>
 </Layout>
 
@@ -30,5 +76,56 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     color: var(--starlight-dim);
     max-width: 50ch;
     margin-inline: auto;
+  }
+
+  .exp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .exp-card__image {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    clip-path: inset(0 0 100% 0);
+  }
+
+  .exp-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .exp-card:hover .exp-card__image img {
+    transform: scale(1.05);
+  }
+
+  .exp-card__title {
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    font-weight: 400;
+    margin-top: var(--space-md);
+    margin-bottom: var(--space-xs);
+  }
+
+  .exp-card__desc {
+    color: var(--starlight-dim);
+    font-size: var(--fs-sm);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 1024px) {
+    .exp-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .exp-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-2xl);
+    }
   }
 </style>
