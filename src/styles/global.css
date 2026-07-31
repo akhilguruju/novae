@@ -317,6 +317,53 @@ em {
   border-color: var(--ember);
 }
 
+/* --- Section divider stars --- */
+.section-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding-block: var(--space-xl);
+}
+
+.section-stars::before,
+.section-stars::after {
+  content: '';
+  width: clamp(40px, 10vw, 120px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--starlight-faint), transparent);
+}
+
+.section-stars__dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--ember-dim);
+  box-shadow: 0 0 6px var(--ember-dim), 0 0 12px rgba(232, 148, 74, 0.15);
+}
+
+/* --- Text cursor glow --- */
+[data-cursor-glow] {
+  background: radial-gradient(
+    circle 120px at var(--glow-x, -200px) var(--glow-y, -200px),
+    var(--starlight) 0%,
+    rgba(240, 235, 227, 0.7) 25%,
+    var(--starlight-dim) 60%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (hover: none) {
+  [data-cursor-glow] {
+    background: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    -webkit-text-fill-color: var(--starlight-dim);
+  }
+}
+
 /* --- Responsive --- */
 @media (max-width: 768px) {
   .section {

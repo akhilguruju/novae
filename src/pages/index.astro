@@ -10,7 +10,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <h1 class="hero__title" id="hero-title">
         Where the sky<br /><em>remembers your name</em>
       </h1>
-      <p class="hero__sub" data-reveal="fade" data-reveal-delay="0.8">
+      <p class="hero__sub" data-reveal="fade" data-reveal-delay="0.8" data-cursor-glow>
         Luxury glamping under the darkest skies — 30 minutes from Hyderabad
       </p>
     </div>
@@ -59,6 +59,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </div>
   </section>
 
+  <div class="section-stars" data-reveal="fade"><span class="section-stars__dot"></span></div>
+
   <!-- === OUR STORY === -->
   <section class="story section" id="story">
     <div class="story__inner container">
@@ -66,12 +68,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <h2 class="story__heading" data-reveal="up">
           Born from a love<br />of <em>dark skies</em>
         </h2>
-        <p data-reveal data-reveal-delay="0.15">
+        <p data-reveal data-reveal-delay="0.15" data-cursor-glow>
           Novae Glamp began with a simple question: what if the best night of your life
           was only 30 minutes away? Nestled in the quiet countryside of Bhuvanagiri,
           we created a place where the Milky Way isn't a photograph — it's your ceiling.
         </p>
-        <p data-reveal data-reveal-delay="0.25">
+        <p data-reveal data-reveal-delay="0.25" data-cursor-glow>
           Every detail here is designed to slow you down. To make you look up.
           To remind you what silence sounds like.
         </p>
@@ -91,7 +93,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <div class="container">
       <div class="stays-preview__header">
         <h2 data-reveal="up">Find your <em>night</em></h2>
-        <p class="stays-preview__sub" data-reveal data-reveal-delay="0.1">
+        <p class="stays-preview__sub" data-reveal data-reveal-delay="0.1" data-cursor-glow>
           Six ways to sleep under the stars — from luxury tepees to open-sky camping.
         </p>
       </div>
@@ -164,6 +166,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </div>
   </section>
 
+  <div class="section-stars" data-reveal="fade"><span class="section-stars__dot"></span></div>
+
   <!-- === EXPERIENCES HORIZONTAL SCROLL === -->
   <section class="exp-scroll" id="experiences">
     <div class="exp-scroll__header container">
@@ -218,24 +222,27 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </div>
   </section>
 
+  <div class="section-stars" data-reveal="fade"><span class="section-stars__dot"></span></div>
+
   <!-- === TESTIMONIALS === -->
   <section class="testimonials section" id="testimonials">
     <div class="container">
+      <h2 class="testimonials__heading" data-reveal="up">Voices from the <em>dark</em></h2>
       <div class="testimonials__inner">
         <blockquote class="testimonial" data-reveal="up">
-          <p class="testimonial__text">
+          <p class="testimonial__text" data-cursor-glow>
             &ldquo;We could see the Milky Way with our naked eyes. My kids still talk about it every week.&rdquo;
           </p>
           <cite class="testimonial__cite">— Priya & Family, Hyderabad</cite>
         </blockquote>
         <blockquote class="testimonial" data-reveal="up" data-reveal-delay="0.15">
-          <p class="testimonial__text">
+          <p class="testimonial__text" data-cursor-glow>
             &ldquo;The most peaceful night I've had in years. Woke up to mist and birdsong. Already planning our return.&rdquo;
           </p>
           <cite class="testimonial__cite">— Arjun & Meera</cite>
         </blockquote>
         <blockquote class="testimonial" data-reveal="up" data-reveal-delay="0.3">
-          <p class="testimonial__text">
+          <p class="testimonial__text" data-cursor-glow>
             &ldquo;Perfect for our corporate offsite. The team disconnected from screens and actually talked to each other.&rdquo;
           </p>
           <cite class="testimonial__cite">— Rahul, TechCorp</cite>
@@ -405,6 +412,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-lg);
+    perspective: 800px;
   }
 
   .stay-card {
@@ -413,6 +421,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     border-radius: var(--radius-md);
     border: 1px solid var(--starlight-faint);
     transition: border-color var(--duration-base) ease;
+    transform-style: preserve-3d;
+    will-change: transform;
   }
 
   .stay-card:hover {
@@ -553,6 +563,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   }
 
   /* === TESTIMONIALS === */
+  .testimonials__heading {
+    font-size: var(--fs-3xl);
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .testimonials__heading em {
+    color: var(--ember);
+  }
+
   .testimonials__inner {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -790,4 +810,25 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       });
     });
   });
+
+  // 3D tilt on stay cards
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.querySelectorAll('.stay-card').forEach((card) => {
+      const el = card as HTMLElement;
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        gsap.to(el, {
+          rotateY: x * 5,
+          rotateX: -y * 5,
+          duration: 0.4,
+          ease: 'power2.out',
+        });
+      });
+      el.addEventListener('mouseleave', () => {
+        gsap.to(el, { rotateY: 0, rotateX: 0, duration: 0.7, ease: 'elastic.out(1, 0.5)' });
+      });
+    });
+  }
 </script>

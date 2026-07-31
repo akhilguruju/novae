@@ -1,0 +1,167 @@
+---
+
+---
+
+<div class="moon" id="moon" aria-hidden="true">
+  <div class="moon__body">
+    <div class="moon__surface"></div>
+    <div class="moon__shadow" id="moon-shadow"></div>
+    <div class="moon__glow"></div>
+  </div>
+</div>
+
+<style>
+  .moon {
+    position: fixed;
+    top: 8vh;
+    right: 6vw;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+  }
+
+  .moon.is-visible {
+    opacity: 1;
+  }
+
+  .moon__body {
+    position: relative;
+    width: clamp(60px, 8vw, 120px);
+    height: clamp(60px, 8vw, 120px);
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .moon__surface {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 35% 35%,
+      rgba(240, 235, 227, 0.18) 0%,
+      rgba(220, 215, 200, 0.12) 30%,
+      rgba(200, 195, 180, 0.08) 60%,
+      rgba(180, 175, 160, 0.05) 100%
+    );
+  }
+
+  .moon__surface::before {
+    content: '';
+    position: absolute;
+    width: 15%;
+    height: 15%;
+    top: 30%;
+    left: 25%;
+    border-radius: 50%;
+    background: rgba(160, 155, 140, 0.08);
+  }
+
+  .moon__surface::after {
+    content: '';
+    position: absolute;
+    width: 22%;
+    height: 20%;
+    top: 50%;
+    left: 55%;
+    border-radius: 50%;
+    background: rgba(160, 155, 140, 0.06);
+  }
+
+  .moon__shadow {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--void, #060608);
+    transform: translateX(0%);
+    transition: none;
+  }
+
+  .moon__glow {
+    position: absolute;
+    inset: -40%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(240, 235, 227, 0.04) 0%,
+      rgba(240, 235, 227, 0.02) 40%,
+      transparent 70%
+    );
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const moon = document.getElementById('moon');
+  const shadow = document.getElementById('moon-shadow');
+
+  if (moon && shadow) {
+    function showMoon() {
+      moon!.classList.add('is-visible');
+    }
+
+    if (document.documentElement.classList.contains('preloader-done')) {
+      setTimeout(showMoon, 500);
+    } else {
+      window.addEventListener('preloader:complete', () => setTimeout(showMoon, 800), { once: true });
+    }
+
+    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+    ScrollTrigger.create({
+      trigger: document.body,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 1,
+      onUpdate(self) {
+        const p = self.progress;
+
+        // Phase cycle: full → half → new/eclipse → half → full
+        // 0.0 = full moon (shadow fully off to the right)
+        // 0.25 = half moon (shadow covering right half)
+        // 0.5 = new moon/eclipse (shadow fully covering)
+        // 0.75 = half moon (shadow covering left half)
+        // 1.0 = full moon again
+
+        let shadowX: number;
+        let shadowOpacity: number;
+
+        if (p <= 0.25) {
+          // Full → half: shadow slides from right to center
+          shadowX = 100 - (p / 0.25) * 100;
+          shadowOpacity = p / 0.25;
+        } else if (p <= 0.5) {
+          // Half → eclipse: shadow slides past center to cover fully
+          const t = (p - 0.25) / 0.25;
+          shadowX = -t * 10;
+          shadowOpacity = 1;
+        } else if (p <= 0.75) {
+          // Eclipse → half: shadow retreats to the left
+          const t = (p - 0.5) / 0.25;
+          shadowX = -10 + t * 10 - 100 * (1 - t);
+          shadowOpacity = 1;
+        } else {
+          // Half → full: shadow slides off to the left
+          const t = (p - 0.75) / 0.25;
+          shadowX = -100 * (1 - t) - 100;
+          shadowOpacity = 1 - t;
+        }
+
+        shadow!.style.transform = `translateX(${shadowX}%)`;
+        shadow!.style.opacity = String(Math.min(1, shadowOpacity));
+      },
+    });
+
+    // Gentle floating
+    gsap.to(moon, {
+      y: 15,
+      duration: 6,
+      ease: 'sine.inOut',
+      yoyo: true,
+      repeat: -1,
+    });
+  }
+</script>

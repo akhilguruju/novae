@@ -2,117 +2,170 @@
 
 ---
 
-<div class="cursor" id="custom-cursor" aria-hidden="true">
-  <div class="cursor__glow"></div>
-  <div class="cursor__star">
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 2L12 22M2 12L22 12M4.93 4.93L19.07 19.07M19.07 4.93L4.93 19.07" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
-    </svg>
-  </div>
-</div>
+<canvas class="cursor-canvas" id="cursor-canvas" aria-hidden="true"></canvas>
+<div class="cursor-highlight" id="cursor-highlight" aria-hidden="true"></div>
 
 <style>
-  .cursor {
+  .cursor-canvas {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     z-index: 10001;
     pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.4s ease;
+    width: 100%;
+    height: 100%;
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .cursor {
+    .cursor-canvas {
       display: block;
     }
   }
 
-  .cursor.is-visible {
-    opacity: 1;
-  }
-
-  .cursor__glow {
-    position: absolute;
-    width: 160px;
-    height: 160px;
+  .cursor-highlight {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    pointer-events: none;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     transform: translate(-50%, -50%);
     background: radial-gradient(
       circle,
-      rgba(232, 148, 74, 0.12) 0%,
-      rgba(232, 148, 74, 0.06) 25%,
-      rgba(232, 148, 74, 0.02) 50%,
-      transparent 70%
+      rgba(232, 148, 74, 0.08) 0%,
+      rgba(232, 148, 74, 0.03) 35%,
+      transparent 65%
     );
     mix-blend-mode: screen;
-    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+    transition: opacity 0.5s ease, width 0.4s ease, height 0.4s ease;
   }
 
-  .cursor.is-hovering .cursor__glow {
-    width: 220px;
-    height: 220px;
+  @media (hover: hover) and (pointer: fine) {
+    .cursor-highlight {
+      display: block;
+    }
   }
 
-  .cursor__star {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    transform: translate(-50%, -50%);
-    color: rgba(232, 148, 74, 0.6);
-    transition: color 0.3s ease,
-                filter 0.3s ease;
-    filter: drop-shadow(0 0 3px rgba(232, 148, 74, 0.4));
-    animation: cursorSpin 8s linear infinite;
+  .cursor-highlight.is-visible {
+    opacity: 1;
   }
 
-  @keyframes cursorSpin {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
+  .cursor-highlight.is-on-text {
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(
+      circle,
+      rgba(232, 148, 74, 0.14) 0%,
+      rgba(240, 235, 227, 0.06) 30%,
+      transparent 60%
+    );
   }
 
-  .cursor.is-hovering .cursor__star {
-    color: rgba(232, 148, 74, 0.9);
-    filter: drop-shadow(0 0 6px rgba(232, 148, 74, 0.6));
-    animation-duration: 3s;
-  }
-
-  .cursor.is-hidden {
-    opacity: 0 !important;
+  .cursor-highlight.is-hovering {
+    width: 240px;
+    height: 240px;
   }
 </style>
 
 <script>
-  const cursor = document.getElementById('custom-cursor');
+  const canvas = document.getElementById('cursor-canvas') as HTMLCanvasElement;
+  const highlight = document.getElementById('cursor-highlight') as HTMLElement;
 
-  if (cursor && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  if (canvas && highlight && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     document.documentElement.classList.add('has-custom-cursor');
 
-    const glow = cursor.querySelector('.cursor__glow') as HTMLElement;
-    const star = cursor.querySelector('.cursor__star') as HTMLElement;
-
-    let mx = 0;
-    let my = 0;
-    let gx = 0;
-    let gy = 0;
+    const ctx = canvas.getContext('2d')!;
+    let w = 0;
+    let h = 0;
+    let mx = -200;
+    let my = -200;
+    let hx = -200;
+    let hy = -200;
     let hasMoved = false;
+    let isHovering = false;
+    let isOnText = false;
+
+    interface Particle {
+      angle: number;
+      radius: number;
+      speed: number;
+      size: number;
+      alpha: number;
+      orbitRadius: number;
+    }
+
+    interface Trail {
+      x: number;
+      y: number;
+      alpha: number;
+      size: number;
+    }
+
+    const particles: Particle[] = [];
+    const trails: Trail[] = [];
+    const PARTICLE_COUNT = 6;
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        angle: (Math.PI * 2 * i) / PARTICLE_COUNT,
+        radius: 1 + Math.random() * 1.5,
+        speed: 0.3 + Math.random() * 0.5,
+        size: 1 + Math.random(),
+        alpha: 0.4 + Math.random() * 0.4,
+        orbitRadius: 8 + Math.random() * 10,
+      });
+    }
+
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio, 2);
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    resize();
+    let resizeTimer: number;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(resize, 200) as unknown as number;
+    });
 
     document.addEventListener('mousemove', (e) => {
       mx = e.clientX;
       my = e.clientY;
 
-      star.style.left = mx + 'px';
-      star.style.top = my + 'px';
-
       if (!hasMoved) {
         hasMoved = true;
-        gx = mx;
-        gy = my;
-        glow.style.left = mx + 'px';
-        glow.style.top = my + 'px';
-        cursor.classList.add('is-visible');
+        hx = mx;
+        hy = my;
+        highlight.classList.add('is-visible');
+      }
+
+      if (trails.length < 12) {
+        trails.push({ x: mx, y: my, alpha: 0.5, size: 2 });
+      }
+
+      const el = document.elementFromPoint(mx, my);
+      const wasOnText = isOnText;
+      if (el) {
+        const tag = el.tagName;
+        isOnText = tag === 'P' || tag === 'H1' || tag === 'H2' || tag === 'H3' ||
+                   tag === 'H4' || tag === 'SPAN' || tag === 'EM' || tag === 'CITE' ||
+                   tag === 'BLOCKQUOTE' || tag === 'A' ||
+                   el.closest('h1, h2, h3, h4, p, blockquote, cite') !== null;
+      } else {
+        isOnText = false;
+      }
+      if (isOnText !== wasOnText) {
+        highlight.classList.toggle('is-on-text', isOnText);
       }
     });
 
@@ -120,33 +173,113 @@
       return a + (b - a) * t;
     }
 
-    function tick() {
-      gx = lerp(gx, mx, 0.1);
-      gy = lerp(gy, my, 0.1);
-      glow.style.left = gx + 'px';
-      glow.style.top = gy + 'px';
-      requestAnimationFrame(tick);
+    function draw(time: number) {
+      ctx.clearRect(0, 0, w, h);
+
+      if (!hasMoved) {
+        requestAnimationFrame(draw);
+        return;
+      }
+
+      hx = lerp(hx, mx, 0.12);
+      hy = lerp(hy, my, 0.12);
+      highlight.style.left = hx + 'px';
+      highlight.style.top = hy + 'px';
+
+      // Trails
+      for (let i = trails.length - 1; i >= 0; i--) {
+        const t = trails[i];
+        t.alpha -= 0.025;
+        t.size *= 0.97;
+        if (t.alpha <= 0) {
+          trails.splice(i, 1);
+          continue;
+        }
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, t.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(232, 148, 74, ${t.alpha * 0.3})`;
+        ctx.fill();
+      }
+
+      // Core glow
+      const coreSize = isHovering ? 18 : 12;
+      const grad = ctx.createRadialGradient(mx, my, 0, mx, my, coreSize);
+      grad.addColorStop(0, `rgba(240, 235, 227, ${isHovering ? 0.9 : 0.7})`);
+      grad.addColorStop(0.3, `rgba(232, 148, 74, ${isHovering ? 0.5 : 0.35})`);
+      grad.addColorStop(0.7, 'rgba(232, 148, 74, 0.08)');
+      grad.addColorStop(1, 'rgba(232, 148, 74, 0)');
+      ctx.beginPath();
+      ctx.arc(mx, my, coreSize, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Bright center point
+      ctx.beginPath();
+      ctx.arc(mx, my, 2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${isHovering ? 0.95 : 0.8})`;
+      ctx.fill();
+
+      // Lens flare spikes
+      const spikeLen = isHovering ? 16 : 10;
+      const spikeAlpha = isHovering ? 0.35 : 0.2;
+      ctx.strokeStyle = `rgba(240, 235, 227, ${spikeAlpha})`;
+      ctx.lineWidth = 0.5;
+      for (let i = 0; i < 4; i++) {
+        const a = (Math.PI / 4) * i + time * 0.0002;
+        ctx.beginPath();
+        ctx.moveTo(mx + Math.cos(a) * 3, my + Math.sin(a) * 3);
+        ctx.lineTo(mx + Math.cos(a) * spikeLen, my + Math.sin(a) * spikeLen);
+        ctx.stroke();
+      }
+
+      // Orbiting particles
+      for (const p of particles) {
+        p.angle += p.speed * 0.02;
+        const ox = mx + Math.cos(p.angle) * p.orbitRadius;
+        const oy = my + Math.sin(p.angle) * p.orbitRadius;
+        const twinkle = 0.5 + 0.5 * Math.sin(time * 0.003 + p.angle * 3);
+        const alpha = p.alpha * twinkle;
+
+        ctx.beginPath();
+        ctx.arc(ox, oy, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(240, 235, 227, ${alpha})`;
+        ctx.fill();
+
+        if (p.size > 1.2) {
+          ctx.beginPath();
+          ctx.arc(ox, oy, p.size * 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(232, 148, 74, ${alpha * 0.15})`;
+          ctx.fill();
+        }
+      }
+
+      requestAnimationFrame(draw);
     }
-    tick();
+    requestAnimationFrame(draw);
 
     const interactives = 'a, button, .btn, .stay-card, .nav__burger, input, textarea, [data-cursor-hover]';
 
     document.addEventListener('mouseover', (e) => {
       if ((e.target as Element).closest(interactives)) {
-        cursor.classList.add('is-hovering');
+        isHovering = true;
+        highlight.classList.add('is-hovering');
       }
     });
 
     document.addEventListener('mouseout', (e) => {
       if ((e.target as Element).closest(interactives)) {
-        cursor.classList.remove('is-hovering');
+        isHovering = false;
+        highlight.classList.remove('is-hovering');
       }
     });
 
-    document.addEventListener('mousedown', () => cursor.classList.add('is-clicking'));
-    document.addEventListener('mouseup', () => cursor.classList.remove('is-clicking'));
-
-    document.addEventListener('mouseleave', () => cursor.classList.add('is-hidden'));
-    document.addEventListener('mouseenter', () => cursor.classList.remove('is-hidden'));
+    document.addEventListener('mouseleave', () => {
+      canvas.style.opacity = '0';
+      highlight.classList.remove('is-visible');
+    });
+    document.addEventListener('mouseenter', () => {
+      canvas.style.opacity = '1';
+      if (hasMoved) highlight.classList.add('is-visible');
+    });
   }
 </script>
