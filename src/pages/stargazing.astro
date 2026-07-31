@@ -1730,13 +1730,32 @@ const planets = [
     const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     // Real photos where we have them; every other target falls back to the
-    // procedural render below. To make one real, drop a file at
-    // public/assets/experiences/space/<id>.jpg and add it here.
+    // procedural render below.
+    //
+    // To upgrade a target to a real photo (needs a session with network access):
+    //   1. Save the image to public/assets/experiences/space/<id>.jpg
+    //   2. Uncomment its line in IMG (and CAP) below.
+    // Suggested public-domain sources on Wikimedia Commons:
+    //   saturn    — Saturn_during_Equinox.jpg                     (NASA/JPL/Cassini)
+    //   jupiter   — Jupiter_by_Cassini-Huygens.jpg                (NASA/JPL/Cassini)
+    //   moon      — Moon_nearside_LRO.jpg                         (NASA/GSFC/LRO)
+    //   orion     — Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg   (NASA/ESA/Hubble)
+    //   andromeda — Andromeda_Galaxy_(GALEX).jpg                  (NASA/JPL/GALEX)
     const IMG: Record<string, string> = {
       milkyway: base + '/assets/home/nightsky.jpeg',
+      // saturn:    base + '/assets/experiences/space/saturn.jpg',
+      // jupiter:   base + '/assets/experiences/space/jupiter.jpg',
+      // moon:      base + '/assets/experiences/space/moon.jpg',
+      // orion:     base + '/assets/experiences/space/orion.jpg',
+      // andromeda: base + '/assets/experiences/space/andromeda.jpg',
     };
     const CAP: Record<string, string> = {
       milkyway: 'Photographed under the skies at Novae',
+      // saturn: 'NASA / JPL / Cassini',
+      // jupiter: 'NASA / JPL / Cassini',
+      // moon: 'NASA / GSFC / LRO',
+      // orion: 'NASA / ESA / Hubble',
+      // andromeda: 'NASA / JPL / GALEX',
     };
 
     const DATA: Record<string, { name: string; sub: string; naked: string; tele: string }> = {
