@@ -13,58 +13,137 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </div>
   </section>
 
-  <section class="exp-grid section container">
-    <div class="exp-card" data-reveal data-reveal-delay="0">
-      <div class="exp-card__image" data-clip-reveal>
-        <img src={`${base}/assets/experiences/astronomy.jpg`} alt="Stargazing through telescope" loading="lazy" />
-      </div>
-      <h3 class="exp-card__title">Stargazing</h3>
-      <p class="exp-card__desc">Guided telescope sessions under Bortle Class 3 skies. See the Milky Way, Saturn's rings, and deep-sky objects with expert astronomers.</p>
-    </div>
+  <div class="section-stars" data-reveal="fade">
+    <span class="section-stars__dot"></span>
+    <span class="section-stars__dot"></span>
+    <span class="section-stars__dot"></span>
+  </div>
 
-    <div class="exp-card" data-reveal data-reveal-delay="0.1">
-      <div class="exp-card__image" data-clip-reveal>
-        <img src={`${base}/assets/experiences/couples_dusk.jpg`} alt="Couple at dusk by campfire" loading="lazy" />
-      </div>
-      <h3 class="exp-card__title">Campfire Nights</h3>
-      <p class="exp-card__desc">Gather around the fire for stories, marshmallows, and music. The kind of evening the city can never offer.</p>
+  <!-- Featured: Stargazing -->
+  <section class="exp-feature section" id="stargazing">
+    <div class="exp-feature__media" data-reveal="scale">
+      <img src={`${base}/assets/experiences/astronomy.jpg`} alt="Guided stargazing through a Celestron telescope" loading="lazy" />
+      <div class="exp-feature__media-overlay"></div>
     </div>
-
-    <div class="exp-card" data-reveal data-reveal-delay="0.2">
-      <div class="exp-card__image" data-clip-reveal>
-        <img src={`${base}/assets/experiences/family&kids.jpg`} alt="Family and kids activities" loading="lazy" />
+    <div class="exp-feature__content container">
+      <span class="exp-feature__number" data-reveal="fade" data-reveal-delay="0.1">01</span>
+      <h2 class="exp-feature__title" data-reveal="up" data-reveal-delay="0.15">Stargazing</h2>
+      <p class="exp-feature__desc" data-reveal data-reveal-delay="0.2">
+        Guided telescope sessions under Bortle Class 3 skies. See the Milky Way arc across the horizon,
+        resolve Saturn's rings, and spot deep-sky nebulae with expert astronomers by your side.
+      </p>
+      <div class="exp-feature__stats" data-reveal="fade" data-reveal-delay="0.3">
+        <div class="exp-feature__stat">
+          <span class="exp-feature__stat-num">2,847</span>
+          <span class="exp-feature__stat-label">Visible Stars</span>
+        </div>
+        <div class="exp-feature__stat">
+          <span class="exp-feature__stat-num">Class 3</span>
+          <span class="exp-feature__stat-label">Bortle Scale</span>
+        </div>
       </div>
-      <h3 class="exp-card__title">Family Adventures</h3>
-      <p class="exp-card__desc">Farm walks, nature trails, outdoor games, and workshops designed for families. Kids discover wonder while parents find peace.</p>
     </div>
+  </section>
 
-    <div class="exp-card" data-reveal data-reveal-delay="0.1">
-      <div class="exp-card__image" data-clip-reveal>
-        <img src={`${base}/assets/experiences/corporates.jpg`} alt="Corporate retreats" loading="lazy" />
+  <!-- Grid: Campfire + Family -->
+  <section class="exp-duo section container">
+    <div class="exp-duo__card" data-reveal data-reveal-delay="0">
+      <div class="exp-duo__image">
+        <img src={`${base}/assets/experiences/couples_dusk.jpg`} alt="Couple by campfire at dusk" loading="lazy" />
       </div>
-      <h3 class="exp-card__title">Corporate Retreats</h3>
-      <p class="exp-card__desc">Team building under the stars. Custom programs for offsites, strategy sessions, and the kind of bonding that cubicles can't create.</p>
+      <div class="exp-duo__text">
+        <span class="exp-duo__number">02</span>
+        <h3 class="exp-duo__title">Campfire Nights</h3>
+        <p class="exp-duo__desc">Gather around the fire for stories, marshmallows, and music. The kind of evening the city can never offer.</p>
+      </div>
     </div>
-
-    <div class="exp-card" data-reveal data-reveal-delay="0.2">
-      <div class="exp-card__image" data-clip-reveal>
-        <img src={`${base}/assets/experiences/events.jpg`} alt="Private events" loading="lazy" />
+    <div class="exp-duo__card" data-reveal data-reveal-delay="0.15">
+      <div class="exp-duo__image">
+        <img src={`${base}/assets/experiences/family&kids.jpg`} alt="Family activities at Novae" loading="lazy" />
       </div>
-      <h3 class="exp-card__title">Private Events</h3>
-      <p class="exp-card__desc">Birthdays, anniversaries, sangeets, and celebrations set against a sky full of stars. Intimate venues, unforgettable settings.</p>
+      <div class="exp-duo__text">
+        <span class="exp-duo__number">03</span>
+        <h3 class="exp-duo__title">Family Adventures</h3>
+        <p class="exp-duo__desc">Farm walks, nature trails, outdoor games, and workshops. Kids discover wonder while parents find peace.</p>
+      </div>
     </div>
+  </section>
 
-    <div class="exp-card" data-reveal data-reveal-delay="0.3">
-      <div class="exp-card__image" data-clip-reveal>
-        <img src={`${base}/assets/activities/meditation.jpg`} alt="Morning meditation" loading="lazy" />
+  <!-- Featured: Corporate -->
+  <section class="exp-feature exp-feature--flip section" id="corporates">
+    <div class="exp-feature__media" data-reveal="scale">
+      <img src={`${base}/assets/experiences/corporates.jpg`} alt="Corporate team building at Novae" loading="lazy" />
+      <div class="exp-feature__media-overlay"></div>
+    </div>
+    <div class="exp-feature__content container">
+      <span class="exp-feature__number" data-reveal="fade" data-reveal-delay="0.1">04</span>
+      <h2 class="exp-feature__title" data-reveal="up" data-reveal-delay="0.15">Corporate Retreats</h2>
+      <p class="exp-feature__desc" data-reveal data-reveal-delay="0.2">
+        Team building under the stars. Custom programs for offsites, strategy sessions,
+        and the kind of bonding that cubicles can't create. From 20 to 200 people.
+      </p>
+    </div>
+  </section>
+
+  <!-- Grid: Events + Wellness -->
+  <section class="exp-duo section container">
+    <div class="exp-duo__card" data-reveal data-reveal-delay="0">
+      <div class="exp-duo__image">
+        <img src={`${base}/assets/experiences/events.jpg`} alt="Private events under the stars" loading="lazy" />
       </div>
-      <h3 class="exp-card__title">Wellness & Meditation</h3>
-      <p class="exp-card__desc">Sunrise yoga, guided meditation, and nature sound baths. Reconnect with yourself in the quiet of the countryside.</p>
+      <div class="exp-duo__text">
+        <span class="exp-duo__number">05</span>
+        <h3 class="exp-duo__title">Private Events</h3>
+        <p class="exp-duo__desc">Birthdays, anniversaries, sangeets, and celebrations set against a sky full of stars. Intimate venues, unforgettable settings.</p>
+      </div>
+    </div>
+    <div class="exp-duo__card" data-reveal data-reveal-delay="0.15">
+      <div class="exp-duo__image">
+        <img src={`${base}/assets/activities/meditation.jpg`} alt="Sunrise meditation" loading="lazy" />
+      </div>
+      <div class="exp-duo__text">
+        <span class="exp-duo__number">06</span>
+        <h3 class="exp-duo__title">Wellness & Meditation</h3>
+        <p class="exp-duo__desc">Sunrise yoga, guided meditation, and nature sound baths. Reconnect with yourself in the quiet of the countryside.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Photo gallery strip -->
+  <section class="exp-gallery section">
+    <div class="exp-gallery__track">
+      <div class="exp-gallery__item" data-reveal="scale" data-reveal-delay="0">
+        <img src={`${base}/assets/activities/DSC09239.jpg`} alt="Night activities" loading="lazy" />
+      </div>
+      <div class="exp-gallery__item" data-reveal="scale" data-reveal-delay="0.08">
+        <img src={`${base}/assets/activities/telescope_pointing.jpg`} alt="Telescope observation" loading="lazy" />
+      </div>
+      <div class="exp-gallery__item" data-reveal="scale" data-reveal-delay="0.16">
+        <img src={`${base}/assets/activities/AM307489.jpg`} alt="Activities at Novae" loading="lazy" />
+      </div>
+      <div class="exp-gallery__item" data-reveal="scale" data-reveal-delay="0.24">
+        <img src={`${base}/assets/activities/DSC08930.jpg`} alt="Outdoor experience" loading="lazy" />
+      </div>
+      <div class="exp-gallery__item" data-reveal="scale" data-reveal-delay="0.32">
+        <img src={`${base}/assets/experiences/kids&telescope.jpg`} alt="Kids with telescope" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="exp-cta section--full">
+    <div class="container">
+      <h2 class="exp-cta__title" data-reveal="up">Ready to look up?</h2>
+      <p class="exp-cta__sub" data-reveal="fade" data-reveal-delay="0.15">Every night at Novae is different. Book yours.</p>
+      <div data-reveal="fade" data-reveal-delay="0.3">
+        <a href={`${base}/stays`} class="btn btn--ember" data-magnetic><span>Book a Stay</span></a>
+      </div>
     </div>
   </section>
 </Layout>
 
 <style>
+  /* === PAGE HERO === */
   .page-hero {
     padding-top: calc(var(--nav-h) + var(--space-2xl));
     text-align: center;
@@ -78,54 +157,259 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     margin-inline: auto;
   }
 
-  .exp-grid {
+  /* === FEATURED EXPERIENCE (alternating layout) === */
+  .exp-feature {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-xl);
+    align-items: center;
+    min-height: 70vh;
   }
 
-  .exp-card__image {
-    border-radius: var(--radius-md);
+  .exp-feature--flip .exp-feature__media { order: 2; }
+  .exp-feature--flip .exp-feature__content { order: 1; }
+
+  .exp-feature__media {
+    position: relative;
+    border-radius: var(--radius-lg);
     overflow: hidden;
     aspect-ratio: 4 / 3;
-    clip-path: inset(0 0 100% 0);
   }
 
-  .exp-card__image img {
+  .exp-feature__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform var(--duration-slow) var(--ease-out-expo);
+    transition: transform 1.2s var(--ease-out-expo);
   }
 
-  .exp-card:hover .exp-card__image img {
+  .exp-feature:hover .exp-feature__media img {
     transform: scale(1.05);
   }
 
-  .exp-card__title {
+  .exp-feature__media-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(6,6,8,0.3), transparent 60%);
+    pointer-events: none;
+  }
+
+  .exp-feature__content {
+    padding: var(--space-xl);
+  }
+
+  .exp-feature__number {
     font-family: var(--font-display);
-    font-size: var(--fs-lg);
-    font-weight: 400;
-    margin-top: var(--space-md);
+    font-size: var(--fs-sm);
+    color: var(--ember);
+    letter-spacing: 0.2em;
+    display: block;
+    margin-bottom: var(--space-sm);
+  }
+
+  .exp-feature__title {
+    font-size: var(--fs-3xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .exp-feature__desc {
+    color: var(--starlight-dim);
+    font-size: var(--fs-base);
+    line-height: 1.8;
+    max-width: 45ch;
+  }
+
+  .exp-feature__stats {
+    display: flex;
+    gap: var(--space-xl);
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--starlight-faint);
+  }
+
+  .exp-feature__stat-num {
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    color: var(--ember);
+    display: block;
+  }
+
+  .exp-feature__stat-label {
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--starlight-dim);
+  }
+
+  /* === DUO CARDS === */
+  .exp-duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+  }
+
+  .exp-duo__card {
+    border: 1px solid var(--starlight-faint);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color var(--duration-base) var(--ease-out-expo);
+  }
+
+  .exp-duo__card:hover {
+    border-color: var(--ember-dim);
+  }
+
+  .exp-duo__image {
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+  }
+
+  .exp-duo__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease-out-expo);
+  }
+
+  .exp-duo__card:hover .exp-duo__image img {
+    transform: scale(1.05);
+  }
+
+  .exp-duo__text {
+    padding: var(--space-lg) var(--space-lg) var(--space-xl);
+  }
+
+  .exp-duo__number {
+    font-family: var(--font-display);
+    font-size: var(--fs-xs);
+    color: var(--ember);
+    letter-spacing: 0.2em;
+    display: block;
     margin-bottom: var(--space-xs);
   }
 
-  .exp-card__desc {
+  .exp-duo__title {
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    font-weight: 400;
+    margin-bottom: var(--space-sm);
+  }
+
+  .exp-duo__desc {
     color: var(--starlight-dim);
     font-size: var(--fs-sm);
     line-height: 1.7;
   }
 
+  /* === GALLERY STRIP === */
+  .exp-gallery {
+    overflow: hidden;
+  }
+
+  .exp-gallery__track {
+    display: flex;
+    gap: var(--space-md);
+    padding-inline: var(--container-pad);
+  }
+
+  .exp-gallery__item {
+    flex: 0 0 28%;
+    aspect-ratio: 3 / 2;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .exp-gallery__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1s var(--ease-out-expo);
+  }
+
+  .exp-gallery__item:hover img {
+    transform: scale(1.08);
+  }
+
+  /* === CTA === */
+  .exp-cta {
+    text-align: center;
+  }
+
+  .exp-cta__title {
+    font-size: var(--fs-3xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .exp-cta__sub {
+    color: var(--starlight-dim);
+    font-size: var(--fs-md);
+    margin-bottom: var(--space-xl);
+    margin-inline: auto;
+  }
+
+  /* === RESPONSIVE === */
   @media (max-width: 1024px) {
-    .exp-grid {
-      grid-template-columns: repeat(2, 1fr);
+    .exp-feature {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .exp-feature--flip .exp-feature__media { order: 1; }
+    .exp-feature--flip .exp-feature__content { order: 2; }
+
+    .exp-feature__content {
+      padding: var(--space-lg) 0;
+    }
+
+    .exp-gallery__item {
+      flex: 0 0 40%;
     }
   }
 
   @media (max-width: 640px) {
-    .exp-grid {
+    .exp-duo {
       grid-template-columns: 1fr;
-      gap: var(--space-2xl);
+    }
+
+    .exp-gallery__item {
+      flex: 0 0 70%;
     }
   }
 </style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Parallax on feature images
+  document.querySelectorAll('.exp-feature__media img').forEach((img) => {
+    gsap.to(img, {
+      yPercent: -10,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: img.closest('.exp-feature'),
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true,
+      },
+    });
+  });
+
+  // Gallery horizontal drift on scroll
+  const galleryTrack = document.querySelector('.exp-gallery__track') as HTMLElement;
+  if (galleryTrack) {
+    gsap.to(galleryTrack, {
+      x: -120,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.exp-gallery',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1,
+      },
+    });
+  }
+</script>
+</content>
+</invoke>

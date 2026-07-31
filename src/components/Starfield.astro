@@ -55,9 +55,22 @@
       phase: number;
     }
 
+    interface Galaxy {
+      x: number;
+      y: number;
+      size: number;
+      angle: number;
+      tilt: number;
+      alpha: number;
+      hue: number; // 0=blue-white, 1=warm
+      arms: number;
+      layer: number;
+    }
+
     let stars: Star[] = [];
     let shootingStars: ShootingStar[] = [];
     let embers: Ember[] = [];
+    let galaxies: Galaxy[] = [];
     let lastShootingTime = 0;
 
     function createStars() {
@@ -104,6 +117,7 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       createStars();
       createEmbers();
+      createGalaxies();
     }
 
     function createEmbers() {
@@ -121,12 +135,118 @@
       }
     }
 
+    function createGalaxies() {
+      galaxies = [];
+      const count = Math.max(4, Math.floor((w * h) / 250000));
+      for (let i = 0; i < count; i++) {
+        galaxies.push({
+          x: Math.random() * w,
+          y: Math.random() * h * 3,
+          size: 12 + Math.random() * 30,
+          angle: Math.random() * Math.PI * 2,
+          tilt: 0.3 + Math.random() * 0.5,
+          alpha: 0.04 + Math.random() * 0.06,
+          hue: Math.random(),
+          arms: Math.random() < 0.4 ? 0 : (2 + Math.floor(Math.random() * 3)),
+          layer: Math.random() < 0.5 ? 0 : 1,
+        });
+      }
+    }
+
+    function drawGalaxy(g: Galaxy, sy: number, time: number) {
+      ctx.save();
+      ctx.translate(g.x, sy);
+      ctx.rotate(g.angle + time * 0.00002);
+
+      const pulse = 0.85 + 0.15 * Math.sin(time * 0.0003 + g.x);
+      const a = g.alpha * pulse;
+
+      if (g.arms === 0) {
+        // Elliptical galaxy — soft glowing ellipse
+        const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, g.size);
+        if (g.hue < 0.5) {
+          grad.addColorStop(0, `rgba(200, 210, 240, ${a * 2.5})`);
+          grad.addColorStop(0.3, `rgba(180, 190, 220, ${a * 1.5})`);
+          grad.addColorStop(0.7, `rgba(140, 150, 180, ${a * 0.5})`);
+        } else {
+          grad.addColorStop(0, `rgba(240, 220, 190, ${a * 2.5})`);
+          grad.addColorStop(0.3, `rgba(230, 200, 170, ${a * 1.5})`);
+          grad.addColorStop(0.7, `rgba(200, 170, 140, ${a * 0.5})`);
+        }
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+
+        ctx.scale(1, g.tilt);
+        ctx.beginPath();
+        ctx.arc(0, 0, g.size, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+      } else {
+        // Spiral galaxy
+        ctx.scale(1, g.tilt);
+
+        // Core glow
+        const coreGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, g.size * 0.3);
+        if (g.hue < 0.5) {
+          coreGrad.addColorStop(0, `rgba(220, 225, 255, ${a * 3})`);
+          coreGrad.addColorStop(0.5, `rgba(180, 190, 230, ${a * 1.5})`);
+        } else {
+          coreGrad.addColorStop(0, `rgba(255, 235, 210, ${a * 3})`);
+          coreGrad.addColorStop(0.5, `rgba(240, 210, 180, ${a * 1.5})`);
+        }
+        coreGrad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.beginPath();
+        ctx.arc(0, 0, g.size * 0.3, 0, Math.PI * 2);
+        ctx.fillStyle = coreGrad;
+        ctx.fill();
+
+        // Spiral arms
+        for (let arm = 0; arm < g.arms; arm++) {
+          const armOffset = (arm / g.arms) * Math.PI * 2;
+          ctx.beginPath();
+          for (let t = 0; t < 80; t++) {
+            const theta = armOffset + t * 0.08;
+            const r = (t / 80) * g.size;
+            const px = Math.cos(theta) * r;
+            const py = Math.sin(theta) * r;
+            if (t === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          const armAlpha = a * 1.2;
+          ctx.strokeStyle = g.hue < 0.5
+            ? `rgba(180, 195, 240, ${armAlpha})`
+            : `rgba(230, 200, 170, ${armAlpha})`;
+          ctx.lineWidth = g.size * 0.06;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+        }
+
+        // Outer haze
+        const outerGrad = ctx.createRadialGradient(0, 0, g.size * 0.2, 0, 0, g.size);
+        outerGrad.addColorStop(0, `rgba(200, 210, 240, ${a * 0.4})`);
+        outerGrad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.beginPath();
+        ctx.arc(0, 0, g.size, 0, Math.PI * 2);
+        ctx.fillStyle = outerGrad;
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
     function draw(time: number) {
       if (!visible) { requestAnimationFrame(draw); return; }
 
       ctx.clearRect(0, 0, w, h);
 
       const parallaxFactors = [0.02, 0.05, 0.1];
+
+      // Draw galaxies behind everything
+      for (const g of galaxies) {
+        const parallax = scrollY * parallaxFactors[g.layer];
+        const gy = ((g.y - parallax) % (h * 3) + h * 3) % (h * 3);
+        if (gy > h + g.size * 2 || gy < -g.size * 2) continue;
+        drawGalaxy(g, gy, time);
+      }
 
       for (const star of stars) {
         const parallax = scrollY * parallaxFactors[star.layer];
