@@ -1,0 +1,1 @@
+import{g as r}from"./index.CzGW6FVa.js";import{S as o}from"./ScrollTrigger.DNECHiyU.js";r.registerPlugin(o);r.to("#scroll-progress",{width:"100%",ease:"none",scrollTrigger:{trigger:document.documentElement,start:"top top",end:"bottom bottom",scrub:.3}});
