@@ -1,6 +1,41 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const photos = [
+  { src: '/assets/home/nightsky.jpeg', alt: 'Night sky over Novae', cat: 'night', span: 'wide' },
+  { src: '/assets/stays-page/tipee.jpg', alt: 'Luxury Tepee', cat: 'stays' },
+  { src: '/assets/activities/AM307099.jpg', alt: 'Evening campfire', cat: 'moments' },
+  { src: '/assets/experiences/astronomy.jpg', alt: 'Stargazing session', cat: 'night', span: 'tall' },
+  { src: '/assets/stays-page/american.jpg', alt: 'American Tents', cat: 'stays' },
+  { src: '/assets/activities/DSC09087.jpg', alt: 'Activity at Novae', cat: 'moments' },
+  { src: '/assets/activities/couple-stargazing.png', alt: 'Couple under the stars', cat: 'night' },
+  { src: '/assets/tipi-stay/tipi-inside.png', alt: 'Tepee interior', cat: 'stays' },
+  { src: '/assets/activities/AM307483.jpg', alt: 'Guests enjoying outdoors', cat: 'moments', span: 'wide' },
+  { src: '/assets/activities/telescope_pointing.jpg', alt: 'Telescope session', cat: 'night' },
+  { src: '/assets/farm/farm.png', alt: 'Novae farmland', cat: 'nature' },
+  { src: '/assets/stays-page/suite_room.jpg', alt: 'Suite Room', cat: 'stays' },
+  { src: '/assets/activities/DSC08930.jpg', alt: 'Bonfire evening', cat: 'moments', span: 'tall' },
+  { src: '/assets/outdoor.png', alt: 'Outdoor lounge', cat: 'nature' },
+  { src: '/assets/activities/meditation.jpg', alt: 'Morning meditation', cat: 'moments' },
+  { src: '/assets/activities/AM304866.jpg', alt: 'Guests at Novae', cat: 'moments' },
+  { src: '/assets/stays-page/hut.jpg', alt: 'Hut Tent', cat: 'stays' },
+  { src: '/assets/experiences/kids&telescope.jpg', alt: 'Kids with telescope', cat: 'night' },
+  { src: '/assets/farm/farm05.png', alt: 'Farm greenery', cat: 'nature', span: 'wide' },
+  { src: '/assets/stays-page/camping.jpg', alt: 'Open-sky camping', cat: 'stays' },
+  { src: '/assets/activities/AM307665.jpg', alt: 'Night gathering', cat: 'moments' },
+  { src: '/assets/activities/kids-in-farm.png', alt: 'Kids exploring the farm', cat: 'nature' },
+  { src: '/assets/novaestay.png', alt: 'Novae at dusk', cat: 'stays' },
+  { src: '/assets/activities/AM309294.jpg', alt: 'Evening at camp', cat: 'moments' },
+];
+
+const categories = [
+  { id: 'all', label: 'All' },
+  { id: 'stays', label: 'Stays' },
+  { id: 'night', label: 'Night Sky' },
+  { id: 'moments', label: 'Moments' },
+  { id: 'nature', label: 'Nature' },
+];
 ---
 
 <Layout title="Gallery" description="Moments captured at Novae Glamp — night skies, tents, campfires, and golden hours.">
@@ -13,8 +48,47 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </div>
   </section>
 
-  <section class="section container">
-    <p class="text-dim" data-reveal>Gallery page — coming in a later phase (immersive photo grid).</p>
+  <section class="section gal-main">
+    <div class="container">
+      <div class="gal-filters" data-reveal="fade">
+        {categories.map((c) => (
+          <button
+            class={`gal-filter ${c.id === 'all' ? 'gal-filter--active' : ''}`}
+            data-filter={c.id}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
+
+      <div class="gal-grid">
+        {photos.map((p, i) => (
+          <div
+            class={`gal-item ${p.span === 'wide' ? 'gal-item--wide' : ''} ${p.span === 'tall' ? 'gal-item--tall' : ''}`}
+            data-cat={p.cat}
+            data-reveal="scale"
+            data-reveal-delay={String(Math.min(i * 0.04, 0.3))}
+          >
+            <img src={`${base}${p.src}`} alt={p.alt} loading="lazy" />
+            <div class="gal-item__overlay">
+              <span class="gal-item__label">{p.alt}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--full gal-cta">
+    <div class="container text-center">
+      <h2 data-reveal="up">Your night is waiting.</h2>
+      <p class="gal-cta__sub" data-reveal="fade" data-reveal-delay="0.1">
+        Come make your own moments under the stars.
+      </p>
+      <a href={`${base}/contact`} class="btn btn--ember" data-reveal="fade" data-reveal-delay="0.2">
+        <span>Book Now</span>
+      </a>
+    </div>
   </section>
 </Layout>
 
@@ -31,4 +105,161 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     max-width: 50ch;
     margin-inline: auto;
   }
+
+  /* --- Filters --- */
+  .gal-filters {
+    display: flex;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-2xl);
+    flex-wrap: wrap;
+  }
+
+  .gal-filter {
+    font-family: var(--font-body);
+    font-size: var(--fs-sm);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.5em 1.2em;
+    border: 1px solid var(--starlight-faint);
+    border-radius: var(--radius-pill);
+    color: var(--starlight-dim);
+    background: none;
+    cursor: pointer;
+    transition: all var(--duration-fast) ease;
+  }
+
+  .gal-filter:hover {
+    color: var(--starlight);
+    border-color: var(--starlight-dim);
+  }
+
+  .gal-filter--active {
+    color: var(--void);
+    background: var(--starlight);
+    border-color: var(--starlight);
+  }
+
+  /* --- Grid --- */
+  .gal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 280px;
+    gap: var(--space-md);
+  }
+
+  .gal-item {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: opacity var(--duration-base) ease, transform var(--duration-base) ease;
+  }
+
+  .gal-item.hidden {
+    display: none;
+  }
+
+  .gal-item--wide {
+    grid-column: span 2;
+  }
+
+  .gal-item--tall {
+    grid-row: span 2;
+  }
+
+  .gal-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .gal-item:hover img {
+    transform: scale(1.06);
+  }
+
+  .gal-item__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(6, 6, 8, 0.7) 0%, transparent 50%);
+    display: flex;
+    align-items: flex-end;
+    padding: var(--space-md);
+    opacity: 0;
+    transition: opacity var(--duration-base) ease;
+  }
+
+  .gal-item:hover .gal-item__overlay {
+    opacity: 1;
+  }
+
+  .gal-item__label {
+    font-family: var(--font-display);
+    font-size: var(--fs-md);
+    font-weight: 300;
+  }
+
+  /* --- CTA --- */
+  .gal-cta h2 {
+    font-size: var(--fs-3xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .gal-cta__sub {
+    color: var(--starlight-dim);
+    font-size: var(--fs-md);
+    max-width: 40ch;
+    margin-inline: auto;
+    margin-bottom: var(--space-xl);
+  }
+
+  /* --- Responsive --- */
+  @media (max-width: 1024px) {
+    .gal-grid {
+      grid-auto-rows: 220px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .gal-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-auto-rows: 200px;
+    }
+
+    .gal-item--wide {
+      grid-column: span 2;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .gal-grid {
+      grid-template-columns: 1fr;
+      grid-auto-rows: 240px;
+    }
+
+    .gal-item--wide {
+      grid-column: span 1;
+    }
+  }
 </style>
+
+<script>
+  const filters = document.querySelectorAll('.gal-filter');
+  const items = document.querySelectorAll('.gal-item');
+
+  filters.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.getAttribute('data-filter')!;
+      filters.forEach((f) => f.classList.remove('gal-filter--active'));
+      btn.classList.add('gal-filter--active');
+
+      items.forEach((item) => {
+        if (cat === 'all' || item.getAttribute('data-cat') === cat) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>

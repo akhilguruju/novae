@@ -1,6 +1,14 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const bortle = [
+  { level: '1', label: 'Excellent', desc: 'Zodiacal light, gegenschein, zodiacal band all visible' },
+  { level: '2', label: 'Typical dark site', desc: 'Milky Way shows great detail and structure' },
+  { level: '3', label: 'Rural sky', desc: 'Milky Way clearly visible, some light domes on horizon', active: true },
+  { level: '4', label: 'Rural/suburban', desc: 'Milky Way visible but loses detail' },
+  { level: '5–9', label: 'Suburban → City', desc: 'Milky Way faint to invisible, few stars' },
+];
 ---
 
 <Layout title="Stargazing" description="Bortle Class 3 dark skies, guided telescope sessions, and the Milky Way with your naked eyes.">
@@ -11,10 +19,176 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         Bortle Class 3 darkness. 2,847 visible stars. Your eyes adjust. The universe appears.
       </p>
     </div>
+    <div class="scroll-indicator" data-reveal="fade" data-reveal-delay="0.5">
+      <span class="scroll-indicator__label">Scroll</span>
+      <span class="scroll-indicator__line"></span>
+    </div>
   </section>
 
-  <section class="section container">
-    <p class="text-dim" data-reveal>Stargazing page — coming in Phase 6 (interactive WebGL night sky).</p>
+  <!-- What you'll see -->
+  <section class="section sg-see">
+    <div class="sg-see__spread container">
+      <div class="sg-see__media" data-reveal="scale">
+        <img src={`${base}/assets/experiences/astronomy.jpg`} alt="Night sky at Novae" loading="lazy" />
+      </div>
+      <div class="sg-see__text">
+        <h2 data-reveal="up">What you'll see</h2>
+        <p data-reveal="fade" data-reveal-delay="0.1">
+          On a clear night at Novae, your naked eyes can resolve the Milky Way's dust lanes, the Andromeda galaxy as a faint smudge, and thousands of stars you've never seen from the city. With our telescopes, Saturn's rings, Jupiter's moons, and deep-sky nebulae come into focus.
+        </p>
+        <div class="sg-see__highlights" data-reveal="fade" data-reveal-delay="0.2">
+          <div class="sg-highlight">
+            <span class="sg-highlight__icon">&#9733;</span>
+            <div>
+              <strong>Milky Way</strong>
+              <span>Visible core with dust lanes</span>
+            </div>
+          </div>
+          <div class="sg-highlight">
+            <span class="sg-highlight__icon">&#9790;</span>
+            <div>
+              <strong>Planets</strong>
+              <span>Saturn's rings, Jupiter's moons</span>
+            </div>
+          </div>
+          <div class="sg-highlight">
+            <span class="sg-highlight__icon">&#10026;</span>
+            <div>
+              <strong>Deep sky</strong>
+              <span>Orion Nebula, Andromeda, star clusters</span>
+            </div>
+          </div>
+          <div class="sg-highlight">
+            <span class="sg-highlight__icon">&#9788;</span>
+            <div>
+              <strong>Meteor showers</strong>
+              <span>Perseids, Geminids, Leonids</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-stars">
+    <span class="section-stars__dot"></span>
+  </div>
+
+  <!-- Dark sky science -->
+  <section class="section sg-bortle">
+    <div class="container">
+      <div class="sg-bortle__intro">
+        <h2 data-reveal="up">Why darkness matters</h2>
+        <p data-reveal="fade" data-reveal-delay="0.1">
+          Light pollution erases the night sky. The Bortle scale measures darkness from 1 (pristine) to 9 (city centre). Novae sits at Class 3 — rare this close to a major city.
+        </p>
+      </div>
+      <div class="sg-bortle__scale" data-reveal="fade" data-reveal-delay="0.2">
+        {bortle.map((b) => (
+          <div class={`sg-bortle__level ${b.active ? 'sg-bortle__level--active' : ''}`}>
+            <span class="sg-bortle__num">{b.level}</span>
+            <div>
+              <strong>{b.label}</strong>
+              <span>{b.desc}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <div class="section-stars">
+    <span class="section-stars__dot"></span>
+  </div>
+
+  <!-- Sessions -->
+  <section class="section sg-sessions">
+    <div class="sg-sessions__spread container">
+      <div class="sg-sessions__text">
+        <h2 data-reveal="up">Guided sessions</h2>
+        <p data-reveal="fade" data-reveal-delay="0.1">
+          Every night at Novae includes a guided stargazing session. Our hosts walk you through the visible constellations, point out planets and satellites, and set up telescopes for deep-sky viewing.
+        </p>
+        <div class="sg-sessions__list">
+          <div class="sg-session" data-reveal="up" data-reveal-delay="0">
+            <h3>Naked-eye tour</h3>
+            <p>Learn to navigate the sky by finding key constellations, the ecliptic, and the galactic plane. No equipment needed — just your eyes and 20 minutes of dark adaptation.</p>
+          </div>
+          <div class="sg-session" data-reveal="up" data-reveal-delay="0.08">
+            <h3>Telescope viewing</h3>
+            <p>Observe planets, the Moon's craters, star clusters, and nebulae through our guided telescope setup. Targets vary by season and sky conditions.</p>
+          </div>
+          <div class="sg-session" data-reveal="up" data-reveal-delay="0.16">
+            <h3>Astrophotography intro</h3>
+            <p>Bring your phone or camera — we'll help you capture the Milky Way, star trails, and long-exposure nightscapes. Tripods available on request.</p>
+          </div>
+        </div>
+      </div>
+      <div class="sg-sessions__media" data-reveal="scale">
+        <img src={`${base}/assets/activities/telescope_pointing.jpg`} alt="Guided telescope session" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <div class="section-stars">
+    <span class="section-stars__dot"></span>
+  </div>
+
+  <!-- Image band -->
+  <section class="section sg-band">
+    <div class="sg-band__grid container">
+      <div class="sg-band__item sg-band__item--wide" data-reveal="scale">
+        <img src={`${base}/assets/activities/couple-stargazing.png`} alt="Couple stargazing" loading="lazy" />
+      </div>
+      <div class="sg-band__item" data-reveal="scale" data-reveal-delay="0.06">
+        <img src={`${base}/assets/experiences/kids&telescope.jpg`} alt="Kids with telescope" loading="lazy" />
+      </div>
+      <div class="sg-band__item" data-reveal="scale" data-reveal-delay="0.12">
+        <img src={`${base}/assets/activities/kids-with-tele.png`} alt="Telescope viewing" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Tips -->
+  <section class="section sg-tips">
+    <div class="container">
+      <h2 class="text-center" data-reveal="up">Tips for your night</h2>
+      <div class="sg-tips__grid">
+        <div class="sg-tip" data-reveal="up" data-reveal-delay="0">
+          <span class="sg-tip__num">01</span>
+          <h3>Give your eyes time</h3>
+          <p>Full dark adaptation takes 20–30 minutes. Avoid phone screens — even a glance resets your night vision.</p>
+        </div>
+        <div class="sg-tip" data-reveal="up" data-reveal-delay="0.08">
+          <span class="sg-tip__num">02</span>
+          <h3>Check the Moon phase</h3>
+          <p>A bright Moon washes out fainter objects. New Moon nights are best for the Milky Way and deep-sky viewing.</p>
+        </div>
+        <div class="sg-tip" data-reveal="up" data-reveal-delay="0.16">
+          <span class="sg-tip__num">03</span>
+          <h3>Dress warm</h3>
+          <p>Temperatures drop after dark, even in summer. Bring a light jacket — you'll be standing still for a while.</p>
+        </div>
+        <div class="sg-tip" data-reveal="up" data-reveal-delay="0.24">
+          <span class="sg-tip__num">04</span>
+          <h3>Look up, not through</h3>
+          <p>The best views at Novae are naked-eye. Binoculars and telescopes add detail, but the wide sky is the real show.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section--full sg-cta">
+    <div class="container text-center">
+      <h2 data-reveal="up">2,847 stars are waiting.</h2>
+      <p class="sg-cta__sub" data-reveal="fade" data-reveal-delay="0.1">
+        Every stay at Novae includes a guided stargazing session.
+      </p>
+      <a href={`${base}/contact`} class="btn btn--ember" data-reveal="fade" data-reveal-delay="0.2">
+        <span>Book Your Night</span>
+      </a>
+    </div>
   </section>
 </Layout>
 
@@ -22,6 +196,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   .page-hero {
     padding-top: calc(var(--nav-h) + var(--space-2xl));
     text-align: center;
+    position: relative;
   }
 
   .page-hero__sub {
@@ -30,5 +205,316 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     color: var(--starlight-dim);
     max-width: 50ch;
     margin-inline: auto;
+  }
+
+  /* --- What you'll see --- */
+  .sg-see__spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .sg-see__media {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+  }
+
+  .sg-see__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .sg-see__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .sg-see__text h2 {
+    font-size: var(--fs-2xl);
+  }
+
+  .sg-see__text p {
+    color: var(--starlight-dim);
+    line-height: 1.8;
+  }
+
+  .sg-see__highlights {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+    margin-top: var(--space-sm);
+  }
+
+  .sg-highlight {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: flex-start;
+  }
+
+  .sg-highlight__icon {
+    font-size: var(--fs-lg);
+    color: var(--ember);
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 0.1em;
+  }
+
+  .sg-highlight strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--fs-md);
+    font-weight: 400;
+    margin-bottom: 0.15rem;
+  }
+
+  .sg-highlight span {
+    font-size: var(--fs-sm);
+    color: var(--starlight-dim);
+  }
+
+  /* --- Bortle scale --- */
+  .sg-bortle__intro {
+    max-width: 55ch;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .sg-bortle__intro h2 {
+    font-size: var(--fs-2xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .sg-bortle__intro p {
+    color: var(--starlight-dim);
+    line-height: 1.8;
+  }
+
+  .sg-bortle__scale {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .sg-bortle__level {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    border-top: 1px solid var(--starlight-faint);
+    transition: background var(--duration-fast) ease;
+  }
+
+  .sg-bortle__level:last-child {
+    border-bottom: 1px solid var(--starlight-faint);
+  }
+
+  .sg-bortle__level--active {
+    background: rgba(232, 148, 74, 0.06);
+    border-color: var(--ember-dim);
+  }
+
+  .sg-bortle__level--active + .sg-bortle__level {
+    border-top-color: var(--ember-dim);
+  }
+
+  .sg-bortle__num {
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    font-weight: 300;
+    min-width: 3ch;
+    text-align: center;
+    color: var(--starlight-faint);
+  }
+
+  .sg-bortle__level--active .sg-bortle__num {
+    color: var(--ember);
+  }
+
+  .sg-bortle__level strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--fs-md);
+    font-weight: 400;
+  }
+
+  .sg-bortle__level span {
+    font-size: var(--fs-sm);
+    color: var(--starlight-dim);
+  }
+
+  /* --- Sessions --- */
+  .sg-sessions__spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+
+  .sg-sessions__text h2 {
+    font-size: var(--fs-2xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .sg-sessions__text > p {
+    color: var(--starlight-dim);
+    line-height: 1.8;
+    margin-bottom: var(--space-xl);
+  }
+
+  .sg-sessions__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .sg-session {
+    border-left: 1px solid var(--starlight-faint);
+    padding-left: var(--space-lg);
+  }
+
+  .sg-session h3 {
+    font-size: var(--fs-md);
+    margin-bottom: 0.4rem;
+  }
+
+  .sg-session p {
+    color: var(--starlight-dim);
+    font-size: var(--fs-sm);
+    line-height: 1.7;
+  }
+
+  .sg-sessions__media {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    position: sticky;
+    top: calc(var(--nav-h) + var(--space-lg));
+  }
+
+  .sg-sessions__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* --- Image band --- */
+  .sg-band__grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: var(--space-md);
+  }
+
+  .sg-band__item {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+  }
+
+  .sg-band__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .sg-band__item:hover img {
+    transform: scale(1.04);
+  }
+
+  /* --- Tips --- */
+  .sg-tips h2 {
+    font-size: var(--fs-2xl);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .sg-tips__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .sg-tip {
+    border-top: 1px solid var(--starlight-faint);
+    padding-top: var(--space-lg);
+  }
+
+  .sg-tip__num {
+    font-family: var(--font-display);
+    font-size: var(--fs-2xl);
+    font-weight: 300;
+    color: var(--starlight-faint);
+    display: block;
+    margin-bottom: var(--space-sm);
+    line-height: 1;
+  }
+
+  .sg-tip h3 {
+    font-size: var(--fs-md);
+    margin-bottom: 0.4rem;
+    line-height: 1.3;
+  }
+
+  .sg-tip p {
+    color: var(--starlight-dim);
+    font-size: var(--fs-sm);
+    line-height: 1.7;
+  }
+
+  /* --- CTA --- */
+  .sg-cta h2 {
+    font-size: var(--fs-3xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .sg-cta__sub {
+    color: var(--starlight-dim);
+    font-size: var(--fs-md);
+    max-width: 45ch;
+    margin-inline: auto;
+    margin-bottom: var(--space-xl);
+  }
+
+  /* --- Responsive --- */
+  @media (max-width: 1024px) {
+    .sg-tips__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .sg-see__spread,
+    .sg-sessions__spread {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+
+    .sg-see__media {
+      aspect-ratio: 4 / 3;
+    }
+
+    .sg-sessions__media {
+      position: static;
+      aspect-ratio: 4 / 3;
+    }
+
+    .sg-see__highlights {
+      grid-template-columns: 1fr;
+    }
+
+    .sg-bortle__level {
+      padding: var(--space-sm) var(--space-md);
+    }
+
+    .sg-band__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .sg-tips__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
   }
 </style>
