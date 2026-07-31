@@ -58,6 +58,19 @@ const notes = [
   { num: '03', title: 'Dress warm', desc: 'Temperatures drop after dark, even in summer. You’ll be standing still for a while.' },
   { num: '04', title: 'Look up, not through', desc: 'The best view at Novae is naked-eye. The telescope adds detail; the wide sky is the show.' },
 ];
+
+// Orrery — the full solar system (9 orbits, Mercury → Pluto)
+const planets = [
+  { name: 'Mercury', color: '#b7a99a', size: 5,  dur: 7 },
+  { name: 'Venus',   color: '#e4c088', size: 8,  dur: 10 },
+  { name: 'Earth',   color: '#6fa8dc', size: 8,  dur: 13 },
+  { name: 'Mars',    color: '#cf6b43', size: 6,  dur: 16 },
+  { name: 'Jupiter', color: '#d9b78c', size: 15, dur: 21 },
+  { name: 'Saturn',  color: '#e6cfa0', size: 13, dur: 27, ring: true },
+  { name: 'Uranus',  color: '#a6dbe0', size: 10, dur: 33 },
+  { name: 'Neptune', color: '#5a78d6', size: 10, dur: 39 },
+  { name: 'Pluto',   color: '#c8b6a3', size: 4,  dur: 46 },
+];
 ---
 
 <Layout title="Stargazing" description="Bortle Class 3 dark skies, 2,847 visible stars, guided telescope sessions, and the Milky Way with your naked eyes — 30 minutes from Hyderabad.">
@@ -155,10 +168,12 @@ const notes = [
     <div class="sg-scope__spread container">
       <div class="sg-scope__viewer" data-reveal="scale">
         <div class="sg-scope__eyepiece">
+          <img id="sg-scope-img" class="sg-scope__img" alt="" aria-hidden="true" />
           <canvas id="sg-scope-canvas" aria-hidden="true"></canvas>
           <span class="sg-scope__reticle" aria-hidden="true"></span>
           <span class="sg-scope__ring" aria-hidden="true"></span>
         </div>
+        <p class="sg-scope__credit" id="sg-scope-cap">Photographed under the skies at Novae</p>
       </div>
 
       <div class="sg-scope__panel">
@@ -211,10 +226,17 @@ const notes = [
       <div class="sg-tonight__spread" data-reveal="fade" data-reveal-delay="0.1">
         <div class="sg-orrery" aria-hidden="true">
           <span class="sg-orrery__sun"></span>
-          <span class="sg-orrery__ring sg-orrery__ring--1"><span class="sg-orrery__planet"></span></span>
-          <span class="sg-orrery__ring sg-orrery__ring--2"><span class="sg-orrery__planet"></span></span>
-          <span class="sg-orrery__ring sg-orrery__ring--3"><span class="sg-orrery__planet"></span></span>
-          <span class="sg-orrery__ring sg-orrery__ring--4"><span class="sg-orrery__planet"></span></span>
+          {planets.map((p, i) => (
+            <span
+              class="sg-orrery__ring"
+              style={`width:${(18 + i * (82 / 8)).toFixed(2)}%;height:${(18 + i * (82 / 8)).toFixed(2)}%;animation-duration:${p.dur}s`}
+            >
+              <span
+                class={`sg-orrery__planet ${p.ring ? 'sg-orrery__planet--ring' : ''}`}
+                style={`width:${p.size}px;height:${p.size}px;margin-top:${-p.size / 2}px;background:${p.color}`}
+              ></span>
+            </span>
+          ))}
         </div>
 
         <div class="sg-tonight__panel" id="sg-tonight-panel">
@@ -673,7 +695,9 @@ const notes = [
 
   .sg-scope__viewer {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
   }
 
   .sg-scope__eyepiece {
@@ -695,6 +719,31 @@ const notes = [
     inset: 0;
     width: 100%;
     height: 100%;
+    transition: opacity var(--duration-base) ease;
+  }
+
+  .sg-scope__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 32%;
+    opacity: 0;
+    transition: opacity 0.5s ease, filter 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+  }
+
+  .sg-scope__img.is-shown { opacity: 1; }
+  .sg-scope__img.is-focusing { filter: blur(16px); transform: scale(1.15); opacity: 0.35; }
+
+  .sg-scope__credit {
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--starlight-faint);
+    text-align: center;
+    max-width: 34ch;
   }
 
   .sg-scope__ring {
@@ -863,28 +912,29 @@ const notes = [
     position: absolute;
     border: 1px solid var(--starlight-faint);
     border-radius: 50%;
-    display: grid;
-    place-items: center;
     animation: orrery-spin linear infinite;
   }
 
-  .sg-orrery__ring--1 { width: 30%; height: 30%; animation-duration: 12s; }
-  .sg-orrery__ring--2 { width: 52%; height: 52%; animation-duration: 20s; }
-  .sg-orrery__ring--3 { width: 76%; height: 76%; animation-duration: 32s; }
-  .sg-orrery__ring--4 { width: 100%; height: 100%; animation-duration: 48s; }
-
   .sg-orrery__planet {
     position: absolute;
-    top: -4px;
-    width: 8px;
-    height: 8px;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
     border-radius: 50%;
-    background: var(--starlight);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
   }
 
-  .sg-orrery__ring--2 .sg-orrery__planet { background: var(--ember); width: 10px; height: 10px; top: -5px; }
-  .sg-orrery__ring--3 .sg-orrery__planet { background: var(--starlight-dim); }
-  .sg-orrery__ring--4 .sg-orrery__planet { background: #c9d4ff; }
+  .sg-orrery__planet--ring::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 210%;
+    height: 210%;
+    transform: translate(-50%, -50%) rotate(18deg) scaleY(0.42);
+    border: 1px solid rgba(230, 207, 160, 0.7);
+    border-radius: 50%;
+  }
 
   @keyframes orrery-spin { to { transform: rotate(360deg); } }
 
@@ -1675,6 +1725,19 @@ const notes = [
     const subEl = document.getElementById('sg-scope-sub')!;
     const nakedEl = document.getElementById('sg-scope-naked')!;
     const teleEl = document.getElementById('sg-scope-tele')!;
+    const capEl = document.getElementById('sg-scope-cap');
+    const img = document.getElementById('sg-scope-img') as HTMLImageElement | null;
+    const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+    // Real photos where we have them; every other target falls back to the
+    // procedural render below. To make one real, drop a file at
+    // public/assets/experiences/space/<id>.jpg and add it here.
+    const IMG: Record<string, string> = {
+      milkyway: base + '/assets/home/nightsky.jpeg',
+    };
+    const CAP: Record<string, string> = {
+      milkyway: 'Photographed under the skies at Novae',
+    };
 
     const DATA: Record<string, { name: string; sub: string; naked: string; tele: string }> = {
       milkyway: { name: 'The Milky Way', sub: 'Our galaxy, edge-on', naked: 'A glowing river of light with dark dust lanes, straight overhead.', tele: 'Resolves into countless individual stars and star clouds.' },
@@ -1712,6 +1775,7 @@ const notes = [
     function render(t: number) {
       const cx = w / 2, cy = h / 2;
       ctx.clearRect(0, 0, w, h);
+      if (IMG[current]) { if (active) requestAnimationFrame(render); return; }
       ctx.filter = focus < 0.999 ? `blur(${(1 - focus) * 9}px)` : 'none';
       ctx.save();
 
@@ -1826,6 +1890,27 @@ const notes = [
       const d = DATA[id];
       nameEl.textContent = d.name; subEl.textContent = d.sub; nakedEl.textContent = d.naked; teleEl.textContent = d.tele;
       btns.forEach((b) => b.classList.toggle('is-active', b.dataset.target === id));
+      if (capEl) capEl.textContent = CAP[id] || 'Illustration — the naked-eye view is subtler';
+
+      // Real image if we have one, else fall back to the procedural render.
+      const src = IMG[id];
+      if (src && img) {
+        if (canvas) canvas.style.opacity = '0';
+        img.classList.add('is-shown');
+        const sharpen = () => requestAnimationFrame(() => requestAnimationFrame(() => img.classList.remove('is-focusing')));
+        if (reduced) { img.classList.remove('is-focusing'); if (img.getAttribute('src') !== src) img.src = src; return; }
+        img.classList.add('is-focusing');
+        if (img.getAttribute('src') === src && img.complete) { sharpen(); }
+        else {
+          img.onload = sharpen;
+          img.onerror = () => { delete IMG[id]; img.classList.remove('is-shown', 'is-focusing'); if (canvas) canvas.style.opacity = '1'; select(id); };
+          img.src = src;
+        }
+        return;
+      }
+
+      if (img) img.classList.remove('is-shown', 'is-focusing');
+      if (canvas) canvas.style.opacity = '1';
       if (reduced) { focus = 1; if (!active) render(performance.now()); return; }
       focus = 0.05;
       gsap.to({ v: 0.05 }, { v: 1, duration: 0.9, ease: 'power2.out', onUpdate: function () { focus = this.targets()[0].v; if (!active) render(performance.now()); } });
@@ -1847,7 +1932,7 @@ const notes = [
         else render(performance.now());
       },
     });
-    render(performance.now());
+    select('milkyway');
   })();
 
   /* ============================================================
