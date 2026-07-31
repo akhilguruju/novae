@@ -561,3 +561,168 @@
   .sky-grid { grid-template-columns: 1fr; }
   .scope-visual { height: 300px; }
 }
+
+
+/* ============================================================
+   PREMIUM ELEVATION — "Observatory"-inspired, brand-native
+   Appended overrides. Page-scoped (stargazing.html only).
+   Keeps the Cosmos-Blue + Warm-Amber branding; adds cinematic
+   depth, refined type, glow and layered background.
+============================================================ */
+
+/* Wire the intended display/sans fonts the page already references
+   (the base CSS points at undefined --font-display/--font-sans). */
+body {
+  --font-display: var(--font-accent);   /* Cormorant Garamond — editorial serif */
+  --font-sans:    var(--font-body);      /* Lato */
+}
+
+/* Let the fixed starfield read softly THROUGH the whole page while
+   keeping text high-contrast (base stays ~88–92% opaque near-black). */
+.bg-void   { background-color: rgba(5, 8, 16, 0.92); }
+.bg-deep   { background-color: rgba(8, 12, 24, 0.88); }
+.bg-cosmos { background-color: rgba(10, 15, 30, 0.85); }
+
+/* ---------- HERO ---------- */
+.sg-hero { min-height: 100svh; }
+
+/* Cinematic vignette + faint gold bloom (below content) */
+.sg-hero::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 92% 72% at 50% 42%, transparent 42%, rgba(3, 5, 12, 0.55) 100%),
+    radial-gradient(circle at 50% 30%, rgba(244, 196, 124, 0.05), transparent 55%);
+}
+/* Bottom fade so the hero melts into the page (above the ring) */
+.sg-hero::after {
+  content: '';
+  position: absolute; left: 0; right: 0; bottom: 0; height: 40%;
+  z-index: 4; pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--clr-void));
+}
+
+.sg-hero__content { max-width: 940px; }
+
+.sg-hero__eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.34em;
+}
+
+.sg-hero__title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(2.9rem, 8.2vw, 6.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  text-shadow: 0 2px 40px rgba(3, 5, 12, 0.6);
+}
+.sg-hero__title-line2 {
+  font-family: var(--font-accent);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0;
+  color: var(--clr-gold-bright);
+}
+.sg-hero__subtitle {
+  font-family: var(--font-mono);
+  margin-top: var(--space-4);
+  font-size: clamp(0.72rem, 1.4vw, 0.9rem);
+  letter-spacing: 0.22em;
+  color: var(--clr-star-dim);
+}
+.sg-hero__desc {
+  color: var(--clr-star-dim);
+  font-size: 1.02rem;
+  max-width: 560px;
+}
+.sg-hero__ctas { gap: var(--space-3); margin-top: var(--space-5); }
+.sg-hero .btn { padding: 1rem 2.4rem; letter-spacing: 0.16em; }
+
+/* ---------- SECOND SECTION — WHY IT MATTERS ---------- */
+.sg-why__spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  align-items: center;
+}
+.sg-why__media {
+  position: relative;
+  margin: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border: var(--border-gold-dim);
+  box-shadow: 0 40px 80px -44px rgba(0, 0, 0, 0.85);
+}
+.sg-why__media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s var(--transition-slow);
+}
+.sg-why__media::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(3, 5, 12, 0.62), transparent 46%);
+  pointer-events: none;
+}
+.sg-why__media:hover img { transform: scale(1.05); }
+.sg-why__badge {
+  position: absolute; left: 1.5rem; bottom: 1.4rem; z-index: 2;
+  display: flex; flex-direction: column; gap: 0.15rem;
+}
+.sg-why__badge-num {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 2.2rem;
+  line-height: 1;
+  color: var(--clr-gold-bright);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+}
+.sg-why__badge-txt {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--clr-star-dim);
+}
+.sg-why__cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+.sg-card {
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  background: linear-gradient(180deg, rgba(244, 196, 124, 0.035), transparent 70%);
+}
+.sg-card:hover { transform: translateY(-4px); }
+.sg-card .heading-4 { margin-top: var(--space-1); }
+
+/* ---------- PREMIUM POLISH (styling only, content untouched) ---------- */
+.sky-grid { border-radius: var(--radius-lg); overflow: hidden; }
+.card,
+.event-card,
+.feature-row,
+.testimonial-card,
+.map-placeholder { border-radius: var(--radius-lg); }
+.event-card:hover { box-shadow: 0 26px 54px -34px rgba(0, 0, 0, 0.75); }
+.feature-row:hover { box-shadow: 0 18px 40px -30px rgba(0, 0, 0, 0.7); }
+.data-ribbon__val { text-shadow: 0 0 20px rgba(244, 196, 124, 0.25); }
+.scope-center { box-shadow: 0 0 60px rgba(244, 196, 124, 0.16), inset 0 0 22px rgba(244, 196, 124, 0.05); }
+
+/* ---------- RESPONSIVE (second section) ---------- */
+@media (max-width: 900px) {
+  .sg-why__spread { grid-template-columns: 1fr; gap: var(--space-5); }
+  .sg-why__media { aspect-ratio: 16 / 10; }
+  .sg-why__cards { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .sg-why__cards { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sg-why__media img { transition: none; }
+}
