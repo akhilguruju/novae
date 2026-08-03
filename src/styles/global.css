@@ -1,0 +1,380 @@
+/* ============================================
+   NOVAE GLAMP — Design System
+   3 colors. 2 fonts. Zero noise.
+   ============================================ */
+
+/* --- Tokens --- */
+:root {
+  /* Palette */
+  --void: #060608;
+  --starlight: #F0EBE3;
+  --ember: #E8944A;
+
+  /* Derived */
+  --void-light: #0e0e12;
+  --starlight-dim: rgba(240, 235, 227, 0.5);
+  --starlight-faint: rgba(240, 235, 227, 0.12);
+  --ember-dim: rgba(232, 148, 74, 0.6);
+
+  /* Typography */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  /* Scale */
+  --fs-xs: clamp(0.65rem, 0.6rem + 0.25vw, 0.75rem);
+  --fs-sm: clamp(0.75rem, 0.7rem + 0.3vw, 0.875rem);
+  --fs-base: clamp(0.875rem, 0.82rem + 0.3vw, 1rem);
+  --fs-md: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+  --fs-lg: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  --fs-xl: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem);
+  --fs-2xl: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
+  --fs-3xl: clamp(2.5rem, 2rem + 3vw, 5rem);
+  --fs-hero: clamp(3rem, 2rem + 5vw, 8rem);
+
+  /* Spacing */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 5rem;
+  --space-3xl: 8rem;
+  --space-4xl: 12rem;
+
+  /* Layout */
+  --container-max: 1200px;
+  --container-pad: clamp(1.5rem, 3vw, 4rem);
+  --nav-h: 72px;
+
+  /* Radius */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-pill: 999px;
+
+  /* Transitions */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --duration-fast: 0.2s;
+  --duration-base: 0.4s;
+  --duration-slow: 0.8s;
+}
+
+/* --- Reset --- */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--starlight);
+  background-color: var(--void);
+  overflow-x: hidden;
+}
+
+img, video, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor, html.has-custom-cursor *, html.has-custom-cursor *::before, html.has-custom-cursor *::after {
+    cursor: none !important;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* --- Typography --- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: var(--fs-hero); }
+h2 { font-size: var(--fs-3xl); }
+h3 { font-size: var(--fs-2xl); }
+h4 { font-size: var(--fs-xl); }
+
+p {
+  max-width: 60ch;
+  line-height: 1.7;
+}
+
+em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* --- Layout --- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+.section {
+  padding-block: var(--space-3xl);
+}
+
+.section--full {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* --- Utility --- */
+.text-ember { color: var(--ember); }
+.text-dim { color: var(--starlight-dim); }
+.text-center { text-align: center; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Film grain is now handled by the animated Grain.astro canvas component */
+
+/* --- Scroll indicator --- */
+.scroll-indicator {
+  position: absolute;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.scroll-indicator__label {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--starlight-dim);
+}
+
+.scroll-indicator__line {
+  width: 1px;
+  height: 48px;
+  background: var(--starlight-faint);
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-indicator__line::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--starlight);
+  animation: scrollLine 2s var(--ease-out-expo) infinite;
+}
+
+@keyframes scrollLine {
+  0% { top: -100%; }
+  50% { top: 0; }
+  100% { top: 100%; }
+}
+
+/* --- Reveal animations (GSAP-driven) ---
+   Initial hidden state is set by GSAP's gsap.set() in Layout.astro.
+   No CSS hiding here — if JS fails, content remains visible. */
+
+/* --- Link hover effect --- */
+.link-draw {
+  position: relative;
+  display: inline-block;
+}
+
+.link-draw::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--starlight);
+  transition: width var(--duration-base) var(--ease-out-expo);
+}
+
+.link-draw:hover::after {
+  width: 100%;
+}
+
+/* --- Button --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.9em 2em;
+  border: 1px solid var(--starlight-faint);
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-base) var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--starlight);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-slow) var(--ease-out-expo);
+}
+
+.btn:hover {
+  color: var(--void);
+  border-color: var(--starlight);
+}
+
+.btn:hover::before {
+  transform: scaleX(1);
+}
+
+.btn span {
+  position: relative;
+  z-index: 1;
+}
+
+.btn--ember {
+  border-color: var(--ember-dim);
+  color: var(--ember);
+}
+
+.btn--ember::before {
+  background: var(--ember);
+}
+
+.btn--ember:hover {
+  color: var(--void);
+  border-color: var(--ember);
+}
+
+/* --- Section divider stars --- */
+.section-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding-block: var(--space-xl);
+}
+
+.section-stars::before,
+.section-stars::after {
+  content: '';
+  width: clamp(40px, 10vw, 120px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--starlight-faint), transparent);
+}
+
+.section-stars__dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--ember-dim);
+  box-shadow: 0 0 6px var(--ember-dim), 0 0 12px rgba(232, 148, 74, 0.15);
+}
+
+/* --- Text cursor glow --- */
+.cursor-glow {
+  background: radial-gradient(
+    circle 120px at var(--glow-x, -200px) var(--glow-y, -200px),
+    var(--starlight) 0%,
+    rgba(240, 235, 227, 0.7) 25%,
+    currentColor 60%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding: 0.15em 0.2em;
+  margin: -0.15em -0.2em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+@media (hover: none) {
+  .cursor-glow {
+    background: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .section {
+    padding-block: var(--space-2xl);
+  }
+
+  .section--full {
+    min-height: 100svh;
+  }
+}

@@ -1,0 +1,181 @@
+---
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import Preloader from '@/components/Preloader.astro';
+import Grain from '@/components/Grain.astro';
+import Starfield from '@/components/Starfield.astro';
+import Cursor from '@/components/Cursor.astro';
+import ScrollProgress from '@/components/ScrollProgress.astro';
+import '@/styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const {
+  title,
+  description = 'Luxury glamping under the darkest skies, 30 minutes from Hyderabad. Stargazing, campfires, and nights you won\'t forget.',
+  ogImage = `${base}/assets/home/nightsky.jpeg`,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+
+  <title>{title} | Novae Glamp</title>
+
+  <link rel="canonical" href={canonicalURL} />
+  <link rel="icon" type="image/svg+xml" href={`${base}/assets/NG_logo.svg`} />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={`${title} | Novae Glamp`} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:url" content={canonicalURL} />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={`${title} | Novae Glamp`} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+</head>
+<body>
+  <Starfield />
+  <Preloader />
+  <ScrollProgress />
+  <Nav />
+
+  <main>
+    <slot />
+  </main>
+
+  <Footer />
+  <Cursor />
+  <Grain />
+
+  <script>
+    import Lenis from 'lenis';
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add((time: number) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    lenis.stop();
+
+    function startLenis() {
+      lenis.start();
+      ScrollTrigger.refresh();
+    }
+
+    if (document.documentElement.classList.contains('preloader-done')) {
+      startLenis();
+    } else {
+      window.addEventListener('preloader:complete', startLenis, { once: true });
+    }
+
+    const reveals = document.querySelectorAll('[data-reveal]');
+    const isFirstLoad = !document.documentElement.classList.contains('preloader-done');
+
+    reveals.forEach((el) => {
+      const type = el.getAttribute('data-reveal') || 'default';
+      let delay = parseFloat(el.getAttribute('data-reveal-delay') || '0');
+
+      if (isFirstLoad) {
+        const rect = (el as HTMLElement).getBoundingClientRect();
+        if (rect.top < window.innerHeight) {
+          delay += 0.5;
+        }
+      }
+
+      const initial: gsap.TweenVars = { opacity: 0 };
+      if (type === 'up') initial.y = 40;
+      else if (type === 'scale') { initial.scale = 0.94; initial.y = 20; }
+      else if (type === 'fade') { /* just opacity */ }
+      else initial.y = 40;
+
+      gsap.set(el, initial);
+
+      gsap.to(el, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 1.4,
+        delay,
+        ease: 'expo.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          once: true,
+        },
+      });
+    });
+
+    // Cursor-glow proximity: highlight ALL text elements when cursor is near
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      const glowEls = document.querySelectorAll<HTMLElement>(
+        'p, blockquote, h1, h2, h3, h4, .hero__sub, .testimonial__text, .journey__heading, .stays-preview__sub, .story__text p, cite'
+      );
+
+      glowEls.forEach(el => {
+        if (el.id === 'hero-title') return;
+        el.classList.add('cursor-glow');
+      });
+
+      let gmx = -300, gmy = -300;
+      document.addEventListener('mousemove', (e) => {
+        gmx = e.clientX;
+        gmy = e.clientY;
+      });
+
+      function updateGlow() {
+        for (const el of glowEls) {
+          const rect = el.getBoundingClientRect();
+          if (rect.bottom < -100 || rect.top > window.innerHeight + 100) continue;
+          const pad = 150;
+          if (
+            gmx > rect.left - pad && gmx < rect.right + pad &&
+            gmy > rect.top - pad && gmy < rect.bottom + pad
+          ) {
+            el.style.setProperty('--glow-x', (gmx - rect.left) + 'px');
+            el.style.setProperty('--glow-y', (gmy - rect.top) + 'px');
+          } else {
+            el.style.setProperty('--glow-x', '-200px');
+            el.style.setProperty('--glow-y', '-200px');
+          }
+        }
+        requestAnimationFrame(updateGlow);
+      }
+      requestAnimationFrame(updateGlow);
+    }
+  </script>
+</body>
+</html>

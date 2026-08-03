@@ -1,0 +1,2045 @@
+---
+import Layout from '@/layouts/Layout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// Bortle scale readout
+const bortle = [
+  { level: '1', label: 'Excellent dark sky' },
+  { level: '2', label: 'Typical dark site' },
+  { level: '3', label: 'Rural sky — Novae', active: true },
+  { level: '4', label: 'Rural / suburban' },
+  { level: '5', label: 'Suburban' },
+  { level: '6', label: 'Bright suburban' },
+  { level: '7', label: 'Suburban / urban' },
+  { level: '8', label: 'City' },
+  { level: '9', label: 'Inner city' },
+];
+
+// "Through the eyepiece" targets (rendered procedurally in canvas)
+const targets = [
+  { id: 'milkyway', name: 'The Milky Way', sub: 'Our galaxy, edge-on', nakedEye: 'A glowing river of light with dark dust lanes, straight overhead.', scope: 'Resolves into countless individual stars and star clouds.' },
+  { id: 'saturn', name: 'Saturn', sub: 'The ringed planet', nakedEye: 'A steady golden point that does not twinkle.', scope: 'Rings snap into view, plus its largest moon, Titan.' },
+  { id: 'jupiter', name: 'Jupiter', sub: 'Gas giant', nakedEye: 'The brightest star-like object after Venus.', scope: 'Cloud bands and four Galilean moons in a line.' },
+  { id: 'moon', name: 'The Moon', sub: 'Our nearest neighbour', nakedEye: 'Seas and highlands visible to the unaided eye.', scope: 'Craters, mountains and terminator shadows in sharp relief.' },
+  { id: 'orion', name: 'Orion Nebula', sub: 'M42 · stellar nursery', nakedEye: 'A faint fuzzy patch in Orion’s sword.', scope: 'Glowing gas clouds cradling the newborn Trapezium stars.' },
+  { id: 'andromeda', name: 'Andromeda', sub: 'M31 · nearest galaxy', nakedEye: 'A dim smudge — the farthest thing visible to the naked eye.', scope: 'A vast tilted spiral, 2.5 million light-years away.' },
+];
+
+// Tonight's sky — by month (evening sky, ~17°N)
+const sky = [
+  { m: 'Jan', planets: 'Jupiter, Mars', shower: 'Quadrantids · Jan 3', showerHot: true, con: 'Orion · Taurus · Gemini' },
+  { m: 'Feb', planets: 'Jupiter, Venus', shower: 'Quiet skies', showerHot: false, con: 'Orion · Canis Major · Gemini' },
+  { m: 'Mar', planets: 'Venus, Mars', shower: 'Quiet skies', showerHot: false, con: 'Leo · Gemini · Ursa Major' },
+  { m: 'Apr', planets: 'Venus (dawn)', shower: 'Lyrids · Apr 22', showerHot: true, con: 'Leo · Virgo · Ursa Major' },
+  { m: 'May', planets: 'Mars, Venus', shower: 'Eta Aquariids · May 6', showerHot: true, con: 'Virgo · Boötes · Scorpius' },
+  { m: 'Jun', planets: 'Saturn (dawn)', shower: 'Quiet skies', showerHot: false, con: 'Scorpius · Sagittarius · Hercules' },
+  { m: 'Jul', planets: 'Saturn, galactic core', shower: 'δ-Aquariids · Jul 30', showerHot: true, con: 'Scorpius · Sagittarius · Cygnus' },
+  { m: 'Aug', planets: 'Saturn', shower: 'Perseids · Aug 12', showerHot: true, con: 'Summer Triangle · Sagittarius' },
+  { m: 'Sep', planets: 'Saturn, Jupiter', shower: 'Quiet skies', showerHot: false, con: 'Cygnus · Pegasus · Aquarius' },
+  { m: 'Oct', planets: 'Jupiter, Saturn', shower: 'Orionids · Oct 21', showerHot: true, con: 'Pegasus · Andromeda · Perseus' },
+  { m: 'Nov', planets: 'Jupiter, Mars', shower: 'Leonids · Nov 17', showerHot: true, con: 'Taurus · Pleiades · Andromeda' },
+  { m: 'Dec', planets: 'Jupiter, Mars', shower: 'Geminids · Dec 14', showerHot: true, con: 'Orion · Taurus · Gemini' },
+];
+
+// The night, hour by hour
+const timeline = [
+  { time: '7:00', title: 'Arrival & dusk', desc: 'Settle in as the last light drains from the western sky and the first planets appear.' },
+  { time: '7:30', title: 'Eyes adapt', desc: 'Screens off. Over the next 20 minutes your pupils widen and hundreds of hidden stars emerge.' },
+  { time: '8:00', title: 'Naked-eye tour', desc: 'A host walks you across the sky — constellations, the ecliptic, and the plane of our galaxy.' },
+  { time: '9:00', title: 'Telescope viewing', desc: 'Saturn’s rings, Jupiter’s moons, star clusters and nebulae through our guided setup.' },
+  { time: '10:00', title: 'Astrophotography', desc: 'Bring a phone or camera — capture the Milky Way, star trails and long-exposure nightscapes.' },
+  { time: 'Late', title: 'The galactic core', desc: 'On summer nights, the bright heart of the Milky Way climbs high over the plains.' },
+];
+
+// Field notes (tips)
+const notes = [
+  { num: '01', title: 'Give your eyes time', desc: 'Full dark adaptation takes 20–30 minutes. Even a glance at a phone resets your night vision.' },
+  { num: '02', title: 'Check the Moon phase', desc: 'A bright Moon washes out faint objects. New-Moon nights are best for the Milky Way.' },
+  { num: '03', title: 'Dress warm', desc: 'Temperatures drop after dark, even in summer. You’ll be standing still for a while.' },
+  { num: '04', title: 'Look up, not through', desc: 'The best view at Novae is naked-eye. The telescope adds detail; the wide sky is the show.' },
+];
+
+// Orrery — the full solar system (9 orbits, Mercury → Pluto)
+const planets = [
+  { name: 'Mercury', color: '#b7a99a', size: 5,  dur: 7 },
+  { name: 'Venus',   color: '#e4c088', size: 8,  dur: 10 },
+  { name: 'Earth',   color: '#6fa8dc', size: 8,  dur: 13 },
+  { name: 'Mars',    color: '#cf6b43', size: 6,  dur: 16 },
+  { name: 'Jupiter', color: '#d9b78c', size: 15, dur: 21 },
+  { name: 'Saturn',  color: '#e6cfa0', size: 13, dur: 27, ring: true },
+  { name: 'Uranus',  color: '#a6dbe0', size: 10, dur: 33 },
+  { name: 'Neptune', color: '#5a78d6', size: 10, dur: 39 },
+  { name: 'Pluto',   color: '#c8b6a3', size: 4,  dur: 46 },
+];
+---
+
+<Layout title="Stargazing" description="Bortle Class 3 dark skies, 2,847 visible stars, guided telescope sessions, and the Milky Way with your naked eyes — 30 minutes from Hyderabad.">
+  <!-- ============ HERO: dark-adapt → constellations → zoom-out ============ -->
+  <section class="sg-hero" id="sg-hero">
+    <div class="sg-hero__stage" id="sg-hero-stage">
+      <canvas class="sg-hero__canvas" id="sg-sky" aria-hidden="true"></canvas>
+
+      <div class="sg-hero__overlay" id="sg-hero-overlay">
+        <p class="sg-hero__eyebrow">Glamp · Gaze · Glow</p>
+        <h1 class="sg-hero__title" id="sg-hero-title">The sky<br /><em>is the show</em></h1>
+        <p class="sg-hero__hint" id="sg-hero-hint">
+          <span class="sg-hero__hint-desk">Move to explore · scroll to travel</span>
+          <span class="sg-hero__hint-touch">Bortle 3 · 2,847 stars · scroll to travel</span>
+        </p>
+      </div>
+
+      <div class="sg-hero__label" id="sg-constel-label" aria-hidden="true">
+        <span class="sg-hero__label-name"></span>
+        <span class="sg-hero__label-myth"></span>
+      </div>
+
+      <div class="sg-hero__outro" id="sg-hero-outro">
+        <h2>One sky.<br /><em>One galaxy of many.</em></h2>
+      </div>
+
+      <div class="scroll-indicator" id="sg-hero-cue">
+        <span class="scroll-indicator__label">Scroll</span>
+        <span class="scroll-indicator__line"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BORTLE: wipe the city away ============ -->
+  <section class="section sg-why" id="sg-why">
+    <div class="container">
+      <header class="sg-why__intro">
+        <h2 data-reveal="up">This is why you drive<br /><em>thirty minutes.</em></h2>
+        <p data-reveal="fade" data-reveal-delay="0.1">
+          Light pollution erases the night. Drag the divider and watch the city glow lift away —
+          from a washed-out handful of stars to the full sky Novae is built for.
+        </p>
+      </header>
+
+      <div class="sg-compare" id="sg-compare" data-reveal="fade" data-reveal-delay="0.15">
+        <canvas class="sg-compare__canvas" id="sg-compare-canvas" aria-hidden="true"></canvas>
+
+        <span class="sg-compare__tag sg-compare__tag--city">
+          <span class="sg-compare__place">Hyderabad</span>
+          <span class="sg-compare__bortle">Bortle 8</span>
+        </span>
+        <span class="sg-compare__tag sg-compare__tag--novae">
+          <span class="sg-compare__place">Novae Glamp</span>
+          <span class="sg-compare__bortle">Bortle 3</span>
+        </span>
+
+        <div class="sg-compare__counter" id="sg-compare-counter">
+          <span class="sg-compare__num" id="sg-compare-num">1,400</span>
+          <span class="sg-compare__cap">stars overhead</span>
+        </div>
+
+        <button
+          class="sg-compare__handle"
+          id="sg-compare-handle"
+          role="slider"
+          aria-label="Reveal Novae's sky"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="50"
+          tabindex="0"
+        >
+          <span class="sg-compare__grip"></span>
+        </button>
+      </div>
+
+      <div class="sg-scale" data-reveal="fade">
+        <div class="sg-scale__bar" aria-hidden="true">
+          {bortle.map((b) => (
+            <span class={`sg-scale__seg ${b.active ? 'sg-scale__seg--active' : ''}`} data-level={b.level}>
+              <span class="sg-scale__num">{b.level}</span>
+              {b.active && <span class="sg-scale__flag">Novae · {b.label.split('—')[0].trim()}</span>}
+            </span>
+          ))}
+        </div>
+        <div class="sg-scale__ends">
+          <span>Pristine dark</span>
+          <span>Inner city</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THROUGH THE EYEPIECE ============ -->
+  <section class="section sg-scope" id="sg-scope">
+    <div class="sg-scope__spread container">
+      <div class="sg-scope__viewer" data-reveal="scale">
+        <div class="sg-scope__eyepiece">
+          <img id="sg-scope-img" class="sg-scope__img" alt="" aria-hidden="true" />
+          <canvas id="sg-scope-canvas" aria-hidden="true"></canvas>
+          <span class="sg-scope__reticle" aria-hidden="true"></span>
+          <span class="sg-scope__ring" aria-hidden="true"></span>
+        </div>
+        <p class="sg-scope__credit" id="sg-scope-cap">Photographed under the skies at Novae</p>
+      </div>
+
+      <div class="sg-scope__panel">
+        <h2 data-reveal="up">Through the<br /><em>eyepiece</em></h2>
+        <p data-reveal="fade" data-reveal-delay="0.1">
+          On a clear night your naked eyes do most of the work. Our telescopes do the rest.
+          Choose a target and bring it into focus.
+        </p>
+
+        <div class="sg-scope__targets" id="sg-scope-targets" data-reveal="fade" data-reveal-delay="0.15">
+          {targets.map((t, i) => (
+            <button class={`sg-scope__target ${i === 0 ? 'is-active' : ''}`} data-target={t.id}>
+              {t.name}
+            </button>
+          ))}
+        </div>
+
+        <div class="sg-scope__info" id="sg-scope-info" data-reveal="fade" data-reveal-delay="0.2">
+          <h3 class="sg-scope__name" id="sg-scope-name">The Milky Way</h3>
+          <p class="sg-scope__desc" id="sg-scope-sub">Our galaxy, edge-on</p>
+          <dl class="sg-scope__facts">
+            <div>
+              <dt>Naked eye</dt>
+              <dd id="sg-scope-naked">A glowing river of light with dark dust lanes, straight overhead.</dd>
+            </div>
+            <div>
+              <dt>Through the scope</dt>
+              <dd id="sg-scope-tele">Resolves into countless individual stars and star clouds.</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TONIGHT'S SKY ============ -->
+  <section class="section sg-tonight" id="sg-tonight">
+    <div class="container">
+      <h2 class="text-center" data-reveal="up">What’s up <em>tonight</em></h2>
+      <p class="sg-tonight__lead text-center" data-reveal="fade" data-reveal-delay="0.1">
+        The sky changes with the seasons. Pick a month to plan your night.
+      </p>
+
+      <div class="sg-tonight__months" id="sg-tonight-months" role="tablist" aria-label="Month" data-reveal="fade">
+        {sky.map((s, i) => (
+          <button class={`sg-month ${i === 6 ? 'is-active' : ''}`} role="tab" data-month={String(i)}>{s.m}</button>
+        ))}
+      </div>
+
+      <div class="sg-tonight__spread" data-reveal="fade" data-reveal-delay="0.1">
+        <div class="sg-orrery" aria-hidden="true">
+          <span class="sg-orrery__sun"></span>
+          {planets.map((p, i) => (
+            <span
+              class="sg-orrery__ring"
+              style={`width:${(18 + i * (82 / 8)).toFixed(2)}%;height:${(18 + i * (82 / 8)).toFixed(2)}%;animation-duration:${p.dur}s`}
+            >
+              <span
+                class={`sg-orrery__planet ${p.ring ? 'sg-orrery__planet--ring' : ''}`}
+                style={`width:${p.size}px;height:${p.size}px;margin-top:${-p.size / 2}px;background:${p.color}`}
+              ></span>
+            </span>
+          ))}
+        </div>
+
+        <div class="sg-tonight__panel" id="sg-tonight-panel">
+          <div class="sg-fact">
+            <span class="sg-fact__key">Planets</span>
+            <span class="sg-fact__val" id="sg-fact-planets">Saturn, galactic core</span>
+          </div>
+          <div class="sg-fact">
+            <span class="sg-fact__key">Meteor shower</span>
+            <span class="sg-fact__val" id="sg-fact-shower">δ-Aquariids · Jul 30</span>
+          </div>
+          <div class="sg-fact">
+            <span class="sg-fact__key">Best constellations</span>
+            <span class="sg-fact__val" id="sg-fact-con">Scorpius · Sagittarius · Cygnus</span>
+          </div>
+          <div class="sg-fact">
+            <span class="sg-fact__key">Darkest nights</span>
+            <span class="sg-fact__val">Within a few days of the new moon</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE NIGHT, HOUR BY HOUR ============ -->
+  <section class="section sg-timeline" id="sg-timeline">
+    <div class="container">
+      <h2 class="text-center" data-reveal="up">Your night, <em>hour by hour</em></h2>
+      <div class="sg-timeline__track" id="sg-timeline-track">
+        <span class="sg-timeline__line" aria-hidden="true"></span>
+        <span class="sg-timeline__fill" id="sg-timeline-fill" aria-hidden="true"></span>
+        {timeline.map((t, i) => (
+          <div class={`sg-tl ${i % 2 === 0 ? 'sg-tl--left' : 'sg-tl--right'}`} data-reveal={i % 2 === 0 ? 'right' : 'left'}>
+            <span class="sg-tl__dot" aria-hidden="true"></span>
+            <span class="sg-tl__time">{t.time}</span>
+            <div class="sg-tl__body">
+              <h3>{t.title}</h3>
+              <p>{t.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ IMAGE BAND ============ -->
+  <section class="sg-band">
+    <div class="sg-band__grid container">
+      <div class="sg-band__item sg-band__item--wide" data-reveal="scale">
+        <img src={`${base}/assets/activities/couple-stargazing.png`} alt="Couple stargazing at Novae" loading="lazy" />
+      </div>
+      <div class="sg-band__item" data-reveal="scale" data-reveal-delay="0.06">
+        <img src={`${base}/assets/experiences/kids&telescope.jpg`} alt="Kids at the telescope" loading="lazy" />
+      </div>
+      <div class="sg-band__item" data-reveal="scale" data-reveal-delay="0.12">
+        <img src={`${base}/assets/activities/telescope_pointing.jpg`} alt="Guided telescope session" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FIELD NOTES ============ -->
+  <section class="section sg-notes">
+    <div class="container">
+      <h2 class="text-center" data-reveal="up">Field notes</h2>
+      <div class="sg-notes__grid">
+        {notes.map((n, i) => (
+          <div class="sg-note" data-reveal="up" data-reveal-delay={String(i * 0.08)}>
+            <span class="sg-note__num">{n.num}</span>
+            <h3>{n.title}</h3>
+            <p>{n.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA + NEW MOON COUNTDOWN ============ -->
+  <section class="section section--full sg-cta">
+    <div class="container text-center">
+      <p class="sg-cta__moon" id="sg-cta-moon" data-reveal="fade">
+        <span class="sg-cta__moon-dot" aria-hidden="true"></span>
+        <span id="sg-cta-moon-text">Finding the next new moon…</span>
+      </p>
+      <h2 data-reveal="up">2,847 stars<br />are <em>waiting.</em></h2>
+      <p class="sg-cta__sub" data-reveal="fade" data-reveal-delay="0.1">
+        Every stay at Novae includes a guided stargazing session.
+      </p>
+      <a href={`${base}/contact`} class="btn btn--ember" data-reveal="fade" data-reveal-delay="0.2">
+        <span>Book Your Night</span>
+      </a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ============================================================
+     STARGAZING — "The Observatory"
+     A page that behaves like an instrument, not a brochure.
+     ============================================================ */
+
+  /* --- HERO --- */
+  .sg-hero {
+    position: relative;
+    height: 240vh;            /* scroll distance for the zoom-out */
+    background: var(--void);
+  }
+
+  .sg-hero__stage {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 80% at 50% 120%, rgba(232, 148, 74, 0.05), transparent 60%),
+      var(--void);
+  }
+
+  .sg-hero__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .sg-hero__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    pointer-events: none;
+    z-index: 2;
+    padding-inline: var(--container-pad);
+  }
+
+  .sg-hero__eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    color: var(--starlight-dim);
+    margin-bottom: var(--space-md);
+    padding-left: 0.4em;
+  }
+
+  .sg-hero__title {
+    font-size: var(--fs-hero);
+    line-height: 1.05;
+    margin: 0;
+    text-shadow: 0 0 40px rgba(6, 6, 8, 0.8);
+  }
+
+  .sg-hero__hint {
+    margin-top: var(--space-lg);
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--starlight-dim);
+  }
+
+  .sg-hero__hint-touch { display: none; }
+
+  .sg-hero__label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -140%);
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--duration-base) ease;
+    z-index: 3;
+    width: max-content;
+    max-width: 240px;
+  }
+
+  .sg-hero__label-name {
+    display: block;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--fs-lg);
+    color: var(--starlight);
+    letter-spacing: 0.02em;
+  }
+
+  .sg-hero__label-myth {
+    display: block;
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    color: var(--starlight-dim);
+    margin-top: 0.25rem;
+    letter-spacing: 0.02em;
+  }
+
+  .sg-hero__outro {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2;
+    padding-inline: var(--container-pad);
+  }
+
+  .sg-hero__outro h2 {
+    font-size: var(--fs-3xl);
+    line-height: 1.1;
+  }
+
+  .sg-hero .scroll-indicator {
+    z-index: 3;
+  }
+
+  /* --- BORTLE compare --- */
+  .sg-why__intro {
+    max-width: 60ch;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .sg-why__intro h2 {
+    font-size: var(--fs-2xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .sg-why__intro p {
+    color: var(--starlight-dim);
+    line-height: 1.8;
+  }
+
+  .sg-compare {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 12 / 5;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    cursor: ew-resize;
+    user-select: none;
+    touch-action: pan-y;
+    box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.9);
+  }
+
+  .sg-compare__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .sg-compare__tag {
+    position: absolute;
+    top: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    font-family: var(--font-body);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .sg-compare__tag--city { left: var(--space-md); }
+  .sg-compare__tag--novae { right: var(--space-md); text-align: right; }
+
+  .sg-compare__place {
+    font-size: var(--fs-sm);
+    letter-spacing: 0.05em;
+    color: var(--starlight);
+  }
+
+  .sg-compare__bortle {
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--starlight-dim);
+  }
+
+  .sg-compare__tag--novae .sg-compare__bortle { color: var(--ember); }
+
+  .sg-compare__counter {
+    position: absolute;
+    right: var(--space-md);
+    bottom: var(--space-md);
+    text-align: right;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .sg-compare__num {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--fs-2xl);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--starlight);
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.9);
+  }
+
+  .sg-compare__cap { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9); }
+
+  .sg-compare__cap {
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--starlight-dim);
+  }
+
+  .sg-compare__handle {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 100%;
+    width: 44px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    cursor: ew-resize;
+    touch-action: none;
+  }
+
+  .sg-compare__handle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: rgba(240, 235, 227, 0.6);
+    box-shadow: 0 0 12px rgba(240, 235, 227, 0.4);
+  }
+
+  .sg-compare__grip {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(6, 6, 8, 0.5);
+    border: 1px solid rgba(240, 235, 227, 0.6);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  }
+
+  .sg-compare__grip::before,
+  .sg-compare__grip::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-block: 5px solid transparent;
+  }
+
+  .sg-compare__grip::before {
+    left: 11px;
+    border-right: 7px solid rgba(240, 235, 227, 0.8);
+  }
+
+  .sg-compare__grip::after {
+    right: 11px;
+    border-left: 7px solid rgba(240, 235, 227, 0.8);
+  }
+
+  .sg-compare__handle:hover .sg-compare__grip,
+  .sg-compare__handle:focus-visible .sg-compare__grip {
+    transform: scale(1.12);
+    border-color: var(--ember);
+    outline: none;
+  }
+
+  /* Bortle scale bar */
+  .sg-scale {
+    margin-top: var(--space-2xl);
+  }
+
+  .sg-scale__bar {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    border-radius: var(--radius-pill);
+    overflow: visible;
+    height: 10px;
+    background: linear-gradient(90deg,
+      #05060a 0%, #0a0d16 22%, #17203a 40%,
+      #33405f 58%, #6b6f7d 74%, #b09a7a 88%, #e8c07a 100%);
+    position: relative;
+  }
+
+  .sg-scale__seg {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .sg-scale__num {
+    position: absolute;
+    top: 16px;
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    color: var(--starlight-dim);
+  }
+
+  .sg-scale__seg--active::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--ember);
+    box-shadow: 0 0 0 4px rgba(232, 148, 74, 0.25), 0 0 20px rgba(232, 148, 74, 0.6);
+  }
+
+  .sg-scale__flag {
+    position: absolute;
+    bottom: 26px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ember);
+  }
+
+  .sg-scale__ends {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--space-lg);
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--starlight-faint);
+  }
+
+  /* --- THROUGH THE EYEPIECE --- */
+  .sg-scope__spread {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: var(--space-3xl);
+    align-items: center;
+  }
+
+  .sg-scope__viewer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .sg-scope__eyepiece {
+    position: relative;
+    width: min(420px, 80vw);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #000;
+    box-shadow:
+      inset 0 0 0 2px rgba(240, 235, 227, 0.08),
+      inset 0 0 60px rgba(0, 0, 0, 0.9),
+      0 0 0 10px rgba(240, 235, 227, 0.02),
+      0 40px 90px -40px rgba(0, 0, 0, 0.9);
+  }
+
+  .sg-scope__eyepiece canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity var(--duration-base) ease;
+  }
+
+  .sg-scope__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: 50% 50%;
+    /* Per-target apparent size (set by JS) so each object reads as a small,
+       distant subject in the field rather than filling the eyepiece. */
+    transform: scale(var(--eye-scale, 0.75));
+    /* Fade the source frame's straight edges into the black field — a soft
+       field-stop vignette so rectangular / mosaic borders never show. */
+    -webkit-mask-image: radial-gradient(circle closest-side at 50% 50%, #000 72%, transparent 94%);
+    mask-image: radial-gradient(circle closest-side at 50% 50%, #000 72%, transparent 94%);
+    opacity: 0;
+    transition: opacity 0.5s ease, filter 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+  }
+
+  .sg-scope__img.is-shown { opacity: 1; }
+  .sg-scope__img.is-focusing { filter: blur(16px); transform: scale(calc(var(--eye-scale, 0.75) * 1.12)); opacity: 0.35; }
+
+  .sg-scope__credit {
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--starlight-faint);
+    text-align: center;
+    max-width: 34ch;
+  }
+
+  .sg-scope__ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: inset 0 0 70px 20px rgba(0, 0, 0, 0.85);
+  }
+
+  .sg-scope__reticle {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .sg-scope__reticle::before,
+  .sg-scope__reticle::after {
+    content: '';
+    position: absolute;
+    background: rgba(240, 235, 227, 0.15);
+  }
+
+  .sg-scope__reticle::before { left: 50%; top: 12%; bottom: 12%; width: 1px; transform: translateX(-50%); }
+  .sg-scope__reticle::after { top: 50%; left: 12%; right: 12%; height: 1px; transform: translateY(-50%); }
+
+  .sg-scope__panel h2 {
+    font-size: var(--fs-2xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .sg-scope__panel > p {
+    color: var(--starlight-dim);
+    line-height: 1.8;
+    margin-bottom: var(--space-lg);
+  }
+
+  .sg-scope__targets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+  }
+
+  .sg-scope__target {
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5em 1em;
+    border: 1px solid var(--starlight-faint);
+    border-radius: var(--radius-pill);
+    color: var(--starlight-dim);
+    transition: all var(--duration-fast) ease;
+  }
+
+  .sg-scope__target:hover {
+    color: var(--starlight);
+    border-color: var(--starlight-dim);
+  }
+
+  .sg-scope__target.is-active {
+    color: var(--void);
+    background: var(--ember);
+    border-color: var(--ember);
+  }
+
+  .sg-scope__name {
+    font-size: var(--fs-xl);
+    margin-bottom: 0.1rem;
+  }
+
+  .sg-scope__desc {
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ember);
+    margin-bottom: var(--space-md);
+  }
+
+  .sg-scope__facts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .sg-scope__facts dt {
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--starlight-dim);
+    margin-bottom: 0.15rem;
+  }
+
+  .sg-scope__facts dd {
+    font-size: var(--fs-sm);
+    color: var(--starlight);
+    line-height: 1.6;
+  }
+
+  /* --- TONIGHT'S SKY --- */
+  .sg-tonight__lead {
+    color: var(--starlight-dim);
+    max-width: 48ch;
+    margin: var(--space-md) auto var(--space-2xl);
+  }
+
+  .sg-tonight__months {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .sg-month {
+    font-family: var(--font-body);
+    font-size: var(--fs-sm);
+    letter-spacing: 0.05em;
+    width: 3.4em;
+    padding: 0.5em 0;
+    border: 1px solid var(--starlight-faint);
+    border-radius: var(--radius-sm);
+    color: var(--starlight-dim);
+    transition: all var(--duration-fast) ease;
+  }
+
+  .sg-month:hover { color: var(--starlight); border-color: var(--starlight-dim); }
+
+  .sg-month.is-active {
+    color: var(--void);
+    background: var(--starlight);
+    border-color: var(--starlight);
+  }
+
+  .sg-tonight__spread {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: var(--space-3xl);
+    align-items: center;
+  }
+
+  /* Orrery */
+  .sg-orrery {
+    position: relative;
+    aspect-ratio: 1;
+    width: min(360px, 70vw);
+    margin-inline: auto;
+    display: grid;
+    place-items: center;
+  }
+
+  .sg-orrery__sun {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--ember);
+    box-shadow: 0 0 24px 6px rgba(232, 148, 74, 0.5);
+  }
+
+  .sg-orrery__ring {
+    position: absolute;
+    border: 1px solid var(--starlight-faint);
+    border-radius: 50%;
+    animation: orrery-spin linear infinite;
+  }
+
+  .sg-orrery__planet {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+  }
+
+  .sg-orrery__planet--ring::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 210%;
+    height: 210%;
+    transform: translate(-50%, -50%) rotate(18deg) scaleY(0.42);
+    border: 1px solid rgba(230, 207, 160, 0.7);
+    border-radius: 50%;
+  }
+
+  @keyframes orrery-spin { to { transform: rotate(360deg); } }
+
+  .sg-tonight__panel {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sg-fact {
+    display: grid;
+    grid-template-columns: 12rem 1fr;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+    border-top: 1px solid var(--starlight-faint);
+    align-items: baseline;
+  }
+
+  .sg-fact:last-child { border-bottom: 1px solid var(--starlight-faint); }
+
+  .sg-fact__key {
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--starlight-dim);
+  }
+
+  .sg-fact__val {
+    font-family: var(--font-display);
+    font-size: var(--fs-md);
+    color: var(--starlight);
+    transition: opacity var(--duration-fast) ease;
+  }
+
+  /* --- TIMELINE --- */
+  .sg-timeline__track {
+    position: relative;
+    margin-top: var(--space-3xl);
+  }
+
+  .sg-timeline__line,
+  .sg-timeline__fill {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    transform: translateX(-50%);
+  }
+
+  .sg-timeline__line { background: var(--starlight-faint); }
+
+  .sg-timeline__fill {
+    background: linear-gradient(var(--ember), var(--ember-dim));
+    box-shadow: 0 0 12px rgba(232, 148, 74, 0.5);
+    transform: translateX(-50%) scaleY(0);
+    transform-origin: top;
+    height: 100%;
+  }
+
+  .sg-tl {
+    position: relative;
+    width: 50%;
+    padding: var(--space-lg) var(--space-2xl);
+    margin-bottom: var(--space-lg);
+  }
+
+  .sg-tl--left { left: 0; text-align: right; }
+  .sg-tl--right { left: 50%; text-align: left; }
+
+  .sg-tl__dot {
+    position: absolute;
+    top: calc(var(--space-lg) + 0.4em);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--void);
+    border: 1px solid var(--ember-dim);
+    z-index: 1;
+  }
+
+  .sg-tl--left .sg-tl__dot { right: calc(var(--space-2xl) * -1 + 44px); transform: translateX(50%); right: -6px; }
+  .sg-tl--right .sg-tl__dot { left: -6px; }
+
+  .sg-tl__time {
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    font-weight: 300;
+    color: var(--ember);
+    display: block;
+    line-height: 1;
+    margin-bottom: var(--space-xs);
+  }
+
+  .sg-tl__body h3 { font-size: var(--fs-md); margin-bottom: 0.3rem; }
+  .sg-tl__body p { color: var(--starlight-dim); font-size: var(--fs-sm); line-height: 1.7; margin-inline: 0; }
+  .sg-tl--left .sg-tl__body p { margin-left: auto; }
+
+  /* --- IMAGE BAND --- */
+  .sg-band { padding-block: var(--space-xl); }
+
+  .sg-band__grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    gap: var(--space-md);
+  }
+
+  .sg-band__item {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+  }
+
+  .sg-band__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .sg-band__item:hover img { transform: scale(1.05); }
+
+  /* --- FIELD NOTES --- */
+  .sg-notes h2 { font-size: var(--fs-2xl); margin-bottom: var(--space-2xl); }
+
+  .sg-notes__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .sg-note {
+    border-top: 1px solid var(--starlight-faint);
+    padding-top: var(--space-lg);
+  }
+
+  .sg-note__num {
+    font-family: var(--font-display);
+    font-size: var(--fs-2xl);
+    font-weight: 300;
+    color: var(--starlight-faint);
+    display: block;
+    margin-bottom: var(--space-sm);
+    line-height: 1;
+  }
+
+  .sg-note h3 { font-size: var(--fs-md); margin-bottom: 0.4rem; line-height: 1.3; }
+  .sg-note p { color: var(--starlight-dim); font-size: var(--fs-sm); line-height: 1.7; }
+
+  /* --- CTA --- */
+  .sg-cta__moon {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--starlight-dim);
+    margin-bottom: var(--space-lg);
+    margin-inline: auto;
+  }
+
+  .sg-cta__moon-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #2a2a30, #0a0a0c);
+    box-shadow: inset -3px -3px 5px rgba(0,0,0,0.6), 0 0 12px rgba(240,235,227,0.15);
+  }
+
+  .sg-cta h2 { font-size: var(--fs-3xl); margin-bottom: var(--space-md); }
+
+  .sg-cta__sub {
+    color: var(--starlight-dim);
+    font-size: var(--fs-md);
+    max-width: 45ch;
+    margin-inline: auto;
+    margin-bottom: var(--space-xl);
+  }
+
+  /* --- Responsive --- */
+  @media (max-width: 1024px) {
+    .sg-notes__grid { grid-template-columns: repeat(2, 1fr); }
+    .sg-scope__spread { gap: var(--space-2xl); }
+  }
+
+  @media (hover: none) {
+    .sg-hero__hint-desk { display: none; }
+    .sg-hero__hint-touch { display: inline; }
+  }
+
+  @media (max-width: 768px) {
+    .sg-hero { height: 200vh; }
+    .sg-compare { aspect-ratio: 4 / 5; }
+    .sg-scope__spread,
+    .sg-tonight__spread {
+      grid-template-columns: 1fr;
+      gap: var(--space-2xl);
+    }
+    .sg-orrery { width: min(280px, 70vw); }
+    .sg-fact { grid-template-columns: 1fr; gap: 0.25rem; }
+    .sg-band__grid { grid-template-columns: 1fr; }
+    .sg-notes__grid { grid-template-columns: 1fr; gap: var(--space-lg); }
+
+    /* Timeline collapses to a single left rail */
+    .sg-timeline__line,
+    .sg-timeline__fill { left: 6px; }
+    .sg-tl { width: 100%; left: 0 !important; text-align: left !important; padding: var(--space-md) 0 var(--space-md) var(--space-xl); }
+    .sg-tl--left .sg-tl__dot,
+    .sg-tl--right .sg-tl__dot { left: 1px; right: auto; transform: none; }
+    .sg-tl--left .sg-tl__body p { margin-left: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sg-orrery__ring { animation: none; }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ---------- shared helpers ----------
+  const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+  const smooth = (e0: number, e1: number, x: number) => {
+    const t = clamp((x - e0) / (e1 - e0));
+    return t * t * (3 - 2 * t);
+  };
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  function whenReady(cb: () => void) {
+    if (document.documentElement.classList.contains('preloader-done')) { cb(); return; }
+    let done = false;
+    const run = () => { if (done) return; done = true; cb(); };
+    window.addEventListener('preloader:complete', run, { once: true });
+    setTimeout(run, 1000);
+  }
+
+  function fit(canvas: HTMLCanvasElement) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const r = canvas.getBoundingClientRect();
+    const w = Math.max(1, r.width);
+    const h = Math.max(1, r.height);
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    const ctx = canvas.getContext('2d')!;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx, w, h };
+  }
+
+  // Pre-render a soft "star band" (Milky Way / dense field) to an offscreen canvas.
+  function makeBand(len: number, thick: number) {
+    const off = document.createElement('canvas');
+    off.width = Math.max(2, Math.floor(len));
+    off.height = Math.max(2, Math.floor(thick));
+    const c = off.getContext('2d')!;
+    const n = Math.floor((len * thick) / 90);
+    for (let i = 0; i < n; i++) {
+      const x = Math.random() * len;
+      const g = ((Math.random() + Math.random() + Math.random()) / 1.5) - 1; // ~gaussian -1..1
+      const y = thick / 2 + g * thick * 0.36;
+      const b = Math.max(0, 1 - Math.abs(g));
+      const dust = 0.35 + 0.65 * (Math.sin(x * 0.012) * 0.5 + 0.5);
+      const a = b * 0.5 * dust * (0.4 + Math.random() * 0.6);
+      if (a < 0.02) continue;
+      const sz = Math.random() * 1.3 + 0.2;
+      const tint = Math.random();
+      const cr = 240, cg = 238 - tint * 20, cb = 230 - tint * 30;
+      c.fillStyle = `rgba(${cr},${cg},${cb},${a})`;
+      c.beginPath();
+      c.arc(x, y, sz, 0, Math.PI * 2);
+      c.fill();
+    }
+    return off;
+  }
+
+  // Compact spiral/elliptical galaxy sprite (used by hero zoom-out + Andromeda eyepiece).
+  function makeGalaxy(size: number, spiral: boolean, tilt: number) {
+    const dim = Math.ceil(size * 2.6);
+    const off = document.createElement('canvas');
+    off.width = dim; off.height = dim;
+    const c = off.getContext('2d')!;
+    const cx = dim / 2, cy = dim / 2;
+    const core = c.createRadialGradient(cx, cy, 0, cx, cy, size * 0.4);
+    core.addColorStop(0, 'rgba(255,248,235,0.7)');
+    core.addColorStop(0.4, 'rgba(255,225,180,0.2)');
+    core.addColorStop(1, 'rgba(0,0,0,0)');
+    c.fillStyle = core;
+    c.beginPath(); c.arc(cx, cy, size * 0.4, 0, Math.PI * 2); c.fill();
+    const count = Math.floor(size * 10);
+    for (let i = 0; i < count; i++) {
+      let px: number, py: number, b: number;
+      if (spiral) {
+        const arm = (Math.random() * 2) | 0;
+        const t = Math.random();
+        const r = t * size;
+        const th = arm * Math.PI + t * 3.4;
+        const sc = (0.06 + t * 0.22) * size;
+        px = cx + Math.cos(th) * r + (Math.random() - 0.5) * sc;
+        py = cy + (Math.sin(th) * r) * tilt + (Math.random() - 0.5) * sc * tilt;
+        b = Math.max(0, 1 - t * 0.7);
+      } else {
+        const u1 = Math.random() || 0.001, u2 = Math.random();
+        const r = Math.sqrt(-2 * Math.log(u1)) * size * 0.3;
+        const th = Math.PI * 2 * u2;
+        px = cx + Math.cos(th) * r;
+        py = cy + Math.sin(th) * r * tilt;
+        b = Math.max(0, 1 - Math.hypot(px - cx, (py - cy) / tilt) / size);
+      }
+      if (b <= 0) continue;
+      const sz = 0.25 + Math.random() * 1.1 * b;
+      c.fillStyle = `rgba(${230 + Math.random() * 25 | 0},${225 + Math.random() * 20 | 0},255,${b * 0.6})`;
+      c.beginPath(); c.arc(px, py, sz, 0, Math.PI * 2); c.fill();
+    }
+    return off;
+  }
+
+  /* ============================================================
+     1) HERO — dark-adapt + night-vision cursor + constellations
+              + scroll-driven zoom-out
+     ============================================================ */
+  (function hero() {
+    const canvas = document.getElementById('sg-sky') as HTMLCanvasElement | null;
+    const stage = document.getElementById('sg-hero-stage');
+    const title = document.getElementById('sg-hero-title');
+    const hint = document.getElementById('sg-hero-hint');
+    const outro = document.getElementById('sg-hero-outro');
+    const cue = document.getElementById('sg-hero-cue');
+    const label = document.getElementById('sg-constel-label');
+    const labelName = label?.querySelector('.sg-hero__label-name') as HTMLElement | null;
+    const labelMyth = label?.querySelector('.sg-hero__label-myth') as HTMLElement | null;
+    if (!canvas || !stage) return;
+
+    let ctx = canvas.getContext('2d')!;
+    let w = 0, h = 0;
+
+    type Star = { x: number; y: number; s: number; a: number; tw: number; to: number };
+    let faint: Star[] = [];
+    let bright: Star[] = [];
+    let band: HTMLCanvasElement | null = null;
+    let bandAngle = -0.4;
+    let bgGalaxies: { x: number; y: number; sprite: HTMLCanvasElement; a: number; rot: number }[] = [];
+
+    // Constellations in local unit-box coords + placement.
+    const CON = [
+      { name: 'Orion', myth: 'The hunter — belt of three, sword below.',
+        cx: 0.30, cy: 0.56, sc: 240,
+        p: [[0.25,0.10],[0.70,0.15],[0.40,0.50],[0.50,0.53],[0.60,0.56],[0.30,0.95],[0.78,0.92]],
+        e: [[0,2],[1,4],[2,3],[3,4],[2,5],[4,6],[0,1]] },
+      { name: 'Ursa Major', myth: 'The great bear — the Plough points north.',
+        cx: 0.73, cy: 0.30, sc: 250,
+        p: [[0.05,0.55],[0.10,0.85],[0.42,0.90],[0.40,0.55],[0.62,0.42],[0.82,0.40],[1.00,0.28]],
+        e: [[0,1],[1,2],[2,3],[3,0],[3,4],[4,5],[5,6]] },
+      { name: 'Cassiopeia', myth: 'The seated queen — a lopsided W.',
+        cx: 0.52, cy: 0.17, sc: 200,
+        p: [[0.00,0.30],[0.25,0.75],[0.50,0.35],[0.75,0.80],[1.00,0.35]],
+        e: [[0,1],[1,2],[2,3],[3,4]] },
+      { name: 'Scorpius', myth: 'The scorpion — red Antares at its heart.',
+        cx: 0.74, cy: 0.68, sc: 250,
+        p: [[0.12,0.08],[0.30,0.12],[0.22,0.30],[0.32,0.48],[0.44,0.63],[0.56,0.75],[0.68,0.85],[0.62,0.97]],
+        e: [[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]] },
+      { name: 'Leo', myth: 'The lion — Regulus at the base of the sickle.',
+        cx: 0.20, cy: 0.30, sc: 220,
+        p: [[0.15,0.15],[0.22,0.32],[0.32,0.42],[0.28,0.58],[0.32,0.66],[0.66,0.46],[0.92,0.56],[0.74,0.80]],
+        e: [[0,1],[1,2],[2,3],[3,4],[4,7],[7,5],[5,6],[6,7],[4,5]] },
+    ];
+    const reveal = CON.map(() => 0);
+    let autoIdx = 0, autoT = 0;
+
+    let mx = -9999, my = -9999;
+    let adaptation = reduced ? 1 : 0.06;
+    let heroP = 0;         // scroll progress across the pinned section
+    let active = true;
+
+    function build() {
+      const f = fit(canvas!);
+      ctx = f.ctx; w = f.w; h = f.h;
+
+      const scaleF = clamp(Math.min(w, h) / 860, 0.6, 1.3);
+
+      faint = [];
+      const fn = Math.floor((w * h) / 1600);
+      for (let i = 0; i < fn; i++) {
+        faint.push({ x: Math.random() * w, y: Math.random() * h, s: Math.random() * 1.3 + 0.2,
+          a: Math.random() * 0.5 + 0.15, tw: Math.random() * 2 + 0.5, to: Math.random() * 6.28 });
+      }
+
+      // bright scatter + constellation anchor stars
+      bright = [];
+      for (let i = 0; i < 26; i++) {
+        bright.push({ x: Math.random() * w, y: Math.random() * h, s: Math.random() * 1.4 + 1,
+          a: Math.random() * 0.4 + 0.55, tw: Math.random() * 1.5 + 0.4, to: Math.random() * 6.28 });
+      }
+      for (const con of CON) {
+        const sc = con.sc * scaleF;
+        for (const pt of con.p) {
+          bright.push({
+            x: con.cx * w + (pt[0] - 0.5) * sc,
+            y: con.cy * h + (pt[1] - 0.5) * sc,
+            s: 1.6, a: 0.9, tw: Math.random() * 1.2 + 0.3, to: Math.random() * 6.28,
+          });
+        }
+      }
+
+      band = makeBand(Math.hypot(w, h) * 1.15, h * 0.55);
+
+      bgGalaxies = [];
+      const gc = 7;
+      for (let i = 0; i < gc; i++) {
+        const size = 26 + Math.random() * 34;
+        bgGalaxies.push({
+          x: (0.12 + Math.random() * 0.76) * w,
+          y: (0.12 + Math.random() * 0.76) * h,
+          sprite: makeGalaxy(size, Math.random() < 0.6, 0.4 + Math.random() * 0.4),
+          a: 0.5 + Math.random() * 0.5,
+          rot: Math.random() * Math.PI,
+        });
+      }
+    }
+
+    function conScreen(con: typeof CON[number], i: number) {
+      const scaleF = clamp(Math.min(w, h) / 860, 0.6, 1.3);
+      const sc = con.sc * scaleF;
+      const startIdx = 26 + CON.slice(0, i).reduce((n, c) => n + c.p.length, 0);
+      return { sc, startIdx, cx: con.cx * w, cy: con.cy * h };
+    }
+
+    function draw(t: number) {
+      requestAnimationFrame(draw);
+      if (!active) return;
+      ctx.clearRect(0, 0, w, h);
+
+      const zoom = 1 - smooth(0.1, 1, heroP) * 0.86;
+      const gp = smooth(0.22, 0.9, heroP);   // background-galaxy fade-in
+      const interactive = heroP < 0.08 && !reduced;
+
+      // background galaxies (screen space) — appear as we pull back
+      if (gp > 0.001) {
+        for (const g of bgGalaxies) {
+          ctx.save();
+          ctx.globalAlpha = gp * g.a;
+          ctx.translate(g.x, g.y);
+          ctx.rotate(g.rot + t * 0.00002);
+          const s = 0.6 + gp * 0.5;
+          ctx.scale(s, s);
+          ctx.drawImage(g.sprite, -g.sprite.width / 2, -g.sprite.height / 2);
+          ctx.restore();
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      // our shrinking sky
+      ctx.save();
+      ctx.translate(w / 2, h / 2);
+      ctx.scale(zoom, zoom);
+      ctx.translate(-w / 2, -h / 2);
+
+      // Milky Way band
+      if (band && adaptation > 0.02) {
+        ctx.save();
+        ctx.globalAlpha = adaptation * 0.85;
+        ctx.translate(w * 0.5, h * 0.42);
+        ctx.rotate(bandAngle);
+        ctx.drawImage(band, -band.width / 2, -band.height / 2);
+        ctx.restore();
+        ctx.globalAlpha = 1;
+      }
+
+      // faint stars (gated by adaptation + cursor lens)
+      const lensR = 150;
+      for (const st of faint) {
+        let a = st.a * adaptation;
+        if (interactive) {
+          const d = Math.hypot(st.x - mx, st.y - my);
+          if (d < lensR) a += st.a * (1 - d / lensR) * 0.9;
+        }
+        a *= 0.55 + 0.45 * Math.sin(t * 0.001 * st.tw + st.to);
+        if (a <= 0.01) continue;
+        ctx.globalAlpha = clamp(a);
+        ctx.fillStyle = '#f0ebe3';
+        ctx.beginPath();
+        ctx.arc(st.x, st.y, st.s, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+
+      // constellation lines
+      for (let i = 0; i < CON.length; i++) {
+        const r = reveal[i];
+        if (r < 0.01) continue;
+        const info = conScreen(CON[i], i);
+        ctx.strokeStyle = `rgba(240,235,227,${r * 0.5})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for (const [a, b] of CON[i].e) {
+          const sa = bright[info.startIdx + a], sb = bright[info.startIdx + b];
+          if (!sa || !sb) continue;
+          ctx.moveTo(sa.x, sa.y);
+          ctx.lineTo(sb.x, sb.y);
+        }
+        ctx.stroke();
+      }
+
+      // bright stars
+      for (const st of bright) {
+        const a = st.a * (0.6 + 0.4 * Math.sin(t * 0.001 * st.tw + st.to));
+        ctx.globalAlpha = clamp(a);
+        ctx.fillStyle = '#f6f2ea';
+        ctx.beginPath();
+        ctx.arc(st.x, st.y, st.s, 0, Math.PI * 2);
+        ctx.fill();
+        if (st.s > 1.3) {
+          ctx.globalAlpha = clamp(a) * 0.12;
+          ctx.beginPath();
+          ctx.arc(st.x, st.y, st.s * 3.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.globalAlpha = 1;
+      ctx.restore();
+
+      // cursor lens glow (screen space, only near top of scroll)
+      if (interactive && mx > -9000) {
+        const g = ctx.createRadialGradient(mx, my, 0, mx, my, lensR);
+        g.addColorStop(0, 'rgba(240,235,227,0.05)');
+        g.addColorStop(1, 'rgba(240,235,227,0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(mx - lensR, my - lensR, lensR * 2, lensR * 2);
+      }
+
+      // ---- constellation hover / auto-cycle state ----
+      let hovered = -1;
+      if (interactive && mx > -9000) {
+        let best = 1e9;
+        for (let i = 0; i < CON.length; i++) {
+          const info = conScreen(CON[i], i);
+          const d = Math.hypot(info.cx - mx, info.cy - my);
+          if (d < info.sc * 0.6 && d < best) { best = d; hovered = i; }
+        }
+      } else if (!interactive || !canHover) {
+        // auto-cycle when not hovering (touch / idle)
+        autoT += 1;
+        if (autoT > 150) { autoT = 0; autoIdx = (autoIdx + 1) % CON.length; }
+        if (heroP < 0.08) hovered = autoIdx;
+      }
+      for (let i = 0; i < CON.length; i++) {
+        reveal[i] += ((i === hovered ? 1 : 0) - reveal[i]) * 0.08;
+      }
+
+      // position the DOM label at the strongest revealed constellation
+      if (label && labelName && labelMyth) {
+        let top = -1, tv = 0.35;
+        for (let i = 0; i < CON.length; i++) if (reveal[i] > tv) { tv = reveal[i]; top = i; }
+        if (top >= 0) {
+          const info = conScreen(CON[top], top);
+          const zx = w / 2 + (info.cx - w / 2) * zoom;
+          const zy = h / 2 + (info.cy - h / 2) * zoom - info.sc * 0.42 * zoom;
+          label.style.transform = `translate(${zx}px, ${zy}px) translate(-50%, -100%)`;
+          if (labelName.textContent !== CON[top].name) {
+            labelName.textContent = CON[top].name;
+            labelMyth.textContent = CON[top].myth;
+          }
+          label.style.opacity = String(clamp((tv - 0.35) / 0.4));
+        } else {
+          label.style.opacity = '0';
+        }
+      }
+    }
+
+    // Overlay transitions driven by scroll progress
+    function applyOverlay() {
+      const p = heroP;
+      if (title) {
+        title.style.opacity = String(clamp(1 - p / 0.22));
+        title.style.transform = `translateY(${-p * 90}px)`;
+      }
+      if (hint) hint.style.opacity = String(clamp(1 - p / 0.1));
+      if (cue) cue.style.opacity = String(clamp(1 - p / 0.1));
+      if (outro) {
+        const o = smooth(0.62, 0.92, p);
+        outro.style.opacity = String(o);
+        outro.style.transform = `translateY(${(1 - o) * 40}px)`;
+      }
+    }
+
+    build();
+    let rt: number;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = window.setTimeout(build, 200) as unknown as number; });
+
+    if (canHover) {
+      window.addEventListener('mousemove', (e) => {
+        const r = canvas.getBoundingClientRect();
+        mx = e.clientX - r.left;
+        my = e.clientY - r.top;
+      });
+      window.addEventListener('mouseout', () => { mx = -9999; my = -9999; });
+    }
+
+    ScrollTrigger.create({
+      trigger: '#sg-hero',
+      start: 'top top',
+      end: 'bottom bottom',
+      pin: '#sg-hero-stage',
+      pinSpacing: true,
+      onUpdate: (self) => { heroP = self.progress; applyOverlay(); },
+      onToggle: (self) => { active = self.isActive; },
+    });
+
+    whenReady(() => {
+      if (reduced) { adaptation = 1; return; }
+      gsap.to({ v: 0.06 }, { v: 1, duration: 13, ease: 'power1.inOut', onUpdate: function () { adaptation = this.targets()[0].v; } });
+    });
+
+    applyOverlay();
+    requestAnimationFrame(draw);
+  })();
+
+  /* ============================================================
+     2) BORTLE — "wipe the city away"
+     ============================================================ */
+  (function bortle() {
+    const wrap = document.getElementById('sg-compare');
+    const canvas = document.getElementById('sg-compare-canvas') as HTMLCanvasElement | null;
+    const handle = document.getElementById('sg-compare-handle');
+    const numEl = document.getElementById('sg-compare-num');
+    if (!wrap || !canvas || !handle || !numEl) return;
+
+    let ctx = canvas.getContext('2d')!;
+    let w = 0, h = 0;
+    let split = 0.5;           // divider fraction (0 = all Novae, 1 = all city)
+    let band: HTMLCanvasElement | null = null;
+    let novaeStars: { x: number; y: number; s: number; a: number; tw: number; to: number }[] = [];
+    let cityStars: { x: number; y: number; s: number; a: number }[] = [];
+    let active = false;
+
+    function build() {
+      const f = fit(canvas!); ctx = f.ctx; w = f.w; h = f.h;
+      novaeStars = [];
+      const n = Math.floor((w * h) / 1400);
+      for (let i = 0; i < n; i++) {
+        novaeStars.push({ x: Math.random() * w, y: Math.random() * h, s: Math.random() * 1.4 + 0.2,
+          a: Math.random() * 0.6 + 0.2, tw: Math.random() * 2 + 0.5, to: Math.random() * 6.28 });
+      }
+      cityStars = [];
+      for (let i = 0; i < 20; i++) {
+        cityStars.push({ x: Math.random() * w, y: Math.random() * h * 0.7, s: Math.random() * 1.1 + 0.4, a: Math.random() * 0.35 + 0.25 });
+      }
+      band = makeBand(Math.hypot(w, h) * 1.1, h * 0.5);
+    }
+
+    function draw(t: number) {
+      const splitX = split * w;
+
+      // ---- Novae sky (full canvas) ----
+      const nb = ctx.createLinearGradient(0, 0, 0, h);
+      nb.addColorStop(0, '#05060a');
+      nb.addColorStop(1, '#0a0c14');
+      ctx.fillStyle = nb;
+      ctx.fillRect(0, 0, w, h);
+
+      if (band) {
+        ctx.save();
+        ctx.globalAlpha = 0.8;
+        ctx.translate(w * 0.55, h * 0.4);
+        ctx.rotate(-0.5);
+        ctx.drawImage(band, -band.width / 2, -band.height / 2);
+        ctx.restore();
+        ctx.globalAlpha = 1;
+      }
+      for (const s of novaeStars) {
+        const a = s.a * (0.55 + 0.45 * Math.sin(t * 0.001 * s.tw + s.to));
+        ctx.globalAlpha = clamp(a);
+        ctx.fillStyle = '#f0ebe3';
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+
+      // ---- City overlay (left of divider) ----
+      if (splitX > 1) {
+        ctx.save();
+        ctx.beginPath(); ctx.rect(0, 0, splitX, h); ctx.clip();
+
+        const cb = ctx.createLinearGradient(0, 0, 0, h);
+        cb.addColorStop(0, '#0b0d16');
+        cb.addColorStop(0.7, '#171520');
+        cb.addColorStop(1, '#2a2230');
+        ctx.fillStyle = cb;
+        ctx.fillRect(0, 0, splitX, h);
+
+        // light dome glow from the horizon
+        const dome = ctx.createRadialGradient(splitX * 0.5, h, 0, splitX * 0.5, h, h * 0.95);
+        dome.addColorStop(0, 'rgba(232,148,74,0.42)');
+        dome.addColorStop(0.5, 'rgba(200,120,70,0.14)');
+        dome.addColorStop(1, 'rgba(232,148,74,0)');
+        ctx.fillStyle = dome;
+        ctx.fillRect(0, 0, splitX, h);
+
+        for (const s of cityStars) {
+          if (s.x > splitX) continue;
+          ctx.globalAlpha = s.a;
+          ctx.fillStyle = '#e9e4da';
+          ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        ctx.restore();
+      }
+
+      // ---- divider line ----
+      ctx.fillStyle = 'rgba(240,235,227,0.5)';
+      ctx.fillRect(splitX - 0.5, 0, 1, h);
+
+      if (active) requestAnimationFrame(draw);
+    }
+
+    function setSplit(frac: number) {
+      split = clamp(frac, 0.04, 0.96);
+      handle!.style.left = split * 100 + '%';
+      handle!.setAttribute('aria-valuenow', String(Math.round((1 - split) * 100)));
+      const stars = Math.round(lerp(23, 2847, 1 - split));
+      numEl!.textContent = stars.toLocaleString('en-US');
+      if (!active) draw(performance.now());  // static redraw if loop paused
+    }
+
+    // pointer drag
+    let dragging = false;
+    function fromEvent(clientX: number) {
+      const r = canvas!.getBoundingClientRect();
+      setSplit((clientX - r.left) / r.width);
+    }
+    wrap.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      wrap.setPointerCapture(e.pointerId);
+      fromEvent(e.clientX);
+    });
+    wrap.addEventListener('pointermove', (e) => { if (dragging) fromEvent(e.clientX); });
+    wrap.addEventListener('pointerup', (e) => { dragging = false; try { wrap.releasePointerCapture(e.pointerId); } catch {} });
+    handle.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { setSplit(split - 0.04); e.preventDefault(); }
+      if (e.key === 'ArrowRight') { setSplit(split + 0.04); e.preventDefault(); }
+    });
+
+    let rt: number;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = window.setTimeout(() => { build(); setSplit(split); }, 200) as unknown as number; });
+
+    build();
+
+    ScrollTrigger.create({
+      trigger: '#sg-compare',
+      start: 'top bottom',
+      end: 'bottom top',
+      onToggle: (self) => {
+        active = self.isActive && !reduced;
+        if (active) requestAnimationFrame(draw);
+        else draw(performance.now());
+      },
+    });
+
+    // Intro nudge: sweep the divider once when it first scrolls in.
+    ScrollTrigger.create({
+      trigger: '#sg-compare',
+      start: 'top 70%',
+      once: true,
+      onEnter: () => {
+        if (reduced) { setSplit(0.5); return; }
+        const o = { v: 0.85 };
+        setSplit(0.85);
+        gsap.to(o, { v: 0.4, duration: 2.2, ease: 'power2.inOut', delay: 0.3,
+          onUpdate: () => setSplit(o.v) });
+      },
+    });
+
+    setSplit(0.5);
+  })();
+
+  /* ============================================================
+     3) THROUGH THE EYEPIECE
+     ============================================================ */
+  (function eyepiece() {
+    const canvas = document.getElementById('sg-scope-canvas') as HTMLCanvasElement | null;
+    const btns = Array.from(document.querySelectorAll<HTMLButtonElement>('.sg-scope__target'));
+    if (!canvas || !btns.length) return;
+
+    const nameEl = document.getElementById('sg-scope-name')!;
+    const subEl = document.getElementById('sg-scope-sub')!;
+    const nakedEl = document.getElementById('sg-scope-naked')!;
+    const teleEl = document.getElementById('sg-scope-tele')!;
+    const capEl = document.getElementById('sg-scope-cap');
+    const img = document.getElementById('sg-scope-img') as HTMLImageElement | null;
+    const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+    // Real photos where we have them; every other target falls back to the
+    // procedural render below.
+    //
+    // To upgrade a target to a real photo (needs a session with network access):
+    //   1. Save the image to public/assets/experiences/space/<id>.jpg
+    //   2. Uncomment its line in IMG (and CAP) below.
+    // Suggested public-domain sources on Wikimedia Commons:
+    //   saturn    — Saturn_during_Equinox.jpg                     (NASA/JPL/Cassini)
+    //   jupiter   — Jupiter_by_Cassini-Huygens.jpg                (NASA/JPL/Cassini)
+    //   moon      — Moon_nearside_LRO.jpg                         (NASA/GSFC/LRO)
+    //   orion     — Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg   (NASA/ESA/Hubble)
+    //   andromeda — Andromeda_Galaxy_(GALEX).jpg                  (NASA/JPL/GALEX)
+    const IMG: Record<string, string> = {
+      milkyway: base + '/assets/home/nightsky.jpeg',
+      saturn:    base + '/assets/experiences/space/saturn.jpg',
+      jupiter:   base + '/assets/experiences/space/jupiter.jpg',
+      moon:      base + '/assets/experiences/space/moon.jpg',
+      orion:     base + '/assets/experiences/space/orion.jpg',
+      andromeda: base + '/assets/experiences/space/andromeda.jpg',
+    };
+    const CAP: Record<string, string> = {
+      milkyway: 'Photographed under the skies at Novae',
+      saturn: 'NASA / JPL / Cassini',
+      jupiter: 'NASA / JPL / Cassini',
+      moon: 'NASA / GSFC / LRO',
+      orion: 'NASA / ESA / Hubble',
+      andromeda: 'NASA / JPL / GALEX',
+    };
+    // Per-target scale for the eyepiece photo. Sources frame their subjects
+    // very differently (Saturn is tiny in a wide ring-spanning frame, the
+    // planets/Moon fill theirs, the deep-sky shots are full-bleed), so each
+    // gets its own factor to read as a small, distant subject in the field.
+    const SCALE: Record<string, number> = {
+      saturn: 0.62,
+      jupiter: 0.72,
+      moon: 0.76,
+      orion: 0.82,
+      andromeda: 0.82,
+    };
+
+    const DATA: Record<string, { name: string; sub: string; naked: string; tele: string }> = {
+      milkyway: { name: 'The Milky Way', sub: 'Our galaxy, edge-on', naked: 'A glowing river of light with dark dust lanes, straight overhead.', tele: 'Resolves into countless individual stars and star clouds.' },
+      saturn: { name: 'Saturn', sub: 'The ringed planet', naked: 'A steady golden point that does not twinkle.', tele: 'Rings snap into view, plus its largest moon, Titan.' },
+      jupiter: { name: 'Jupiter', sub: 'Gas giant', naked: 'The brightest star-like object after Venus.', tele: 'Cloud bands and four Galilean moons in a line.' },
+      moon: { name: 'The Moon', sub: 'Our nearest neighbour', naked: 'Seas and highlands visible to the unaided eye.', tele: 'Craters, mountains and terminator shadows in sharp relief.' },
+      orion: { name: 'Orion Nebula', sub: 'M42 · stellar nursery', naked: 'A faint fuzzy patch in Orion’s sword.', tele: 'Glowing gas clouds cradling the newborn Trapezium stars.' },
+      andromeda: { name: 'Andromeda', sub: 'M31 · nearest galaxy', naked: 'A dim smudge — the farthest thing visible to the naked eye.', tele: 'A vast tilted spiral, 2.5 million light-years away.' },
+    };
+
+    let ctx = canvas.getContext('2d')!;
+    let w = 0, h = 0;
+    let current = 'milkyway';
+    let focus = 1;
+    let active = false;
+    const stars = Array.from({ length: 90 }, () => ({ x: Math.random(), y: Math.random(), s: Math.random() * 1.2 + 0.2, tw: Math.random() * 2 + 0.5, to: Math.random() * 6.28 }));
+    const androSprite = makeGalaxy(70, true, 0.42);
+
+    function build() { const f = fit(canvas!); ctx = f.ctx; w = f.w; h = f.h; }
+
+    function bg(t: number, density = 1) {
+      ctx.fillStyle = '#040507';
+      ctx.fillRect(0, 0, w, h);
+      const n = Math.min(stars.length, Math.floor(stars.length * density));
+      for (let i = 0; i < n; i++) {
+        const s = stars[i];
+        const a = (0.4 + 0.4 * Math.sin(t * 0.001 * s.tw + s.to));
+        ctx.globalAlpha = a;
+        ctx.fillStyle = '#f0ebe3';
+        ctx.beginPath(); ctx.arc(s.x * w, s.y * h, s.s, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function render(t: number) {
+      const cx = w / 2, cy = h / 2;
+      ctx.clearRect(0, 0, w, h);
+      if (IMG[current]) { if (active) requestAnimationFrame(render); return; }
+      ctx.filter = focus < 0.999 ? `blur(${(1 - focus) * 9}px)` : 'none';
+      ctx.save();
+
+      if (current === 'milkyway') {
+        bg(t, 1.4);
+        ctx.save();
+        ctx.translate(cx, cy); ctx.rotate(-0.5);
+        const b = makeBandCached(w * 1.6, h * 0.7);
+        ctx.globalAlpha = 0.9;
+        ctx.drawImage(b, -b.width / 2, -b.height / 2);
+        ctx.restore();
+        ctx.globalAlpha = 1;
+      } else if (current === 'saturn') {
+        bg(t, 0.5);
+        const R = w * 0.16;
+        // rings behind
+        ctx.save();
+        ctx.translate(cx, cy); ctx.rotate(-0.42); ctx.scale(1, 0.32);
+        ctx.strokeStyle = 'rgba(226,196,150,0.9)'; ctx.lineWidth = R * 0.5;
+        ctx.beginPath(); ctx.arc(0, 0, R * 2.0, Math.PI, Math.PI * 2); ctx.stroke();
+        ctx.restore();
+        // planet
+        const pg = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, R * 0.2, cx, cy, R);
+        pg.addColorStop(0, '#f3dcae'); pg.addColorStop(1, '#c69b63');
+        ctx.fillStyle = pg;
+        ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+        // rings front
+        ctx.save();
+        ctx.translate(cx, cy); ctx.rotate(-0.42); ctx.scale(1, 0.32);
+        ctx.strokeStyle = 'rgba(240,214,170,0.95)'; ctx.lineWidth = R * 0.5;
+        ctx.beginPath(); ctx.arc(0, 0, R * 2.0, 0, Math.PI); ctx.stroke();
+        ctx.restore();
+      } else if (current === 'jupiter') {
+        bg(t, 0.5);
+        const R = w * 0.2;
+        ctx.save();
+        ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.clip();
+        const jbands = ['#e6cfa4', '#c39a6b', '#d9bd90', '#b5895a'];
+        for (let i = 0; i < 8; i++) {
+          ctx.fillStyle = jbands[i % jbands.length];
+          ctx.fillRect(cx - R, cy - R + (i / 8) * 2 * R, 2 * R, (2 * R) / 8 + 1);
+        }
+        // great red spot
+        ctx.fillStyle = 'rgba(180,90,60,0.8)';
+        ctx.beginPath(); ctx.ellipse(cx + R * 0.3, cy + R * 0.25, R * 0.22, R * 0.13, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+        // shading
+        const sh = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, R * 0.3, cx, cy, R);
+        sh.addColorStop(0, 'rgba(255,255,255,0.12)'); sh.addColorStop(1, 'rgba(0,0,0,0.4)');
+        ctx.fillStyle = sh;
+        ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+        // moons
+        ctx.fillStyle = '#f0ebe3';
+        for (let i = 0; i < 4; i++) {
+          const d = R * (1.5 + i * 0.55) * (i % 2 ? 1 : -1);
+          ctx.beginPath(); ctx.arc(cx + d, cy + (i - 1.5) * 6, 2.2, 0, Math.PI * 2); ctx.fill();
+        }
+      } else if (current === 'moon') {
+        bg(t, 0.3);
+        const R = w * 0.32;
+        const mg = ctx.createRadialGradient(cx - R * 0.25, cy - R * 0.25, R * 0.2, cx, cy, R);
+        mg.addColorStop(0, '#e9e6df'); mg.addColorStop(1, '#a7a49b');
+        ctx.fillStyle = mg;
+        ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+        ctx.save();
+        ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.clip();
+        const seed = [[0.3,0.35,0.5],[0.62,0.3,0.3],[0.55,0.6,0.42],[0.35,0.62,0.28],[0.7,0.55,0.2],[0.45,0.45,0.16]];
+        for (const [sx, sy, sr] of seed) {
+          ctx.fillStyle = 'rgba(120,116,110,0.5)';
+          ctx.beginPath(); ctx.arc(cx + (sx - 0.5) * 2 * R, cy + (sy - 0.5) * 2 * R, sr * R * 0.5, 0, Math.PI * 2); ctx.fill();
+        }
+        // terminator shadow
+        const term = ctx.createLinearGradient(cx - R, 0, cx + R, 0);
+        term.addColorStop(0, 'rgba(0,0,0,0)'); term.addColorStop(0.75, 'rgba(0,0,0,0)'); term.addColorStop(1, 'rgba(0,0,0,0.65)');
+        ctx.fillStyle = term; ctx.fillRect(cx - R, cy - R, 2 * R, 2 * R);
+        ctx.restore();
+      } else if (current === 'orion') {
+        bg(t, 0.7);
+        const blobs = [['rgba(232,120,150,', 0.42, -0.1, -0.05], ['rgba(120,170,240,', 0.34, 0.12, 0.08], ['rgba(210,140,220,', 0.3, 0.0, 0.0]] as const;
+        for (const [col, r, ox, oy] of blobs) {
+          const g = ctx.createRadialGradient(cx + (ox as number) * w, cy + (oy as number) * h, 0, cx + (ox as number) * w, cy + (oy as number) * h, (r as number) * w);
+          g.addColorStop(0, (col as string) + '0.5)');
+          g.addColorStop(1, (col as string) + '0)');
+          ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+        }
+        // trapezium
+        ctx.fillStyle = '#fff';
+        for (const [dx, dy] of [[-6,-4],[6,-2],[-2,6],[4,4]]) {
+          ctx.beginPath(); ctx.arc(cx + dx, cy + dy, 1.8, 0, Math.PI * 2); ctx.fill();
+        }
+      } else if (current === 'andromeda') {
+        bg(t, 0.8);
+        ctx.drawImage(androSprite, cx - androSprite.width / 2, cy - androSprite.height / 2);
+      }
+
+      ctx.restore();
+      ctx.filter = 'none';
+      if (active) requestAnimationFrame(render);
+    }
+
+    // small cache so Milky Way band isn't rebuilt each frame
+    let _band: HTMLCanvasElement | null = null;
+    let _bandKey = '';
+    function makeBandCached(len: number, thick: number) {
+      const key = Math.round(len) + 'x' + Math.round(thick);
+      if (!_band || _bandKey !== key) { _band = makeBand(len, thick); _bandKey = key; }
+      return _band;
+    }
+
+    function select(id: string) {
+      current = id;
+      const d = DATA[id];
+      nameEl.textContent = d.name; subEl.textContent = d.sub; nakedEl.textContent = d.naked; teleEl.textContent = d.tele;
+      btns.forEach((b) => b.classList.toggle('is-active', b.dataset.target === id));
+      if (capEl) capEl.textContent = CAP[id] || 'Illustration — the naked-eye view is subtler';
+
+      // Real image if we have one, else fall back to the procedural render.
+      const src = IMG[id];
+      if (src && img) {
+        img.style.setProperty('--eye-scale', String(SCALE[id] ?? 0.75));
+        if (canvas) canvas.style.opacity = '0';
+        img.classList.add('is-shown');
+        const sharpen = () => requestAnimationFrame(() => requestAnimationFrame(() => img.classList.remove('is-focusing')));
+        if (reduced) { img.classList.remove('is-focusing'); if (img.getAttribute('src') !== src) img.src = src; return; }
+        img.classList.add('is-focusing');
+        if (img.getAttribute('src') === src && img.complete) { sharpen(); }
+        else {
+          img.onload = sharpen;
+          img.onerror = () => { delete IMG[id]; img.classList.remove('is-shown', 'is-focusing'); if (canvas) canvas.style.opacity = '1'; select(id); };
+          img.src = src;
+        }
+        return;
+      }
+
+      if (img) img.classList.remove('is-shown', 'is-focusing');
+      if (canvas) canvas.style.opacity = '1';
+      if (reduced) { focus = 1; if (!active) render(performance.now()); return; }
+      focus = 0.05;
+      gsap.to({ v: 0.05 }, { v: 1, duration: 0.9, ease: 'power2.out', onUpdate: function () { focus = this.targets()[0].v; if (!active) render(performance.now()); } });
+    }
+
+    btns.forEach((b) => b.addEventListener('click', () => select(b.dataset.target!)));
+
+    let rt: number;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = window.setTimeout(() => { build(); if (!active) render(performance.now()); }, 200) as unknown as number; });
+
+    build();
+    ScrollTrigger.create({
+      trigger: '#sg-scope',
+      start: 'top bottom',
+      end: 'bottom top',
+      onToggle: (self) => {
+        active = self.isActive && !reduced;
+        if (active) requestAnimationFrame(render);
+        else render(performance.now());
+      },
+    });
+    select('milkyway');
+  })();
+
+  /* ============================================================
+     4) TONIGHT'S SKY — month selector
+     ============================================================ */
+  (function tonight() {
+    const months = Array.from(document.querySelectorAll<HTMLButtonElement>('.sg-month'));
+    if (!months.length) return;
+    const planets = document.getElementById('sg-fact-planets')!;
+    const shower = document.getElementById('sg-fact-shower')!;
+    const con = document.getElementById('sg-fact-con')!;
+
+    const SKY = [
+      { planets: 'Jupiter, Mars', shower: 'Quadrantids · Jan 3', con: 'Orion · Taurus · Gemini' },
+      { planets: 'Jupiter, Venus', shower: 'Quiet skies', con: 'Orion · Canis Major · Gemini' },
+      { planets: 'Venus, Mars', shower: 'Quiet skies', con: 'Leo · Gemini · Ursa Major' },
+      { planets: 'Venus (dawn)', shower: 'Lyrids · Apr 22', con: 'Leo · Virgo · Ursa Major' },
+      { planets: 'Mars, Venus', shower: 'Eta Aquariids · May 6', con: 'Virgo · Boötes · Scorpius' },
+      { planets: 'Saturn (dawn)', shower: 'Quiet skies', con: 'Scorpius · Sagittarius · Hercules' },
+      { planets: 'Saturn, galactic core', shower: 'δ-Aquariids · Jul 30', con: 'Scorpius · Sagittarius · Cygnus' },
+      { planets: 'Saturn', shower: 'Perseids · Aug 12', con: 'Summer Triangle · Sagittarius' },
+      { planets: 'Saturn, Jupiter', shower: 'Quiet skies', con: 'Cygnus · Pegasus · Aquarius' },
+      { planets: 'Jupiter, Saturn', shower: 'Orionids · Oct 21', con: 'Pegasus · Andromeda · Perseus' },
+      { planets: 'Jupiter, Mars', shower: 'Leonids · Nov 17', con: 'Taurus · Pleiades · Andromeda' },
+      { planets: 'Jupiter, Mars', shower: 'Geminids · Dec 14', con: 'Orion · Taurus · Gemini' },
+    ];
+
+    function pick(i: number) {
+      months.forEach((b) => b.classList.toggle('is-active', Number(b.dataset.month) === i));
+      const d = SKY[i];
+      for (const [el, val] of [[planets, d.planets], [shower, d.shower], [con, d.con]] as const) {
+        el.style.opacity = '0';
+        setTimeout(() => { el.textContent = val; el.style.opacity = '1'; }, 140);
+      }
+    }
+    months.forEach((b) => b.addEventListener('click', () => pick(Number(b.dataset.month))));
+
+    // default to current month
+    pick(new Date().getMonth());
+  })();
+
+  /* ============================================================
+     5) TIMELINE fill
+     ============================================================ */
+  (function timeline() {
+    const fill = document.getElementById('sg-timeline-fill');
+    const track = document.getElementById('sg-timeline-track');
+    if (!fill || !track) return;
+    gsap.fromTo(fill, { scaleY: 0 }, {
+      scaleY: 1, ease: 'none',
+      scrollTrigger: { trigger: track, start: 'top 70%', end: 'bottom 70%', scrub: 0.5 },
+    });
+  })();
+
+  /* ============================================================
+     6) NEW MOON countdown
+     ============================================================ */
+  (function newmoon() {
+    const el = document.getElementById('sg-cta-moon-text');
+    if (!el) return;
+    const SYN = 29.530588853;
+    const ref = Date.UTC(2000, 0, 6, 18, 14) / 86400000; // known new moon in days
+    const now = Date.now() / 86400000;
+    const age = ((now - ref) % SYN + SYN) % SYN;
+    const daysToNew = SYN - age;
+    const nights = Math.round(daysToNew);
+    const next = new Date(Date.now() + daysToNew * 86400000);
+    const md = next.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    if (nights <= 1) el.textContent = 'New moon tonight — the darkest sky of the month';
+    else el.textContent = `Next new moon in ${nights} nights · ${md} — the month’s darkest sky`;
+  })();
+</script>

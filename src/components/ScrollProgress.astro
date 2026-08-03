@@ -1,0 +1,36 @@
+---
+
+---
+
+<div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
+<style>
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--ember), rgba(232, 148, 74, 0.4));
+    z-index: 101;
+    pointer-events: none;
+    transform-origin: left;
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.to('#scroll-progress', {
+    width: '100%',
+    ease: 'none',
+    scrollTrigger: {
+      trigger: document.documentElement,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 0.3,
+    },
+  });
+</script>

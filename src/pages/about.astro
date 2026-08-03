@@ -1,0 +1,360 @@
+---
+import Layout from '@/layouts/Layout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Layout title="About" description="The story of Novae Glamp — born from a love of dark skies, 30 minutes from Hyderabad.">
+  <section class="page-hero section--full">
+    <div class="container">
+      <h1 data-reveal="up">Born from a love<br />of <em>dark skies</em></h1>
+      <p class="page-hero__sub" data-reveal="fade" data-reveal-delay="0.2">
+        What started as a dream became Telangana's most intentional escape.
+      </p>
+    </div>
+    <div class="scroll-indicator" data-reveal="fade" data-reveal-delay="0.5">
+      <span class="scroll-indicator__label">Scroll</span>
+      <span class="scroll-indicator__line"></span>
+    </div>
+  </section>
+
+  <!-- Origin story -->
+  <section class="section abt-story">
+    <div class="abt-story__spread container">
+      <div class="abt-story__media" data-reveal="scale">
+        <img src={`${base}/assets/about/novaeabout.png`} alt="Novae Glamp at dusk" loading="lazy" />
+      </div>
+      <div class="abt-story__text">
+        <h2 data-reveal="up">The story</h2>
+        <p data-reveal="fade" data-reveal-delay="0.1">
+          Novae began with a simple question: where can you see the Milky Way within an hour of Hyderabad? The answer was a quiet stretch of farmland near Bhuvanagiri — Bortle class 3, zero light pollution, and skies so dark they feel ancient.
+        </p>
+        <p data-reveal="fade" data-reveal-delay="0.15">
+          We built Novae Glamp to share that sky. Not a resort with a telescope bolted on, but a place designed from the ground up for darkness — where every light is shielded, every structure is oriented toward the stars, and every experience draws you closer to the night.
+        </p>
+        <p data-reveal="fade" data-reveal-delay="0.2">
+          Today, Novae is Telangana's first dedicated dark-sky glamping retreat. We host families, couples, corporate teams, and solo travellers who want to disconnect from the city and reconnect with something older.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-stars">
+    <span class="section-stars__dot"></span>
+  </div>
+
+  <!-- Values -->
+  <section class="section abt-values">
+    <div class="container">
+      <h2 class="text-center" data-reveal="up">What we stand for</h2>
+      <div class="abt-values__grid">
+        <div class="abt-value" data-reveal="up" data-reveal-delay="0">
+          <h3>Dark-sky<br />preservation</h3>
+          <p>Every light at Novae is warm-spectrum and fully shielded. We protect the night for our guests and our ecosystem.</p>
+        </div>
+        <div class="abt-value" data-reveal="up" data-reveal-delay="0.08">
+          <h3>Intentional<br />hospitality</h3>
+          <p>No TVs. No background music. Just fire, sky, and conversation. We strip away the noise so you can hear the night.</p>
+        </div>
+        <div class="abt-value" data-reveal="up" data-reveal-delay="0.16">
+          <h3>Off-grid<br />by design</h3>
+          <p>100% off the light grid after sunset. Solar-powered essentials. Darkness isn't a compromise here — it's the point.</p>
+        </div>
+        <div class="abt-value" data-reveal="up" data-reveal-delay="0.24">
+          <h3>Rooted in<br />the land</h3>
+          <p>We sit on working farmland in Maryala village. Local food, local staff, local stories. The land is part of the experience.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-stars">
+    <span class="section-stars__dot"></span>
+  </div>
+
+  <!-- Location -->
+  <section class="section abt-location">
+    <div class="abt-location__spread container">
+      <div class="abt-location__text">
+        <h2 data-reveal="up">30 minutes from<br />the city. A <em>universe</em> away.</h2>
+        <p data-reveal="fade" data-reveal-delay="0.1">
+          Novae sits just off the Hyderabad–Warangal highway, near Bhuvanagiri in Yadadri district. Close enough for a weeknight escape, remote enough that the Milky Way fills your entire field of vision.
+        </p>
+        <div class="abt-location__stats" data-reveal="fade" data-reveal-delay="0.2">
+          <div class="abt-stat">
+            <span class="abt-stat__value text-ember">3</span>
+            <span class="abt-stat__label">Bortle class</span>
+          </div>
+          <div class="abt-stat">
+            <span class="abt-stat__value text-ember">2,847</span>
+            <span class="abt-stat__label">Visible stars</span>
+          </div>
+          <div class="abt-stat">
+            <span class="abt-stat__value text-ember">30</span>
+            <span class="abt-stat__label">Min from Hyderabad</span>
+          </div>
+        </div>
+      </div>
+      <div class="abt-location__media" data-reveal="scale">
+        <img src={`${base}/assets/home/nightsky.jpeg`} alt="Night sky over Novae" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery strip -->
+  <section class="section abt-glimpse">
+    <div class="container">
+      <h2 class="text-center" data-reveal="up">A glimpse of Novae</h2>
+      <div class="abt-glimpse__grid">
+        <div class="abt-glimpse__item abt-glimpse__item--tall" data-reveal="scale">
+          <img src={`${base}/assets/farm/farm.png`} alt="Novae farmland" loading="lazy" />
+        </div>
+        <div class="abt-glimpse__item" data-reveal="scale" data-reveal-delay="0.06">
+          <img src={`${base}/assets/outdoor.png`} alt="Outdoor seating" loading="lazy" />
+        </div>
+        <div class="abt-glimpse__item" data-reveal="scale" data-reveal-delay="0.12">
+          <img src={`${base}/assets/telescope.png`} alt="Telescope setup" loading="lazy" />
+        </div>
+        <div class="abt-glimpse__item abt-glimpse__item--tall" data-reveal="scale" data-reveal-delay="0.08">
+          <img src={`${base}/assets/novaestay.png`} alt="Novae stay at night" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section--full abt-cta">
+    <div class="container text-center">
+      <h2 data-reveal="up">Come see the sky<br />we fell in love with.</h2>
+      <div class="abt-cta__actions" data-reveal="fade" data-reveal-delay="0.15">
+        <a href={`${base}/stays`} class="btn"><span>Explore Stays</span></a>
+        <a href={`${base}/contact`} class="btn btn--ember"><span>Book Now</span></a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-hero {
+    padding-top: calc(var(--nav-h) + var(--space-2xl));
+    text-align: center;
+    position: relative;
+  }
+
+  .page-hero__sub {
+    margin-top: var(--space-md);
+    font-size: var(--fs-lg);
+    color: var(--starlight-dim);
+    max-width: 50ch;
+    margin-inline: auto;
+  }
+
+  /* --- Story --- */
+  .abt-story__spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .abt-story__media {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+
+  .abt-story__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .abt-story__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .abt-story__text h2 {
+    font-size: var(--fs-2xl);
+  }
+
+  .abt-story__text p {
+    color: var(--starlight-dim);
+    line-height: 1.8;
+  }
+
+  /* --- Values --- */
+  .abt-values h2 {
+    font-size: var(--fs-2xl);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .abt-values__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .abt-value {
+    border-top: 1px solid var(--starlight-faint);
+    padding-top: var(--space-lg);
+  }
+
+  .abt-value h3 {
+    font-size: var(--fs-lg);
+    margin-bottom: var(--space-sm);
+    line-height: 1.3;
+  }
+
+  .abt-value p {
+    color: var(--starlight-dim);
+    font-size: var(--fs-sm);
+    line-height: 1.7;
+  }
+
+  /* --- Location --- */
+  .abt-location__spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .abt-location__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .abt-location__text h2 {
+    font-size: var(--fs-2xl);
+  }
+
+  .abt-location__text p {
+    color: var(--starlight-dim);
+    line-height: 1.8;
+  }
+
+  .abt-location__stats {
+    display: flex;
+    gap: var(--space-xl);
+    margin-top: var(--space-sm);
+  }
+
+  .abt-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .abt-stat__value {
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    font-weight: 300;
+  }
+
+  .abt-stat__label {
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--starlight-dim);
+  }
+
+  .abt-location__media {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+
+  .abt-location__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* --- Glimpse gallery --- */
+  .abt-glimpse h2 {
+    font-size: var(--fs-2xl);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .abt-glimpse__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto;
+    gap: var(--space-md);
+  }
+
+  .abt-glimpse__item {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+  }
+
+  .abt-glimpse__item--tall {
+    grid-row: span 2;
+    aspect-ratio: auto;
+  }
+
+  .abt-glimpse__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .abt-glimpse__item:hover img {
+    transform: scale(1.04);
+  }
+
+  /* --- CTA --- */
+  .abt-cta h2 {
+    font-size: var(--fs-3xl);
+    margin-bottom: var(--space-xl);
+  }
+
+  .abt-cta__actions {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+  }
+
+  /* --- Responsive --- */
+  @media (max-width: 1024px) {
+    .abt-values__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .abt-story__spread,
+    .abt-location__spread {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+
+    .abt-values__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+
+    .abt-glimpse__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .abt-glimpse__item--tall {
+      grid-row: span 1;
+      aspect-ratio: 3 / 2;
+    }
+
+    .abt-location__stats {
+      flex-wrap: wrap;
+      gap: var(--space-lg);
+    }
+
+    .abt-cta__actions {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>

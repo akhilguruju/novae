@@ -1,0 +1,335 @@
+---
+import Layout from '@/layouts/Layout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const stays = [
+  {
+    id: 'luxury-tepee',
+    num: '01',
+    name: 'Luxury Tepee',
+    price: '₹14,999',
+    unit: '/night',
+    desc: 'Step inside a handcrafted tepee that blends ancient form with modern luxury. King-sized comfort meets canvas walls — fall asleep to the sound of wind through the plains.',
+    amenities: ['King bed', 'Private deck', 'Attached washroom', 'Hot shower', 'AC', 'Charging points'],
+    hero: '/assets/stays-page/tipee.jpg',
+    gallery: ['/assets/tipi-stay/tipi-inside.png', '/assets/tipi-stay/tippi01.png', '/assets/tipi-stay/tippi03.png'],
+  },
+  {
+    id: 'american-tent',
+    num: '02',
+    name: 'American Tent',
+    price: '₹11,999',
+    unit: '/night',
+    desc: 'Spacious canvas tents on raised wooden platforms, with wide-open views of the surrounding farmland. Wake up to golden light flooding through the mesh windows.',
+    amenities: ['Double bed', 'Attached washroom', 'Hot shower', 'Cross ventilation', 'Charging points'],
+    hero: '/assets/stays-page/american.jpg',
+    gallery: ['/assets/american/american01.png', '/assets/american/american03.png', '/assets/american/washroom.png'],
+  },
+  {
+    id: 'suite-room',
+    num: '03',
+    name: 'Suite Room',
+    price: '₹11,999',
+    unit: '/night',
+    desc: 'The dark-sky experience with the comfort of a traditional room. Climate-controlled, fully furnished, and just steps from the observation deck.',
+    amenities: ['Double bed', 'AC', 'Private washroom', 'Hot shower', 'Mini fridge', 'Work desk'],
+    hero: '/assets/stays-page/suite_room.jpg',
+    gallery: ['/assets/suite-room/suit-room.png'],
+  },
+  {
+    id: 'hut-tent',
+    num: '04',
+    name: 'Hut Tent',
+    price: '₹3,499',
+    unit: '/person',
+    desc: 'Rustic thatched-roof huts with earth-toned interiors. Perfect for solo travellers and small groups looking for an authentic outdoor feel.',
+    amenities: ['Single/Twin beds', 'Shared washroom', 'Fan', 'Charging points', 'Common lounge'],
+    hero: '/assets/stays-page/hut.jpg',
+    gallery: ['/assets/home/hut1.png', '/assets/home/hut2.png'],
+  },
+  {
+    id: 'dormitory',
+    num: '05',
+    name: 'Dormitory',
+    price: '₹2,999',
+    unit: '/person',
+    desc: 'Budget-friendly shared bunks in a clean, well-ventilated space. Meet fellow stargazers and share the night sky.',
+    amenities: ['Bunk beds', 'Shared washroom', 'Lockers', 'Charging points', 'Common area'],
+    hero: '/assets/stays-page/dorm.jpg',
+    gallery: [],
+  },
+  {
+    id: 'camping',
+    num: '06',
+    name: 'Camping',
+    price: '₹2,299',
+    unit: '/person',
+    desc: 'The most immersive way to experience Novae — nothing between you and 2,847 stars. Bring your own tent or use ours.',
+    amenities: ['Tent provided', 'Shared washroom', 'Campfire access', 'Sleeping bag', 'Ground mat'],
+    hero: '/assets/stays-page/camping.jpg',
+    gallery: [],
+  },
+];
+---
+
+<Layout title="Stays" description="Six ways to sleep under the stars at Novae Glamp — from luxury tepees to open-sky camping.">
+  <section class="page-hero section--full">
+    <div class="container">
+      <h1 data-reveal="up">Find your <em>night</em></h1>
+      <p class="page-hero__sub" data-reveal="fade" data-reveal-delay="0.2">
+        Six ways to sleep under the stars — choose your sky.
+      </p>
+    </div>
+    <div class="scroll-indicator" data-reveal="fade" data-reveal-delay="0.5">
+      <span class="scroll-indicator__label">Scroll</span>
+      <span class="scroll-indicator__line"></span>
+    </div>
+  </section>
+
+  {stays.map((stay, i) => (
+    <section id={stay.id} class={`stay section ${i % 2 !== 0 ? 'stay--flip' : ''}`}>
+      <div class="stay__spread container">
+        <div class="stay__media" data-reveal="scale">
+          <img src={`${base}${stay.hero}`} alt={stay.name} loading="lazy" />
+        </div>
+        <div class="stay__content">
+          <span class="stay__num" data-reveal="fade">{stay.num}</span>
+          <h2 data-reveal="up">{stay.name}</h2>
+          <p class="stay__desc" data-reveal="fade" data-reveal-delay="0.1">{stay.desc}</p>
+          <ul class="stay__amenities" data-reveal="fade" data-reveal-delay="0.2">
+            {stay.amenities.map((a) => (
+              <li>{a}</li>
+            ))}
+          </ul>
+          <div class="stay__price" data-reveal="fade" data-reveal-delay="0.3">
+            From <strong>{stay.price}</strong>{stay.unit}
+          </div>
+          <a href={`${base}/contact`} class="btn btn--ember" data-reveal="fade" data-reveal-delay="0.35">
+            <span>Book This Stay</span>
+          </a>
+        </div>
+      </div>
+      {stay.gallery.length > 0 && (
+        <div class="stay__gallery container">
+          {stay.gallery.map((img, gi) => (
+            <div class="stay__gallery-item" data-reveal="scale" data-reveal-delay={String(gi * 0.08)}>
+              <img src={`${base}${img}`} alt={`${stay.name} detail`} loading="lazy" />
+            </div>
+          ))}
+        </div>
+      )}
+      {i < stays.length - 1 && (
+        <div class="section-stars">
+          <span class="section-stars__dot"></span>
+        </div>
+      )}
+    </section>
+  ))}
+
+  <section class="section section--full stays-cta">
+    <div class="container text-center">
+      <h2 data-reveal="up">Not sure which sky<br />is <em>yours?</em></h2>
+      <p class="stays-cta__sub" data-reveal="fade" data-reveal-delay="0.1">
+        Tell us what you're looking for and we'll match you to the perfect stay.
+      </p>
+      <a href={`${base}/contact`} class="btn btn--ember" data-reveal="fade" data-reveal-delay="0.2">
+        <span>Get in Touch</span>
+      </a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-hero {
+    padding-top: calc(var(--nav-h) + var(--space-2xl));
+    text-align: center;
+    position: relative;
+  }
+
+  .page-hero__sub {
+    margin-top: var(--space-md);
+    font-size: var(--fs-lg);
+    color: var(--starlight-dim);
+    max-width: 50ch;
+    margin-inline: auto;
+  }
+
+  /* --- Stay section --- */
+  .stay {
+    padding-block: var(--space-xl);
+  }
+
+  .stay__spread {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .stay--flip .stay__spread {
+    grid-template-columns: 0.9fr 1.1fr;
+  }
+
+  .stay--flip .stay__media {
+    order: 2;
+  }
+
+  .stay--flip .stay__content {
+    order: 1;
+  }
+
+  .stay__media {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+
+  .stay__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .stay__media:hover img {
+    transform: scale(1.04);
+  }
+
+  .stay__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .stay__num {
+    font-family: var(--font-display);
+    font-size: var(--fs-3xl);
+    font-weight: 300;
+    color: var(--starlight-faint);
+    line-height: 1;
+  }
+
+  .stay__content h2 {
+    font-size: var(--fs-2xl);
+  }
+
+  .stay__desc {
+    color: var(--starlight-dim);
+    font-size: var(--fs-base);
+    line-height: 1.8;
+  }
+
+  .stay__amenities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-md);
+    list-style: none;
+  }
+
+  .stay__amenities li {
+    font-size: var(--fs-sm);
+    color: var(--starlight-dim);
+    position: relative;
+    padding-left: 1.2em;
+  }
+
+  .stay__amenities li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--ember);
+    font-weight: 700;
+    font-size: 1.4em;
+    line-height: 1;
+    top: -0.05em;
+  }
+
+  .stay__price {
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    color: var(--starlight-dim);
+  }
+
+  .stay__price strong {
+    color: var(--ember);
+    font-weight: 400;
+  }
+
+  /* --- Gallery row --- */
+  .stay__gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-md);
+    margin-top: var(--space-xl);
+  }
+
+  .stay__gallery-item {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+  }
+
+  .stay__gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .stay__gallery-item:hover img {
+    transform: scale(1.05);
+  }
+
+  /* --- CTA --- */
+  .stays-cta {
+    padding-top: var(--space-3xl);
+  }
+
+  .stays-cta h2 {
+    font-size: var(--fs-3xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .stays-cta__sub {
+    color: var(--starlight-dim);
+    font-size: var(--fs-md);
+    max-width: 45ch;
+    margin-inline: auto;
+    margin-bottom: var(--space-xl);
+  }
+
+  /* --- Responsive --- */
+  @media (max-width: 1024px) {
+    .stay__spread {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xl);
+    }
+
+    .stay--flip .stay__spread {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .stay__spread {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+
+    .stay--flip .stay__media {
+      order: 0;
+    }
+
+    .stay--flip .stay__content {
+      order: 0;
+    }
+
+    .stay__num {
+      font-size: var(--fs-2xl);
+    }
+
+    .stay__gallery {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

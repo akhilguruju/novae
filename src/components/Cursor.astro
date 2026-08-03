@@ -1,0 +1,285 @@
+---
+
+---
+
+<canvas class="cursor-canvas" id="cursor-canvas" aria-hidden="true"></canvas>
+<div class="cursor-highlight" id="cursor-highlight" aria-hidden="true"></div>
+
+<style>
+  .cursor-canvas {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10001;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .cursor-canvas {
+      display: block;
+    }
+  }
+
+  .cursor-highlight {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    pointer-events: none;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+      circle,
+      rgba(232, 148, 74, 0.08) 0%,
+      rgba(232, 148, 74, 0.03) 35%,
+      transparent 65%
+    );
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity 0.5s ease, width 0.4s ease, height 0.4s ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .cursor-highlight {
+      display: block;
+    }
+  }
+
+  .cursor-highlight.is-visible {
+    opacity: 1;
+  }
+
+  .cursor-highlight.is-on-text {
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(
+      circle,
+      rgba(232, 148, 74, 0.14) 0%,
+      rgba(240, 235, 227, 0.06) 30%,
+      transparent 60%
+    );
+  }
+
+  .cursor-highlight.is-hovering {
+    width: 240px;
+    height: 240px;
+  }
+</style>
+
+<script>
+  const canvas = document.getElementById('cursor-canvas') as HTMLCanvasElement;
+  const highlight = document.getElementById('cursor-highlight') as HTMLElement;
+
+  if (canvas && highlight && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.documentElement.classList.add('has-custom-cursor');
+
+    const ctx = canvas.getContext('2d')!;
+    let w = 0;
+    let h = 0;
+    let mx = -200;
+    let my = -200;
+    let hx = -200;
+    let hy = -200;
+    let hasMoved = false;
+    let isHovering = false;
+    let isOnText = false;
+
+    interface Particle {
+      angle: number;
+      radius: number;
+      speed: number;
+      size: number;
+      alpha: number;
+      orbitRadius: number;
+    }
+
+    interface Trail {
+      x: number;
+      y: number;
+      alpha: number;
+      size: number;
+    }
+
+    const particles: Particle[] = [];
+    const trails: Trail[] = [];
+    const PARTICLE_COUNT = 6;
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        angle: (Math.PI * 2 * i) / PARTICLE_COUNT,
+        radius: 1 + Math.random() * 1.5,
+        speed: 0.3 + Math.random() * 0.5,
+        size: 1 + Math.random(),
+        alpha: 0.4 + Math.random() * 0.4,
+        orbitRadius: 8 + Math.random() * 10,
+      });
+    }
+
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio, 2);
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    resize();
+    let resizeTimer: number;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(resize, 200) as unknown as number;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      mx = e.clientX;
+      my = e.clientY;
+
+      if (!hasMoved) {
+        hasMoved = true;
+        hx = mx;
+        hy = my;
+        highlight.classList.add('is-visible');
+      }
+
+      if (trails.length < 12) {
+        trails.push({ x: mx, y: my, alpha: 0.5, size: 2 });
+      }
+
+      const el = document.elementFromPoint(mx, my);
+      const wasOnText = isOnText;
+      if (el) {
+        const tag = el.tagName;
+        isOnText = tag === 'P' || tag === 'H1' || tag === 'H2' || tag === 'H3' ||
+                   tag === 'H4' || tag === 'SPAN' || tag === 'EM' || tag === 'CITE' ||
+                   tag === 'BLOCKQUOTE' || tag === 'A' ||
+                   el.closest('h1, h2, h3, h4, p, blockquote, cite') !== null;
+      } else {
+        isOnText = false;
+      }
+      if (isOnText !== wasOnText) {
+        highlight.classList.toggle('is-on-text', isOnText);
+      }
+    });
+
+    function lerp(a: number, b: number, t: number) {
+      return a + (b - a) * t;
+    }
+
+    function draw(time: number) {
+      ctx.clearRect(0, 0, w, h);
+
+      if (!hasMoved) {
+        requestAnimationFrame(draw);
+        return;
+      }
+
+      hx = lerp(hx, mx, 0.12);
+      hy = lerp(hy, my, 0.12);
+      highlight.style.left = hx + 'px';
+      highlight.style.top = hy + 'px';
+
+      // Trails
+      for (let i = trails.length - 1; i >= 0; i--) {
+        const t = trails[i];
+        t.alpha -= 0.025;
+        t.size *= 0.97;
+        if (t.alpha <= 0) {
+          trails.splice(i, 1);
+          continue;
+        }
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, t.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(232, 148, 74, ${t.alpha * 0.3})`;
+        ctx.fill();
+      }
+
+      // Core glow
+      const coreSize = isHovering ? 18 : 12;
+      const grad = ctx.createRadialGradient(mx, my, 0, mx, my, coreSize);
+      grad.addColorStop(0, `rgba(240, 235, 227, ${isHovering ? 0.9 : 0.7})`);
+      grad.addColorStop(0.3, `rgba(232, 148, 74, ${isHovering ? 0.5 : 0.35})`);
+      grad.addColorStop(0.7, 'rgba(232, 148, 74, 0.08)');
+      grad.addColorStop(1, 'rgba(232, 148, 74, 0)');
+      ctx.beginPath();
+      ctx.arc(mx, my, coreSize, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Bright center point
+      ctx.beginPath();
+      ctx.arc(mx, my, 2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${isHovering ? 0.95 : 0.8})`;
+      ctx.fill();
+
+      // Lens flare spikes
+      const spikeLen = isHovering ? 16 : 10;
+      const spikeAlpha = isHovering ? 0.35 : 0.2;
+      ctx.strokeStyle = `rgba(240, 235, 227, ${spikeAlpha})`;
+      ctx.lineWidth = 0.5;
+      for (let i = 0; i < 4; i++) {
+        const a = (Math.PI / 4) * i + time * 0.0002;
+        ctx.beginPath();
+        ctx.moveTo(mx + Math.cos(a) * 3, my + Math.sin(a) * 3);
+        ctx.lineTo(mx + Math.cos(a) * spikeLen, my + Math.sin(a) * spikeLen);
+        ctx.stroke();
+      }
+
+      // Orbiting particles
+      for (const p of particles) {
+        p.angle += p.speed * 0.02;
+        const ox = mx + Math.cos(p.angle) * p.orbitRadius;
+        const oy = my + Math.sin(p.angle) * p.orbitRadius;
+        const twinkle = 0.5 + 0.5 * Math.sin(time * 0.003 + p.angle * 3);
+        const alpha = p.alpha * twinkle;
+
+        ctx.beginPath();
+        ctx.arc(ox, oy, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(240, 235, 227, ${alpha})`;
+        ctx.fill();
+
+        if (p.size > 1.2) {
+          ctx.beginPath();
+          ctx.arc(ox, oy, p.size * 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(232, 148, 74, ${alpha * 0.15})`;
+          ctx.fill();
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+    requestAnimationFrame(draw);
+
+    const interactives = 'a, button, .btn, .stay-card, .nav__burger, input, textarea, [data-cursor-hover]';
+
+    document.addEventListener('mouseover', (e) => {
+      if ((e.target as Element).closest(interactives)) {
+        isHovering = true;
+        highlight.classList.add('is-hovering');
+      }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      if ((e.target as Element).closest(interactives)) {
+        isHovering = false;
+        highlight.classList.remove('is-hovering');
+      }
+    });
+
+    document.addEventListener('mouseleave', () => {
+      canvas.style.opacity = '0';
+      highlight.classList.remove('is-visible');
+    });
+    document.addEventListener('mouseenter', () => {
+      canvas.style.opacity = '1';
+      if (hasMoved) highlight.classList.add('is-visible');
+    });
+  }
+</script>

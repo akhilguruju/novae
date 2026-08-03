@@ -1,0 +1,309 @@
+---
+import Layout from '@/layouts/Layout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Layout title="Book Your Night" description="Reserve your night under the stars at Novae Glamp — 30 minutes from Hyderabad.">
+  <section class="page-hero section--full">
+    <div class="container">
+      <h1 data-reveal="up">Reserve your <em>night</em></h1>
+      <p class="page-hero__sub" data-reveal="fade" data-reveal-delay="0.2">
+        Let's find you the perfect sky.
+      </p>
+    </div>
+  </section>
+
+  <section class="section contact-main">
+    <div class="contact__spread container">
+      <!-- Form -->
+      <div class="contact__form-wrap">
+        <h2 data-reveal="up">Send us a message</h2>
+        <form class="contact__form" data-reveal="fade" data-reveal-delay="0.1">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required placeholder="Your full name" />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required placeholder="you@example.com" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" placeholder="+91 00000 00000" />
+            </div>
+            <div class="form-group">
+              <label for="guests">Guests</label>
+              <select id="guests" name="guests">
+                <option value="">Select</option>
+                <option value="1-2">1–2</option>
+                <option value="3-5">3–5</option>
+                <option value="6-10">6–10</option>
+                <option value="10+">10+</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="stay">Preferred stay</label>
+            <select id="stay" name="stay">
+              <option value="">Not sure yet</option>
+              <option value="luxury-tepee">Luxury Tepee — ₹14,999/night</option>
+              <option value="american-tent">American Tent — ₹11,999/night</option>
+              <option value="suite-room">Suite Room — ₹11,999/night</option>
+              <option value="hut-tent">Hut Tent — ₹3,499/person</option>
+              <option value="dormitory">Dormitory — ₹2,999/person</option>
+              <option value="camping">Camping — ₹2,299/person</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="4" placeholder="Tell us about your plans — dates, group size, anything special..."></textarea>
+          </div>
+          <button type="submit" class="btn btn--ember contact__submit">
+            <span>Send Enquiry</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Info -->
+      <div class="contact__info">
+        <div class="contact__card" data-reveal="up">
+          <h3>Get in touch</h3>
+          <div class="contact__detail">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <a href="tel:+918886866631">+91 888 686 6631</a>
+          </div>
+          <div class="contact__detail">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            <a href="mailto:Bookings@novaeglamp.com">Bookings@novaeglamp.com</a>
+          </div>
+        </div>
+
+        <div class="contact__card" data-reveal="up" data-reveal-delay="0.08">
+          <h3>Location</h3>
+          <p>
+            Maryala Village Road,<br />
+            Bhuvanagiri, Yadadri District,<br />
+            Telangana 508117
+          </p>
+        </div>
+
+        <div class="contact__card" data-reveal="up" data-reveal-delay="0.16">
+          <h3>Getting here</h3>
+          <p>
+            30 minutes from Hyderabad via the Hyderabad–Warangal highway (NH 163). Take the Bhuvanagiri exit and follow signs to Maryala village.
+          </p>
+          <p class="contact__note">
+            We'll send detailed directions and a pin after you book.
+          </p>
+        </div>
+
+        <div class="contact__card" data-reveal="up" data-reveal-delay="0.24">
+          <h3>Follow us</h3>
+          <div class="contact__social">
+            <a href="https://www.instagram.com/novaeglamphyd/" target="_blank" rel="noopener noreferrer" class="contact__social-link">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+              <span>Instagram</span>
+            </a>
+            <a href="https://www.facebook.com/novaeglamp" target="_blank" rel="noopener noreferrer" class="contact__social-link">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              <span>Facebook</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-hero {
+    padding-top: calc(var(--nav-h) + var(--space-2xl));
+    text-align: center;
+  }
+
+  .page-hero__sub {
+    margin-top: var(--space-md);
+    font-size: var(--fs-lg);
+    color: var(--starlight-dim);
+    max-width: 50ch;
+    margin-inline: auto;
+  }
+
+  /* --- Layout --- */
+  .contact__spread {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: var(--space-3xl);
+    align-items: start;
+  }
+
+  /* --- Form --- */
+  .contact__form-wrap h2 {
+    font-size: var(--fs-2xl);
+    margin-bottom: var(--space-xl);
+  }
+
+  .contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .form-group label {
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--starlight-dim);
+    font-weight: 500;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: rgba(240, 235, 227, 0.04);
+    border: 1px solid var(--starlight-faint);
+    border-radius: var(--radius-sm);
+    padding: 0.75em 1em;
+    font-family: var(--font-body);
+    font-size: var(--fs-base);
+    color: var(--starlight);
+    transition: border-color var(--duration-fast) ease;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: rgba(240, 235, 227, 0.25);
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--ember-dim);
+  }
+
+  .form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(240,235,227,0.4)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1em center;
+    padding-right: 2.5em;
+  }
+
+  .form-group select option {
+    background: var(--void);
+    color: var(--starlight);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .contact__submit {
+    align-self: flex-start;
+    margin-top: var(--space-sm);
+  }
+
+  /* --- Info cards --- */
+  .contact__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    padding-top: 0.5rem;
+  }
+
+  .contact__card {
+    border-left: 1px solid var(--starlight-faint);
+    padding-left: var(--space-lg);
+  }
+
+  .contact__card h3 {
+    font-size: var(--fs-md);
+    margin-bottom: var(--space-sm);
+  }
+
+  .contact__card p {
+    color: var(--starlight-dim);
+    font-size: var(--fs-sm);
+    line-height: 1.7;
+  }
+
+  .contact__detail {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-xs);
+  }
+
+  .contact__detail svg {
+    flex-shrink: 0;
+    color: var(--ember-dim);
+  }
+
+  .contact__detail a {
+    font-size: var(--fs-sm);
+    color: var(--starlight-dim);
+    transition: color var(--duration-fast) ease;
+  }
+
+  .contact__detail a:hover {
+    color: var(--starlight);
+  }
+
+  .contact__note {
+    margin-top: var(--space-xs);
+    font-style: italic;
+    opacity: 0.6;
+  }
+
+  .contact__social {
+    display: flex;
+    gap: var(--space-lg);
+  }
+
+  .contact__social-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--fs-sm);
+    color: var(--starlight-dim);
+    transition: color var(--duration-fast) ease;
+  }
+
+  .contact__social-link:hover {
+    color: var(--starlight);
+  }
+
+  /* --- Responsive --- */
+  @media (max-width: 768px) {
+    .contact__spread {
+      grid-template-columns: 1fr;
+      gap: var(--space-2xl);
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .contact__submit {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

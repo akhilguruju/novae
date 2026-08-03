@@ -1,0 +1,431 @@
+---
+
+---
+
+<canvas class="starfield" id="starfield-canvas" aria-hidden="true"></canvas>
+
+<style>
+  .starfield {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  const canvas = document.getElementById('starfield-canvas') as HTMLCanvasElement;
+  if (canvas) {
+    const ctx = canvas.getContext('2d')!;
+    let w = 0;
+    let h = 0;
+    let scrollY = 0;
+    let visible = true;
+
+    interface Star {
+      x: number;
+      y: number;
+      size: number;
+      baseAlpha: number;
+      twinkleSpeed: number;
+      twinkleOffset: number;
+      layer: number;
+    }
+
+    interface ShootingStar {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      life: number;
+      maxLife: number;
+      size: number;
+      tailLength: number;
+    }
+
+    interface Ember {
+      x: number;
+      y: number;
+      size: number;
+      alpha: number;
+      speed: number;
+      drift: number;
+      phase: number;
+    }
+
+    interface Galaxy {
+      x: number;
+      y: number;
+      size: number;
+      angle: number;
+      tilt: number;
+      alpha: number;
+      colorType: number;
+      arms: number;
+      layer: number;
+      sprite: HTMLCanvasElement | null;
+    }
+
+    let stars: Star[] = [];
+    let shootingStars: ShootingStar[] = [];
+    let embers: Ember[] = [];
+    let galaxies: Galaxy[] = [];
+    let lastShootingTime = 0;
+
+    function createStars() {
+      stars = [];
+      const count = Math.floor((w * h) / 2500);
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * w,
+          y: Math.random() * h * 3,
+          size: Math.random() * 2 + 0.3,
+          baseAlpha: Math.random() * 0.6 + 0.2,
+          twinkleSpeed: Math.random() * 2 + 0.5,
+          twinkleOffset: Math.random() * Math.PI * 2,
+          layer: Math.random() < 0.3 ? 2 : Math.random() < 0.6 ? 1 : 0,
+        });
+      }
+    }
+
+    function spawnShootingStar() {
+      const dir = Math.random();
+      let startX: number, startY: number, angle: number;
+
+      if (dir < 0.35) {
+        // Top-left to bottom-right (classic)
+        startX = Math.random() * w * 0.7;
+        startY = Math.random() * h * 0.3;
+        angle = (Math.random() * 30 + 15) * (Math.PI / 180);
+      } else if (dir < 0.6) {
+        // Top-right to bottom-left
+        startX = w * 0.3 + Math.random() * w * 0.7;
+        startY = Math.random() * h * 0.3;
+        angle = Math.PI - (Math.random() * 30 + 15) * (Math.PI / 180);
+      } else if (dir < 0.8) {
+        // Right to left (shallow)
+        startX = w * 0.6 + Math.random() * w * 0.4;
+        startY = Math.random() * h * 0.5;
+        angle = Math.PI + (Math.random() * 20 - 10) * (Math.PI / 180);
+      } else {
+        // Nearly vertical downward
+        startX = Math.random() * w;
+        startY = -10;
+        angle = (Math.random() * 20 + 70) * (Math.PI / 180);
+      }
+
+      const speed = Math.random() * 8 + 6;
+      shootingStars.push({
+        x: startX,
+        y: startY,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: 0,
+        maxLife: Math.random() * 40 + 30,
+        size: Math.random() * 1.5 + 1,
+        tailLength: Math.random() * 60 + 40,
+      });
+    }
+
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio, 2);
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      createStars();
+      createEmbers();
+      createGalaxies();
+    }
+
+    function createEmbers() {
+      embers = [];
+      for (let i = 0; i < 6; i++) {
+        embers.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          size: 1.5 + Math.random() * 2,
+          alpha: 0.06 + Math.random() * 0.08,
+          speed: 0.15 + Math.random() * 0.15,
+          drift: Math.random() * Math.PI * 2,
+          phase: Math.random() * Math.PI * 2,
+        });
+      }
+    }
+
+    const galaxyPalettes = [
+      { core: [230, 235, 255], stars: [170, 190, 255], outer: [130, 155, 225] },
+      { core: [255, 245, 220], stars: [255, 218, 165], outer: [225, 185, 135] },
+      { core: [235, 220, 255], stars: [200, 175, 245], outer: [170, 145, 215] },
+      { core: [210, 250, 255], stars: [155, 228, 242], outer: [115, 195, 215] },
+      { core: [255, 230, 240], stars: [248, 190, 210], outer: [220, 160, 185] },
+    ];
+
+    function renderGalaxySprite(g: Galaxy): HTMLCanvasElement {
+      const dim = Math.ceil(g.size * 2.8);
+      const off = document.createElement('canvas');
+      off.width = dim;
+      off.height = dim;
+      const oc = off.getContext('2d')!;
+      const cx = dim / 2;
+      const cy = dim / 2;
+      const pal = galaxyPalettes[g.colorType];
+      const count = Math.floor(g.size * 12);
+
+      const coreR = g.size * (g.arms === 0 ? 0.45 : 0.28);
+      const cg = oc.createRadialGradient(cx, cy, 0, cx, cy, coreR);
+      cg.addColorStop(0, `rgba(${pal.core[0]},${pal.core[1]},${pal.core[2]},0.55)`);
+      cg.addColorStop(0.35, `rgba(${pal.stars[0]},${pal.stars[1]},${pal.stars[2]},0.15)`);
+      cg.addColorStop(1, 'rgba(0,0,0,0)');
+      oc.fillStyle = cg;
+      oc.beginPath();
+      oc.arc(cx, cy, coreR, 0, Math.PI * 2);
+      oc.fill();
+
+      if (g.arms === 0) {
+        for (let i = 0; i < count; i++) {
+          const u1 = Math.random() || 0.001;
+          const u2 = Math.random();
+          const r = Math.sqrt(-2 * Math.log(u1)) * g.size * 0.32;
+          const th = Math.PI * 2 * u2;
+          const px = cx + Math.cos(th) * r;
+          const py = cy + Math.sin(th) * r * g.tilt;
+          const d = Math.hypot(px - cx, (py - cy) / g.tilt) / g.size;
+          if (d > 1.2) continue;
+          const b = Math.max(0, 1 - d);
+          const sz = 0.3 + Math.random() * 1.2 * b;
+          const t = Math.min(d * 1.5, 1);
+          const cr = pal.core[0] + (pal.outer[0] - pal.core[0]) * t | 0;
+          const cg2 = pal.core[1] + (pal.outer[1] - pal.core[1]) * t | 0;
+          const cb = pal.core[2] + (pal.outer[2] - pal.core[2]) * t | 0;
+          oc.beginPath();
+          oc.arc(px, py, sz, 0, Math.PI * 2);
+          oc.fillStyle = `rgba(${cr},${cg2},${cb},${b * 0.6})`;
+          oc.fill();
+        }
+      } else {
+        for (let i = 0; i < count; i++) {
+          const arm = (Math.random() * g.arms) | 0;
+          const armOff = (arm / g.arms) * Math.PI * 2;
+          const t = Math.random();
+          const r = t * g.size;
+          const spiral = armOff + t * 3.2;
+          const scatter = (0.06 + t * 0.22) * g.size;
+          const sx = (Math.random() - 0.5) * scatter;
+          const sy = (Math.random() - 0.5) * scatter * g.tilt;
+          const px = cx + Math.cos(spiral) * r + sx;
+          const py = cy + Math.sin(spiral) * r * g.tilt + sy;
+          const d = Math.hypot(px - cx, (py - cy) / g.tilt) / g.size;
+          if (d > 1.3) continue;
+          const b = Math.max(0, 1 - d * 0.7);
+          const sz = 0.2 + Math.random() * 1.0 * b;
+          const ct = Math.min(t * 1.4, 1);
+          const cr = pal.core[0] + (pal.stars[0] - pal.core[0]) * ct | 0;
+          const cg2 = pal.core[1] + (pal.stars[1] - pal.core[1]) * ct | 0;
+          const cb = pal.core[2] + (pal.stars[2] - pal.core[2]) * ct | 0;
+          oc.beginPath();
+          oc.arc(px, py, sz, 0, Math.PI * 2);
+          oc.fillStyle = `rgba(${cr},${cg2},${cb},${b * 0.55})`;
+          oc.fill();
+        }
+        for (let k = 0; k < g.arms * 3; k++) {
+          const arm = k % g.arms;
+          const armOff = (arm / g.arms) * Math.PI * 2;
+          const t = 0.2 + Math.random() * 0.55;
+          const r = t * g.size;
+          const spiral = armOff + t * 3.2;
+          const jx = (Math.random() - 0.5) * g.size * 0.06;
+          const jy = (Math.random() - 0.5) * g.size * 0.06;
+          const px = cx + Math.cos(spiral) * r + jx;
+          const py = cy + Math.sin(spiral) * r * g.tilt + jy;
+          const kg = oc.createRadialGradient(px, py, 0, px, py, g.size * 0.055);
+          kg.addColorStop(0, `rgba(${pal.stars[0]},${pal.stars[1]},${pal.stars[2]},0.4)`);
+          kg.addColorStop(1, 'rgba(0,0,0,0)');
+          oc.fillStyle = kg;
+          oc.beginPath();
+          oc.arc(px, py, g.size * 0.055, 0, Math.PI * 2);
+          oc.fill();
+        }
+      }
+
+      const hg = oc.createRadialGradient(cx, cy, g.size * 0.25, cx, cy, g.size * 1.15);
+      hg.addColorStop(0, `rgba(${pal.outer[0]},${pal.outer[1]},${pal.outer[2]},0.06)`);
+      hg.addColorStop(1, 'rgba(0,0,0,0)');
+      oc.fillStyle = hg;
+      oc.beginPath();
+      oc.arc(cx, cy, g.size * 1.15, 0, Math.PI * 2);
+      oc.fill();
+
+      return off;
+    }
+
+    function createGalaxies() {
+      galaxies = [];
+      const positions = [
+        { bx: 0.2, by: 0.3 },  { bx: 0.75, by: 0.7 },
+        { bx: 0.15, by: 1.2 }, { bx: 0.8, by: 1.6 },
+        { bx: 0.5, by: 2.0 },  { bx: 0.25, by: 2.4 },
+        { bx: 0.7, by: 0.1 },  { bx: 0.45, by: 2.8 },
+      ];
+      for (let i = 0; i < positions.length; i++) {
+        const jx = (Math.random() - 0.5) * w * 0.15;
+        const jy = (Math.random() - 0.5) * h * 0.2;
+        const g: Galaxy = {
+          x: positions[i].bx * w + jx,
+          y: positions[i].by * h + jy,
+          size: 60 + Math.random() * 60,
+          angle: Math.random() * Math.PI * 2,
+          tilt: 0.4 + Math.random() * 0.35,
+          alpha: 0.8 + Math.random() * 0.2,
+          colorType: i % 5,
+          arms: Math.random() < 0.3 ? 0 : (2 + Math.floor(Math.random() * 2)),
+          layer: Math.random() < 0.5 ? 0 : 1,
+          sprite: null,
+        };
+        g.sprite = renderGalaxySprite(g);
+        galaxies.push(g);
+      }
+    }
+
+    function drawGalaxy(g: Galaxy, sy: number, time: number) {
+      if (!g.sprite) return;
+      ctx.save();
+      ctx.translate(g.x, sy);
+      ctx.rotate(g.angle + time * 0.000008);
+      ctx.globalAlpha = g.alpha;
+      const half = g.sprite.width / 2;
+      ctx.drawImage(g.sprite, -half, -half);
+      ctx.globalAlpha = 1;
+      ctx.restore();
+    }
+
+    function draw(time: number) {
+      if (!visible) { requestAnimationFrame(draw); return; }
+
+      ctx.clearRect(0, 0, w, h);
+
+      const parallaxFactors = [0.02, 0.05, 0.1];
+
+      // Draw galaxies behind everything
+      for (const g of galaxies) {
+        const parallax = scrollY * parallaxFactors[g.layer];
+        const gy = ((g.y - parallax) % (h * 3) + h * 3) % (h * 3);
+        if (gy > h + g.size * 2 || gy < -g.size * 2) continue;
+        drawGalaxy(g, gy, time);
+      }
+
+      for (const star of stars) {
+        const parallax = scrollY * parallaxFactors[star.layer];
+        const sy = ((star.y - parallax) % (h * 3) + h * 3) % (h * 3);
+        if (sy > h + 5) continue;
+
+        const twinkle = Math.sin(time * 0.001 * star.twinkleSpeed + star.twinkleOffset);
+        const alpha = star.baseAlpha * (0.5 + 0.5 * twinkle);
+
+        ctx.beginPath();
+        ctx.arc(star.x, sy, star.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(240, 235, 227, ${alpha})`;
+        ctx.fill();
+
+        if (star.size > 1.5 && alpha > 0.5) {
+          ctx.beginPath();
+          ctx.arc(star.x, sy, star.size * 3, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(240, 235, 227, ${alpha * 0.08})`;
+          ctx.fill();
+        }
+      }
+
+      if (time - lastShootingTime > 3000 + Math.random() * 5000) {
+        if (shootingStars.length < 2) {
+          spawnShootingStar();
+          lastShootingTime = time;
+        }
+      }
+
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const s = shootingStars[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.life++;
+
+        const progress = s.life / s.maxLife;
+        const fadeIn = Math.min(progress * 5, 1);
+        const fadeOut = 1 - Math.max((progress - 0.6) / 0.4, 0);
+        const alpha = fadeIn * fadeOut * 0.9;
+
+        if (alpha > 0) {
+          const grad = ctx.createLinearGradient(
+            s.x, s.y,
+            s.x - s.vx * (s.tailLength / Math.hypot(s.vx, s.vy)),
+            s.y - s.vy * (s.tailLength / Math.hypot(s.vx, s.vy))
+          );
+          grad.addColorStop(0, `rgba(240, 235, 227, ${alpha})`);
+          grad.addColorStop(0.3, `rgba(232, 148, 74, ${alpha * 0.6})`);
+          grad.addColorStop(1, `rgba(232, 148, 74, 0)`);
+
+          ctx.beginPath();
+          ctx.moveTo(s.x, s.y);
+          ctx.lineTo(
+            s.x - s.vx * (s.tailLength / Math.hypot(s.vx, s.vy)),
+            s.y - s.vy * (s.tailLength / Math.hypot(s.vx, s.vy))
+          );
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = s.size;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.size * 1.5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.8})`;
+          ctx.fill();
+        }
+
+        if (s.life >= s.maxLife) {
+          shootingStars.splice(i, 1);
+        }
+      }
+
+      // Ambient ember particles
+      for (const e of embers) {
+        e.y -= e.speed;
+        e.x += Math.sin(time * 0.0005 + e.drift) * 0.3;
+        if (e.y < -10) { e.y = h + 10; e.x = Math.random() * w; }
+
+        const pulse = 0.6 + 0.4 * Math.sin(time * 0.001 + e.phase);
+        const a = e.alpha * pulse;
+
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(232, 148, 74, ${a})`;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.size * 3, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(232, 148, 74, ${a * 0.2})`;
+        ctx.fill();
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    resize();
+    let resizeTimer: number;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(resize, 200) as unknown as number;
+    });
+
+    window.addEventListener('scroll', () => { scrollY = window.scrollY; }, { passive: true });
+
+    document.addEventListener('visibilitychange', () => {
+      visible = !document.hidden;
+    });
+
+    requestAnimationFrame(draw);
+  }
+</script>

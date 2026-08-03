@@ -76,16 +76,20 @@
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
 
-  var STAR_COUNT = 320;
+  var STAR_COUNT = 340;
   var stars = [];
+  var motes = [];               // soft gold "ember" motes — warmth + foreground depth
+  var W = 0, H = 0, FIELD = 0;  // FIELD = taller virtual height so parallax never voids
+  var scrollY = window.scrollY || 0;
 
   /* Resize canvas to fill window */
   function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    FIELD = H * 1.8;
   }
 
-  /* Build star data objects */
+  /* Build star + mote data objects */
   function buildStars() {
     stars = [];
     for (var i = 0; i < STAR_COUNT; i++) {
@@ -96,16 +100,30 @@
                  : 2.0;
 
       stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        x: Math.random() * W,
+        y: Math.random() * FIELD,
         r: radius,
         alpha: 0.3 + Math.random() * 0.7,
         alphaDir: Math.random() > 0.5 ? 1 : -1,
         alphaSpeed: 0.002 + Math.random() * 0.008,
         twinkle: Math.random() > 0.3,
+        // Brighter stars read as "closer" → parallax a touch more on scroll
+        depth: radius >= 1.3 ? 0.5 : radius >= 0.9 ? 0.28 : 0.14,
         color: Math.random() < 0.15 ? '#c9a96e'  // gold star
              : Math.random() < 0.10 ? '#aac0f0'  // blue star
              : '#eee8dc'                          // white star
+      });
+    }
+
+    motes = [];
+    for (var m = 0; m < 9; m++) {
+      motes.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: 1.2 + Math.random() * 1.8,
+        a: 0.05 + Math.random() * 0.07,
+        sp: 0.12 + Math.random() * 0.18,
+        drift: Math.random() * Math.PI * 2
       });
     }
   }
@@ -113,29 +131,30 @@
   /* Draw faint nebula cloud patches for depth */
   function drawNebulae() {
     // Cool blue region
-    var g1 = ctx.createRadialGradient(
-      canvas.width * 0.25, canvas.height * 0.3, 0,
-      canvas.width * 0.25, canvas.height * 0.3, canvas.width * 0.35
-    );
+    var g1 = ctx.createRadialGradient(W * 0.25, H * 0.3, 0, W * 0.25, H * 0.3, W * 0.35);
     g1.addColorStop(0, 'rgba(40,80,180,0.06)');
     g1.addColorStop(1, 'transparent');
     ctx.fillStyle = g1;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, W, H);
 
     // Warm gold region
-    var g2 = ctx.createRadialGradient(
-      canvas.width * 0.72, canvas.height * 0.5, 0,
-      canvas.width * 0.72, canvas.height * 0.5, canvas.width * 0.25
-    );
-    g2.addColorStop(0, 'rgba(201,169,110,0.04)');
+    var g2 = ctx.createRadialGradient(W * 0.72, H * 0.5, 0, W * 0.72, H * 0.5, W * 0.25);
+    g2.addColorStop(0, 'rgba(201,169,110,0.045)');
     g2.addColorStop(1, 'transparent');
     ctx.fillStyle = g2;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, W, H);
+
+    // Low warm horizon glow — anchors the composition
+    var g3 = ctx.createRadialGradient(W * 0.5, H * 1.05, 0, W * 0.5, H * 1.05, H * 0.75);
+    g3.addColorStop(0, 'rgba(201,169,110,0.05)');
+    g3.addColorStop(1, 'transparent');
+    ctx.fillStyle = g3;
+    ctx.fillRect(0, 0, W, H);
   }
 
   /* Render loop */
-  function render() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  function render(t) {
+    ctx.clearRect(0, 0, W, H);
     drawNebulae();
 
     for (var i = 0; i < stars.length; i++) {
@@ -148,13 +167,17 @@
         if (s.alpha < 0.15) { s.alpha = 0.15; s.alphaDir =  1; }
       }
 
+      // Parallax: closer stars drift more as the page scrolls
+      var yy = ((s.y - scrollY * s.depth) % FIELD + FIELD) % FIELD;
+      if (yy > H + 4) continue;
+
       ctx.save();
       ctx.globalAlpha = s.alpha;
 
       if (s.r > 1.5) {
         // Bright stars: draw 4-point sparkle
         ctx.fillStyle = s.color;
-        ctx.translate(s.x, s.y);
+        ctx.translate(s.x, yy);
         for (var p = 0; p < 4; p++) {
           ctx.save();
           ctx.rotate(p * Math.PI / 2);
@@ -177,11 +200,32 @@
       } else {
         // Dim stars: simple circle
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.arc(s.x, yy, s.r, 0, Math.PI * 2);
         ctx.fillStyle = s.color;
         ctx.fill();
       }
 
+      ctx.restore();
+    }
+
+    // Soft gold ember motes rising
+    for (var k = 0; k < motes.length; k++) {
+      var e = motes[k];
+      e.y -= e.sp;
+      e.x += Math.sin((t || 0) * 0.0005 + e.drift) * 0.25;
+      if (e.y < -8) { e.y = H + 8; e.x = Math.random() * W; }
+
+      var pulse = 0.65 + 0.35 * Math.sin((t || 0) * 0.001 + e.drift);
+      ctx.save();
+      ctx.globalAlpha = e.a * pulse;
+      ctx.fillStyle = '#c9a96e';
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = e.a * pulse * 0.35;
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, e.r * 3, 0, Math.PI * 2);
+      ctx.fill();
       ctx.restore();
     }
 
@@ -191,12 +235,15 @@
   /* Init */
   resize();
   buildStars();
-  render();
+  requestAnimationFrame(render);
 
   window.addEventListener('resize', function () {
     resize();
     buildStars();
   });
+  window.addEventListener('scroll', function () {
+    scrollY = window.scrollY;
+  }, { passive: true });
 })();
 
 
